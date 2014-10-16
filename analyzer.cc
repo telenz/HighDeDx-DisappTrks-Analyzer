@@ -8,6 +8,7 @@
 #include "analyzer.h"
 #include "functions.h"
 #include "selection.h"
+#include "hitInformation.h"
 #include "TLorentzVector.h"
 #include "TVector3.h"
 #include "TStyle.h"
@@ -210,29 +211,19 @@ int main(int argc, char** argv)
   //-------------------------------------------------------------------------------------
   // Read discriminator templates
   //-------------------------------------------------------------------------------------
-  TH3 * template_pixel = loadDeDxTemplate("data/Discrim_template_pixel_data_2012.root");
-  TH3 * template_strip = loadDeDxTemplate("data/Data7TeV_Deco_SiStripDeDxMip_3D_Rcd.root");
+  template_pixel = loadDeDxTemplate("data/Discrim_template_pixel_data_2012.root");
+  template_strip = loadDeDxTemplate("data/Data7TeV_Deco_SiStripDeDxMip_3D_Rcd.root");
 
   //-------------------------------------------------------------------------------------
   // Declare additional branch addresses for hit information
   //-------------------------------------------------------------------------------------
-  
-  std::vector<std::vector<double> > *HitsDeDx = 0;
   stream._chain->SetBranchAddress("recoTrackHelper_TrackRefitter_HitsDeDx",&HitsDeDx);
-  double electronenergy[1000] = {0};
-  stream._chain->SetBranchAddress("patElectron_patElectronsLoosePFlow.energy",electronenergy);
-  std::vector<std::vector<double> > *HitsPathlength = 0;
-  std::vector<std::vector<int> >    *HitsShapetest  = 0;
-  std::vector<std::vector<int> >    *HitsSubdetid   = 0;
-  std::vector<std::vector<double> > *HitsEta        = 0;
-  std::vector<std::vector<double> > *HitsPhi        = 0;
   stream._chain->SetBranchAddress("recoTrackHelper_TrackRefitter_HitsPathlength",&HitsPathlength);
   stream._chain->SetBranchAddress("recoTrackHelper_TrackRefitter_HitsShapetest",&HitsShapetest);
   stream._chain->SetBranchAddress("recoTrackHelper_TrackRefitter_HitsSubdetId",&HitsSubdetid);
   stream._chain->SetBranchAddress("recoTrackHelper_TrackRefitter_HitsEta",&HitsEta);
   stream._chain->SetBranchAddress("recoTrackHelper_TrackRefitter_HitsPhi",&HitsPhi);
   
-
   //-------------------------------------------------------------------------------------
   // Loop over events
   //-------------------------------------------------------------------------------------
