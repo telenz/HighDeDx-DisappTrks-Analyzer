@@ -462,19 +462,19 @@ std::vector<evt::Track_s> trackCleaningCuts(std::vector<evt::Track_s> trackColle
   for(unsigned int i=0; i<trackCollection.size(); i++){
 
     //.................................................................................//
-    if(std::abs(trackCollection[i].eta)>1.42 && std::abs(trackCollection[i].eta)<1.65)        continue;
+    //if(std::abs(trackCollection[i].eta)>1.42 && std::abs(trackCollection[i].eta)<1.65)        continue;
     countsTrackCriteria->Fill("EtaLess1p42Gt1p65", weight);
     //.................................................................................//
-    if(std::abs(trackCollection[i].eta)>0.15 && std::abs(trackCollection[i].eta)<0.35)        continue;
+    //if(std::abs(trackCollection[i].eta)>0.15 && std::abs(trackCollection[i].eta)<0.35)        continue;
     countsTrackCriteria->Fill("EtaLess0p15Gt0p35", weight);
     //.................................................................................//
-    if(std::abs(trackCollection[i].eta)>1.55 && std::abs(trackCollection[i].eta)<1.85)        continue;
+    //if(std::abs(trackCollection[i].eta)>1.55 && std::abs(trackCollection[i].eta)<1.85)        continue;
     countsTrackCriteria->Fill("EtaLess1p55Gt1p85", weight);
     //.................................................................................//
-    if(getTrkIsMatchedDeadEcal(&trackCollection[i]))                                          continue;
+    //if(getTrkIsMatchedDeadEcal(&trackCollection[i]))                                          continue;
     countsTrackCriteria->Fill("isMatchedDeadEcal", weight);
     //.................................................................................//
-    if(isWithinIntermoduleGapsOfECAL(&trackCollection[i]))                                     continue;
+    //if(isWithinIntermoduleGapsOfECAL(&trackCollection[i]))                                     continue;
     countsTrackCriteria->Fill("notWithinECALGap", weight);
     //.................................................................................//
     if(getTrkIsMatchedBadCSC(&trackCollection[i]))                                            continue;
