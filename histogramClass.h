@@ -3,6 +3,7 @@
 
 #include "analyzer.h"
 #include "functions.h"
+#include "hitInformation.h"
 #include "TH1.h"
 #include "TVector3.h"
 
@@ -26,6 +27,8 @@ class Hist
   TH1D *htrackNLostOuter;
   TH1D *htrackIsolation;
   TH1D *htrackCaloIsolation;
+  TH1D *htrackASmi;
+  TH1D *htrackASmiNP;
   TH1D *htrackDeDxHarm2;
   TH2D *htrackPtDeDxHarm2;
   TH2D *htrackPtCaloIso;
@@ -81,6 +84,8 @@ class Hist
       htrackIsolation = new TH1D("htrackIsolation" ,"htrackIsolation",1000,0,50);
       htrackCaloIsolation = new TH1D("htrackCaloIsolation" ,"htrackCaloIsolation",1000,0,3000);
       htrackDeDxHarm2 = new TH1D("htrackDeDxHarm2" ,"htrackDeDxHarm2",100,0,50);
+      htrackASmi = new TH1D("htrackASmi" ,"htrackASmi",1000,-1.1,1.1);
+      htrackASmiNP = new TH1D("htrackASmiNP" ,"htrackASmiNP",1000,-1.1,1.1);
 
       htrackPdgId = new TH1D("htrackPdgId","htrackPdgId",500,0,500);
       htrackgenParticle = new TH1D("htrackgenParticle","htrackgenParticle",1,0,1);
@@ -140,6 +145,8 @@ class Hist
       TVector3 trackVector;
       trackVector.SetPtEtaPhi(inputCollection[i].pt,inputCollection[i].eta,inputCollection[i].phi);
       double p = std::sqrt(std::pow(inputCollection[i].pt,2) + std::pow(trackVector.Pz(),2));
+      double ASmi   = dEdxOnTheFly(&(*HitsDeDx)[i], &(*HitsShapetest)[i], &(*HitsPathlength)[i], &(*HitsSubdetid)[i], 1, template_strip, template_pixel,1);
+      double ASmiNP = dEdxOnTheFly(&(*HitsDeDx)[i], &(*HitsShapetest)[i], &(*HitsPathlength)[i], &(*HitsSubdetid)[i], 1, template_strip, template_strip,0);
       htrackP                  ->Fill(p, weight);
       htrackPt                 ->Fill(inputCollection[i].pt, weight);
       
@@ -151,6 +158,8 @@ class Hist
       htrackCaloIsolation      ->Fill(trackCaloIsolation(&inputCollection[i]), weight);
       htrackNLostOuter         ->Fill(inputCollection[i].trackerExpectedHitsOuter_numberOfHits, weight);
       htrackDeDxHarm2          ->Fill(inputCollection[i].dEdxHarm2, weight);
+      htrackASmi               ->Fill(ASmi, weight);
+      htrackASmiNP             ->Fill(ASmiNP, weight);
       htrackPtDeDxHarm2        ->Fill(inputCollection[i].pt,inputCollection[i].dEdxHarm2, weight);
       htrackPtCaloIso          ->Fill(inputCollection[i].pt,trackCaloIsolation(&inputCollection[i]), weight);
       htrackPtNLostOuter       ->Fill(inputCollection[i].pt,inputCollection[i].trackerExpectedHitsOuter_numberOfHits, weight);
