@@ -2,7 +2,6 @@
 **/*~
 **/*.so
 **/*.d
-*.root
 analyzer
 filelist_*.txt
 old
