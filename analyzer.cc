@@ -32,6 +32,8 @@ int main(int argc, char** argv)
   bool isSignal = false;
   vector<string> filenames = getFilenames(cmdline.filelist);
   if(filenames[0].find("pMSSM") != std::string::npos) isSignal = true;
+  bool isData = false;
+  if(filenames[0].find("MET_Run2012*_22Jan2013") != std::string::npos) isData = true;
   itreestream stream(filenames, "Events");
   if ( !stream.good() ) error("unable to open ntuple file(s)");
 
@@ -123,6 +125,7 @@ int main(int argc, char** argv)
   // Declaration of Variables
   //-------------------------------------------------------------------------------------
   cout<<endl<<endl<<"------------ Is it signal : "<<isSignal<<" --------------"<<endl<<endl;
+  cout<<endl<<endl<<"------------ Is it data   : "<<isData<<" --------------"<<endl<<endl;
   class Event noSelection("noSelection",ofile);
   class Event triggerRequirements("triggerRequirements",ofile);
   triggerRequirements.preselection        = true;
@@ -187,7 +190,7 @@ int main(int argc, char** argv)
   //-------------------------------------------------------------------------------------
   // Read file for bad ecal cells and csc chambers 
   //-------------------------------------------------------------------------------------
-  ifstream inputFile("data/BadCSCChambers.txt");
+  ifstream inputFile("/afs/desy.de/user/t/tlenz/HighDeDx-DisappTrks-Analyzer/data/BadCSCChambers.txt");
   int lines;
   int i=0;
   double n,m;
@@ -199,7 +202,7 @@ int main(int argc, char** argv)
   lines=i;
   inputFile.close();
 
-  inputFile.open("data/DeadEcalChannelsNew.txt");
+  inputFile.open("/afs/desy.de/user/t/tlenz/HighDeDx-DisappTrks-Analyzer/data/DeadEcalChannelsNew.txt");
   i=0;
   while(inputFile>>n>>m){
     etaEcal.push_back(n);
@@ -211,8 +214,14 @@ int main(int argc, char** argv)
   //-------------------------------------------------------------------------------------
   // Read discriminator templates
   //-------------------------------------------------------------------------------------
-  template_pixel = loadDeDxTemplate("data/Discrim_template_pixel_data_2012.root");
-  template_strip = loadDeDxTemplate("data/Data7TeV_Deco_SiStripDeDxMip_3D_Rcd.root");
+  if(isData){
+  template_pixel = loadDeDxTemplate("/afs/desy.de/user/t/tlenz/HighDeDx-DisappTrks-Analyzer/data/Discrim_template_pixel_data_2012.root");
+  template_strip = loadDeDxTemplate("/afs/desy.de/user/t/tlenz/HighDeDx-DisappTrks-Analyzer/data/Data7TeV_Deco_SiStripDeDxMip_3D_Rcd.root");
+  }
+  else{
+  template_pixel = loadDeDxTemplate("/afs/desy.de/user/t/tlenz/HighDeDx-DisappTrks-Analyzer/data/Discrim_template_pixel_mc_2012.root");
+  template_strip = loadDeDxTemplate("/afs/desy.de/user/t/tlenz/HighDeDx-DisappTrks-Analyzer/data/Discrim_Templates_MC_2012.root");
+  }
 
   //-------------------------------------------------------------------------------------
   // Declare additional branch addresses for hit information
