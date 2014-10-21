@@ -34,15 +34,7 @@ double trackCaloIsolation(struct Track_s *track){
 
   double caloTowerIso05RhoCorr = 
     std::max(0.,track->caloHadDeltaRp5 + track->caloEMDeltaRp5 - sdouble_value*TMath::Pi()*0.5*0.5); 
-  //std::max(0.,track->caloHadDeltaRp5 + track->caloEMDeltaRp5 + sdouble_value*TMath::Pi()*0.5*0.5); 
- 
-  if(caloTowerIso05RhoCorr<10) return true;
-  else{
-
-    //cout<<"track->caloHadDeltaRp5 = "<<track->caloHadDeltaRp5<<endl;
-    //cout<<"track->caloEMDeltaRp5 = "<<track->caloEMDeltaRp5<<endl;
-    //cout<<"sdouble_value*TMath::Pi()*0.5*0.5 = "<<sdouble_value*TMath::Pi()*0.5*0.5<<endl;
-  }
+  
   return caloTowerIso05RhoCorr;
 
 }
@@ -569,7 +561,7 @@ TH3* loadDeDxTemplate(string path){
    return Prob_ChargePath;
 }
 //--------------------------------------------------------------------------------------------------
-double dEdxOnTheFly(std::vector<double> *HitsDeDx, std::vector<int> *HitsShapetest, std::vector<double> *HitsPathlength, std::vector<int> *HitsSubdetid, bool isData, TH3 *templateHistoStrip, TH3 *templateHistoPixel, bool usePixel)
+double dEdxOnTheFly(std::vector<double> *HitsDeDx, std::vector<int> *HitsShapetest, std::vector<double> *HitsPathlength, std::vector<int> *HitsSubdetid, bool isData, TH3 *templateHistoStrip, TH3 *templateHistoPixel, bool usePixel, int nHits=-1)
 {
 
   const double globalPixelMC    = 3.50843;
@@ -625,6 +617,10 @@ double dEdxOnTheFly(std::vector<double> *HitsDeDx, std::vector<int> *HitsShapete
   }
   
   int size      = vect_probs.size();
+
+  if(nHits !=-1){
+    if(size>nHits) size=nHits;
+  }
 
   //Ias pixel + strip
   double P = 1.0/(12*size);
