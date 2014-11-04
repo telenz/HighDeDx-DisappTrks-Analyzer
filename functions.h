@@ -3,7 +3,8 @@
 //-----------------------------------------------------------------------------
 #include <iostream>
 #include "TVector2.h"
-#include "analyzerChiClass.h"
+#include "chiClass.h"
+#include "declarationsOfClasses.h"
 #include "TH3.h"
 using namespace std;
 using namespace evt;
@@ -26,6 +27,9 @@ int nChi0 = 0;
 
 int mismatchedGenChiToTrack = 0;
 int matchedGenChiToTrack    = 0;
+
+int nChiInSimTrack          = 0;
+int nChiInSimVertex         = 0;
 
 //--------------------------------------------------------------------------------------------------
 
@@ -171,10 +175,10 @@ void findChiInGenParticleCollection(){
 
   //if(zeroChip || zeroChim) cout<<"To few charginos in GenParticle collection!"<<endl;
 }
-
 //--------------------------------------------------------------------------------------------------
+/*
 // Get only the Chi from the full Track Collection
-std::vector<Track_s> getChiInTrackCollection(std::vector<Track_s>& inputCollection){
+std::vector<Track_s> findChiInRecoTrackCollection(std::vector<Track_s>& inputCollection){
 
   std::vector<Track_s> chiTrackCollection;
   chiTrackCollection.clear();
@@ -182,56 +186,126 @@ std::vector<Track_s> getChiInTrackCollection(std::vector<Track_s>& inputCollecti
   double dPhi = 0;
   double dEta = 0;
   double dR   = 0;
+  int idxMin  = -100;
  
   for(unsigned int j=0; j<ChiTrack.size();j++){
 
+    double dRmin=10000.;
+
     for(unsigned int i=0; i<inputCollection.size(); i++){
-    
       dPhi = std::abs(TVector2::Phi_mpi_pi(inputCollection[i].phi - ChiTrack[j].genphi));
       dEta = std::abs(inputCollection[i].eta - ChiTrack[j].geneta);
       dR   = std::sqrt( dPhi*dPhi + dEta*dEta );
-      if(dR<0.001){
-	chiTrackCollection.push_back(inputCollection[i]);
-	fillChiTrackWithTrackVariables(&ChiTrack[j], &inputCollection[i]);
-	ChiTrack[j].matched = true;
-	matchedGenChiToTrack += 1;
+
+      if(dR<dRmin){
+	dRmin=dR;
+	idxMin=i;
+      }
+    }
+    
+    if(dRmin<0.001){
+      chiTrackCollection.push_back(inputCollection[idxMin]);
+      fillChiTrackWithRecoTrackVariables(&ChiTrack[j], &inputCollection[idxMin]);
+      ChiTrack[j].matched = true;
+      matchedGenChiToTrack += 1;
+    }
+
+
+  }
+
+  return chiTrackCollection;
+}
+*/
+//--------------------------------------------------------------------------------------------------
+// Get only the Chi from the full Track Collection
+std::vector<Track_s> findChiInRecoTrackCollection(std::vector<Track_s>& inputCollection, Hist* hist){
+
+  std::vector<Track_s> chiTrackCollection;
+  chiTrackCollection.clear();
+
+  double dPhi = 0;
+  double dEta = 0;
+  double dR   = 0;
+  int idxMin  = -100;
+ 
+  for(unsigned int j=0; j<ChiTrack.size();j++){
+
+    double dRmin=10000.;
+
+    for(unsigned int i=0; i<inputCollection.size(); i++){
+      dPhi = std::abs(TVector2::Phi_mpi_pi(inputCollection[i].phi - ChiTrack[j].SimTrackmomentum_phi));
+      dEta = std::abs(inputCollection[i].eta - ChiTrack[j].SimTrackmomentum_eta);
+      dR   = std::sqrt( dPhi*dPhi + dEta*dEta );
+
+      if(dR<dRmin){
+	dRmin=dR;
+	idxMin=i;
+      }
+    }
+    
+    if(dRmin<0.01){
+      chiTrackCollection.push_back(inputCollection[idxMin]);
+      fillChiTrackWithRecoTrackVariables(&ChiTrack[j], &inputCollection[idxMin]);
+      ChiTrack[j].matched = true;
+      matchedGenChiToTrack += 1;
+    }
+    hist->htrackDeltaRSimRecoTracks -> Fill(dRmin,weight);
+    hist->hSimTrackType             -> Fill(ChiTrack[j].SimTracktype,weight);
+
+  }
+
+  return chiTrackCollection;
+}
+
+//--------------------------------------------------------------------------------------------------
+void findChiInSimTrackCollection(){
+
+  for(unsigned int j=0; j<ChiTrack.size();j++){
+
+    for(int i=0; i<nSimTrack; i++){
+
+      if(SimTrack[i].type==ChiTrack[j].genpdgId){
+
+	fillChiTrackWithSimTrackVariables(&ChiTrack[j], &SimTrack[i]);
+	
+	nChiInSimTrack += 1;
+
       }
     }
   }
+}
+//--------------------------------------------------------------------------------------------------
+void findChiDecayVertex(){
 
-  /*
-  double dPhichip = 0;
-  double dEtachip = 0;
-  double dRchip   = 0;
-  double dPhichim = 0;
-  double dEtachim = 0;
-  double dRchim   = 0;
-  
+  for(unsigned int j=0; j<ChiTrack.size();j++){
 
-  for(unsigned int i=0; i<inputCollection.size(); i++){
+    ChiTrack[j].SimVertexFound = false;
 
-  if(!zeroChip){
-  dPhichip = std::abs(TVector2::Phi_mpi_pi(inputCollection[i].phi - chipGenParticle.phi));
-  dEtachip = std::abs(inputCollection[i].eta - chipGenParticle.eta); 
-  dRchip   = std::sqrt( dPhichip*dPhichip + dEtachip*dEtachip );
-  if(dRchip<0.001){
-  chiTrackCollection.push_back(inputCollection[i]);
-  matchedGenChiToTrack += 1;
-  }
-  }
-  if(!zeroChim){
-  dPhichim = std::abs(TVector2::Phi_mpi_pi(inputCollection[i].phi - chimGenParticle.phi));
-  dEtachim = std::abs(inputCollection[i].eta - chimGenParticle.eta);
-  dRchim   = std::sqrt(dPhichim*dPhichim + dEtachim*dEtachim );
-  if(dRchim<0.001){
-  chiTrackCollection.push_back(inputCollection[i]);
-  matchedGenChiToTrack += 1;
-  }
-  }
-  }
-  */
-  return chiTrackCollection;
+    for(int i=0; i<nSimVertex; i++){
 
+      bool decayed = false;
+
+      if((unsigned int) SimVertex[i].parentIndex==ChiTrack[j].SimTracktrackId){
+
+
+	for(int l=0; l<nSimTrack; l++){
+
+	  if(std::abs(SimTrack[l].type)==1000022){
+	    if((unsigned int) SimTrack[l].vertIndex == SimVertex[i].vertexId){
+		decayed = true;
+		break;
+	      }
+	  }
+	}
+
+	if(decayed){
+	  fillChiTrackWithSimVertexVariables(&ChiTrack[j], &SimVertex[i]);
+	  nChiInSimVertex += 1;
+	  ChiTrack[j].SimVertexFound = true;
+	}
+      }
+    }
+  }
 }
 //--------------------------------------------------------------------------------------------------
    
@@ -632,6 +706,63 @@ double dEdxOnTheFly(std::vector<double> *HitsDeDx, std::vector<int> *HitsShapete
   if(size<=0) P=-1;
 
   return P;
+}
+//--------------------------------------------------------------------------------------------------
+std::vector<Track_s> getFakeTracksInTrackCollection(const std::vector<Track_s>& inputCollection){
+
+  std::vector<Track_s> outputCollection;
+  outputCollection.clear();
+  double dRchip = 0;
+  double dRchim = 0;
+
+  for(unsigned int i=0; i<inputCollection.size(); i++){
+
+    dRchip=10000;
+    dRchim=10000;
+
+    if(!zeroChip){
+      double dPhichip = std::abs(TVector2::Phi_mpi_pi(inputCollection[i].phi - chipGenParticle.phi));
+      double dEtachip = std::abs(inputCollection[i].eta - chipGenParticle.eta);
+      dRchip   = std::sqrt(pow(dPhichip,2) + pow(dEtachip,2));
+    }
+    if(!zeroChim){
+      double dPhichim = std::abs(TVector2::Phi_mpi_pi(inputCollection[i].phi - chimGenParticle.phi));
+      double dEtachim = std::abs(inputCollection[i].eta - chimGenParticle.eta);
+      dRchim   = std::sqrt(pow(dPhichim,2) + pow(dEtachim,2));
+    }
+    if(dRchim>0.01 && dRchip>0.01) outputCollection.push_back(inputCollection[i]);
+  }
+  return outputCollection;
+
+}
+//--------------------------------------------------------------------------------------------------
+// Match Tracks to a generator particle in the GenCollection
+void matchTrackToGenParticle(std::vector<Track_s>& inputCollection){
+
+  double dPhi = 0;
+  double dEta = 0;
+  double dR   = 0;
+
+  for(unsigned int i=0; i<inputCollection.size(); i++){
+
+    inputCollection[i].pdgId=0;
+    inputCollection[i].beta=10;
+    double dRsaved = 0.5;
+
+    for(unsigned int j=0; j<GenParticle.size(); j++){
+
+      dEta = std::abs(inputCollection[i].eta - GenParticle[j].eta);
+      if(dEta>dRsaved) continue;
+      dPhi = std::abs(TVector2::Phi_mpi_pi(inputCollection[i].phi - GenParticle[j].phi));
+      dR   = std::sqrt( dPhi*dPhi + dEta*dEta );
+      if(dR<dRsaved){
+	inputCollection[i].pdgId=GenParticle[j].pdgId;
+	inputCollection[i].beta=GenParticle[j].p/GenParticle[j].energy;
+	dRsaved = dR;
+      }
+    }
+  }
+  
 }
 //--------------------------------------------------------------------------------------------------
 #endif
