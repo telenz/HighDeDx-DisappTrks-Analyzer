@@ -3,7 +3,7 @@
 //-----------------------------------------------------------------------------
 // File:        analyzer.h
 // Description: Analyzer header for ntuples created by TheNtupleMaker
-// Created:     Wed Sep  3 16:58:58 2014 by mkanalyzer.py
+// Created:     Tue Oct 28 11:12:43 2014 by mkanalyzer.py
 // Author:      Teresa Lenz
 //-----------------------------------------------------------------------------
 // -- System
@@ -80,6 +80,24 @@ std::vector<double>	Muon_pz(200,0);
 std::vector<int>	PileupSummaryInfo_getBunchCrossing(10,0);
 std::vector<int>	PileupSummaryInfo_getPU_NumInteractions(10,0);
 std::vector<float>	PileupSummaryInfo_getTrueNumInteractions(10,0);
+std::vector<float>	SimTrack_charge(5000,0);
+std::vector<int>	SimTrack_genpartIndex(5000,0);
+std::vector<double>	SimTrack_momentum_energy(5000,0);
+std::vector<double>	SimTrack_momentum_eta(5000,0);
+std::vector<double>	SimTrack_momentum_phi(5000,0);
+std::vector<double>	SimTrack_momentum_pt(5000,0);
+std::vector<int>	SimTrack_noGenpart(5000,0);
+std::vector<int>	SimTrack_noVertex(5000,0);
+std::vector<unsigned int>	SimTrack_trackId(5000,0);
+std::vector<int>	SimTrack_type(5000,0);
+std::vector<int>	SimTrack_vertIndex(5000,0);
+std::vector<int>	SimVertex_noParent(5000,0);
+std::vector<int>	SimVertex_parentIndex(5000,0);
+std::vector<double>	SimVertex_position_t(5000,0);
+std::vector<double>	SimVertex_position_x(5000,0);
+std::vector<double>	SimVertex_position_y(5000,0);
+std::vector<double>	SimVertex_position_z(5000,0);
+std::vector<unsigned int>	SimVertex_vertexId(5000,0);
 std::vector<float>	Tau_againstElectronLoose(200,0);
 std::vector<float>	Tau_againstMuonTight(200,0);
 std::vector<float>	Tau_byLooseCombinedIsolationDeltaBetaCorr(200,0);
@@ -96,6 +114,8 @@ std::vector<double>	Track_caloEMDeltaRp5(2000,0);
 std::vector<double>	Track_caloHadDeltaRp3(2000,0);
 std::vector<double>	Track_caloHadDeltaRp4(2000,0);
 std::vector<double>	Track_caloHadDeltaRp5(2000,0);
+std::vector<double>	Track_chi2(2000,0);
+std::vector<double>	Track_dEdxASmi(2000,0);
 std::vector<double>	Track_dEdxHarm2(2000,0);
 std::vector<double>	Track_dEdxHitsHarm2_1(2000,0);
 std::vector<double>	Track_dEdxHitsHarm2_1000(2000,0);
@@ -115,6 +135,7 @@ std::vector<double>	Track_dEdxHitsTrun40_2(2000,0);
 std::vector<double>	Track_dEdxHitsTrun40_3(2000,0);
 std::vector<double>	Track_dEdxHitsTrun40_5(2000,0);
 std::vector<double>	Track_dEdxHitsTrun40_7(2000,0);
+std::vector<double>	Track_dEdxNPASmi(2000,0);
 std::vector<double>	Track_dEdxNPHarm2(2000,0);
 std::vector<unsigned int>	Track_dEdxNPNoM(2000,0);
 std::vector<double>	Track_dEdxNPTru40(2000,0);
@@ -122,9 +143,11 @@ std::vector<unsigned int>	Track_dEdxNoM(2000,0);
 std::vector<double>	Track_dEdxTru40(2000,0);
 std::vector<double>	Track_eta(2000,0);
 std::vector<unsigned short>	Track_hitPattern_trackerLayersWithoutMeasurement(2000,0);
+std::vector<double>	Track_ndof(2000,0);
 std::vector<unsigned short>	Track_numberOfValidHits(2000,0);
 std::vector<double>	Track_phi(2000,0);
 std::vector<double>	Track_pt(2000,0);
+std::vector<double>	Track_ptError(2000,0);
 std::vector<double>	Track_px(2000,0);
 std::vector<double>	Track_py(2000,0);
 std::vector<double>	Track_pz(2000,0);
@@ -155,6 +178,8 @@ int	nGenParticle;
 int	nJet;
 int	nMuon;
 int	nPileupSummaryInfo;
+int	nSimTrack;
+int	nSimVertex;
 int	nTau;
 int	nTrack;
 int	nVertex;
@@ -329,6 +354,66 @@ std::ostream& operator<<(std::ostream& os, const PileupSummaryInfo_s& o)
   return os;
 }
 //-----------------------------------------------------------------------------
+struct SimTrack_s
+{
+  float	charge;
+  int	vertIndex;
+  int	noVertex;
+  int	genpartIndex;
+  int	noGenpart;
+  int	type;
+  unsigned int	trackId;
+  double	momentum_pt;
+  double	momentum_phi;
+  double	momentum_eta;
+  double	momentum_energy;
+};
+std::vector<SimTrack_s> SimTrack(5000);
+
+std::ostream& operator<<(std::ostream& os, const SimTrack_s& o)
+{
+  char r[1024];
+  os << "SimTrack" << std::endl;
+  sprintf(r, "  %-32s: %f\n", "charge", (double)o.charge); os << r;
+  sprintf(r, "  %-32s: %f\n", "vertIndex", (double)o.vertIndex); os << r;
+  sprintf(r, "  %-32s: %f\n", "noVertex", (double)o.noVertex); os << r;
+  sprintf(r, "  %-32s: %f\n", "genpartIndex", (double)o.genpartIndex); os << r;
+  sprintf(r, "  %-32s: %f\n", "noGenpart", (double)o.noGenpart); os << r;
+  sprintf(r, "  %-32s: %f\n", "type", (double)o.type); os << r;
+  sprintf(r, "  %-32s: %f\n", "trackId", (double)o.trackId); os << r;
+  sprintf(r, "  %-32s: %f\n", "momentum_pt", (double)o.momentum_pt); os << r;
+  sprintf(r, "  %-32s: %f\n", "momentum_phi", (double)o.momentum_phi); os << r;
+  sprintf(r, "  %-32s: %f\n", "momentum_eta", (double)o.momentum_eta); os << r;
+  sprintf(r, "  %-32s: %f\n", "momentum_energy", (double)o.momentum_energy); os << r;
+  return os;
+}
+//-----------------------------------------------------------------------------
+struct SimVertex_s
+{
+  int	parentIndex;
+  int	noParent;
+  unsigned int	vertexId;
+  double	position_x;
+  double	position_y;
+  double	position_z;
+  double	position_t;
+};
+std::vector<SimVertex_s> SimVertex(5000);
+
+std::ostream& operator<<(std::ostream& os, const SimVertex_s& o)
+{
+  char r[1024];
+  os << "SimVertex" << std::endl;
+  sprintf(r, "  %-32s: %f\n", "parentIndex", (double)o.parentIndex); os << r;
+  sprintf(r, "  %-32s: %f\n", "noParent", (double)o.noParent); os << r;
+  sprintf(r, "  %-32s: %f\n", "vertexId", (double)o.vertexId); os << r;
+  sprintf(r, "  %-32s: %f\n", "position_x", (double)o.position_x); os << r;
+  sprintf(r, "  %-32s: %f\n", "position_y", (double)o.position_y); os << r;
+  sprintf(r, "  %-32s: %f\n", "position_z", (double)o.position_z); os << r;
+  sprintf(r, "  %-32s: %f\n", "position_t", (double)o.position_t); os << r;
+  return os;
+}
+//-----------------------------------------------------------------------------
 struct Tau_s
 {
   double	energy;
@@ -364,6 +449,7 @@ std::ostream& operator<<(std::ostream& os, const Tau_s& o)
 struct Track_s
 {
   double	pt;
+  double	ptError;
   double	px;
   double	py;
   double	pz;
@@ -372,6 +458,8 @@ struct Track_s
   double	vx;
   double	vy;
   double	vz;
+  double	chi2;
+  double	ndof;
   unsigned short	numberOfValidHits;
   unsigned short	hitPattern_trackerLayersWithoutMeasurement;
   unsigned short	trackerExpectedHitsInner_numberOfLostHits;
@@ -384,6 +472,8 @@ struct Track_s
   double	caloHadDeltaRp4;
   double	caloEMDeltaRp5;
   double	caloHadDeltaRp5;
+  double	dEdxNPASmi;
+  double	dEdxASmi;
   double	dEdxNPHarm2;
   double	dEdxNPTru40;
   unsigned int	dEdxNPNoM;
@@ -418,6 +508,7 @@ std::ostream& operator<<(std::ostream& os, const Track_s& o)
   char r[1024];
   os << "Track" << std::endl;
   sprintf(r, "  %-32s: %f\n", "pt", (double)o.pt); os << r;
+  sprintf(r, "  %-32s: %f\n", "ptError", (double)o.ptError); os << r;
   sprintf(r, "  %-32s: %f\n", "px", (double)o.px); os << r;
   sprintf(r, "  %-32s: %f\n", "py", (double)o.py); os << r;
   sprintf(r, "  %-32s: %f\n", "pz", (double)o.pz); os << r;
@@ -426,6 +517,8 @@ std::ostream& operator<<(std::ostream& os, const Track_s& o)
   sprintf(r, "  %-32s: %f\n", "vx", (double)o.vx); os << r;
   sprintf(r, "  %-32s: %f\n", "vy", (double)o.vy); os << r;
   sprintf(r, "  %-32s: %f\n", "vz", (double)o.vz); os << r;
+  sprintf(r, "  %-32s: %f\n", "chi2", (double)o.chi2); os << r;
+  sprintf(r, "  %-32s: %f\n", "ndof", (double)o.ndof); os << r;
   sprintf(r, "  %-32s: %f\n", "numberOfValidHits", (double)o.numberOfValidHits); os << r;
   sprintf(r, "  %-32s: %f\n", "hitPattern_trackerLayersWithoutMeasurement", (double)o.hitPattern_trackerLayersWithoutMeasurement); os << r;
   sprintf(r, "  %-32s: %f\n", "trackerExpectedHitsInner_numberOfLostHits", (double)o.trackerExpectedHitsInner_numberOfLostHits); os << r;
@@ -438,6 +531,8 @@ std::ostream& operator<<(std::ostream& os, const Track_s& o)
   sprintf(r, "  %-32s: %f\n", "caloHadDeltaRp4", (double)o.caloHadDeltaRp4); os << r;
   sprintf(r, "  %-32s: %f\n", "caloEMDeltaRp5", (double)o.caloEMDeltaRp5); os << r;
   sprintf(r, "  %-32s: %f\n", "caloHadDeltaRp5", (double)o.caloHadDeltaRp5); os << r;
+  sprintf(r, "  %-32s: %f\n", "dEdxNPASmi", (double)o.dEdxNPASmi); os << r;
+  sprintf(r, "  %-32s: %f\n", "dEdxASmi", (double)o.dEdxASmi); os << r;
   sprintf(r, "  %-32s: %f\n", "dEdxNPHarm2", (double)o.dEdxNPHarm2); os << r;
   sprintf(r, "  %-32s: %f\n", "dEdxNPTru40", (double)o.dEdxNPTru40); os << r;
   sprintf(r, "  %-32s: %f\n", "dEdxNPNoM", (double)o.dEdxNPNoM); os << r;
@@ -564,6 +659,40 @@ inline void fillPileupSummaryInfo()
     }
 }
 
+inline void fillSimTrack()
+{
+  SimTrack.resize(SimTrack_charge.size());
+  for(unsigned int i=0; i < SimTrack.size(); ++i)
+    {
+      SimTrack[i].charge	= SimTrack_charge[i];
+      SimTrack[i].vertIndex	= SimTrack_vertIndex[i];
+      SimTrack[i].noVertex	= SimTrack_noVertex[i];
+      SimTrack[i].genpartIndex	= SimTrack_genpartIndex[i];
+      SimTrack[i].noGenpart	= SimTrack_noGenpart[i];
+      SimTrack[i].type	= SimTrack_type[i];
+      SimTrack[i].trackId	= SimTrack_trackId[i];
+      SimTrack[i].momentum_pt	= SimTrack_momentum_pt[i];
+      SimTrack[i].momentum_phi	= SimTrack_momentum_phi[i];
+      SimTrack[i].momentum_eta	= SimTrack_momentum_eta[i];
+      SimTrack[i].momentum_energy	= SimTrack_momentum_energy[i];
+    }
+}
+
+inline void fillSimVertex()
+{
+  SimVertex.resize(SimVertex_parentIndex.size());
+  for(unsigned int i=0; i < SimVertex.size(); ++i)
+    {
+      SimVertex[i].parentIndex	= SimVertex_parentIndex[i];
+      SimVertex[i].noParent	= SimVertex_noParent[i];
+      SimVertex[i].vertexId	= SimVertex_vertexId[i];
+      SimVertex[i].position_x	= SimVertex_position_x[i];
+      SimVertex[i].position_y	= SimVertex_position_y[i];
+      SimVertex[i].position_z	= SimVertex_position_z[i];
+      SimVertex[i].position_t	= SimVertex_position_t[i];
+    }
+}
+
 inline void fillTau()
 {
   Tau.resize(Tau_energy.size());
@@ -588,6 +717,7 @@ inline void fillTrack()
   for(unsigned int i=0; i < Track.size(); ++i)
     {
       Track[i].pt	= Track_pt[i];
+      Track[i].ptError	= Track_ptError[i];
       Track[i].px	= Track_px[i];
       Track[i].py	= Track_py[i];
       Track[i].pz	= Track_pz[i];
@@ -596,6 +726,8 @@ inline void fillTrack()
       Track[i].vx	= Track_vx[i];
       Track[i].vy	= Track_vy[i];
       Track[i].vz	= Track_vz[i];
+      Track[i].chi2	= Track_chi2[i];
+      Track[i].ndof	= Track_ndof[i];
       Track[i].numberOfValidHits	= Track_numberOfValidHits[i];
       Track[i].hitPattern_trackerLayersWithoutMeasurement	= Track_hitPattern_trackerLayersWithoutMeasurement[i];
       Track[i].trackerExpectedHitsInner_numberOfLostHits	= Track_trackerExpectedHitsInner_numberOfLostHits[i];
@@ -608,6 +740,8 @@ inline void fillTrack()
       Track[i].caloHadDeltaRp4	= Track_caloHadDeltaRp4[i];
       Track[i].caloEMDeltaRp5	= Track_caloEMDeltaRp5[i];
       Track[i].caloHadDeltaRp5	= Track_caloHadDeltaRp5[i];
+      Track[i].dEdxNPASmi	= Track_dEdxNPASmi[i];
+      Track[i].dEdxASmi	= Track_dEdxASmi[i];
       Track[i].dEdxNPHarm2	= Track_dEdxNPHarm2[i];
       Track[i].dEdxNPTru40	= Track_dEdxNPTru40[i];
       Track[i].dEdxNPNoM	= Track_dEdxNPNoM[i];
@@ -656,6 +790,8 @@ void fillObjects()
   fillJet();
   fillMuon();
   fillPileupSummaryInfo();
+  fillSimTrack();
+  fillSimVertex();
   fillTau();
   fillTrack();
   fillVertex();
@@ -794,6 +930,58 @@ void saveSelectedObjects()
   n = 0;
   try
     {
+       n = indexmap["SimTrack"].size();
+    }
+  catch (...)
+    {}
+  if ( n > 0 )
+    {
+      std::vector<int>& index = indexmap["SimTrack"];
+      for(int i=0; i < n; ++i)
+        {
+          int j = index[i];
+          SimTrack_charge[i]	= SimTrack_charge[j];
+          SimTrack_vertIndex[i]	= SimTrack_vertIndex[j];
+          SimTrack_noVertex[i]	= SimTrack_noVertex[j];
+          SimTrack_genpartIndex[i]	= SimTrack_genpartIndex[j];
+          SimTrack_noGenpart[i]	= SimTrack_noGenpart[j];
+          SimTrack_type[i]	= SimTrack_type[j];
+          SimTrack_trackId[i]	= SimTrack_trackId[j];
+          SimTrack_momentum_pt[i]	= SimTrack_momentum_pt[j];
+          SimTrack_momentum_phi[i]	= SimTrack_momentum_phi[j];
+          SimTrack_momentum_eta[i]	= SimTrack_momentum_eta[j];
+          SimTrack_momentum_energy[i]	= SimTrack_momentum_energy[j];
+        }
+      nSimTrack = n;
+    }
+
+  n = 0;
+  try
+    {
+       n = indexmap["SimVertex"].size();
+    }
+  catch (...)
+    {}
+  if ( n > 0 )
+    {
+      std::vector<int>& index = indexmap["SimVertex"];
+      for(int i=0; i < n; ++i)
+        {
+          int j = index[i];
+          SimVertex_parentIndex[i]	= SimVertex_parentIndex[j];
+          SimVertex_noParent[i]	= SimVertex_noParent[j];
+          SimVertex_vertexId[i]	= SimVertex_vertexId[j];
+          SimVertex_position_x[i]	= SimVertex_position_x[j];
+          SimVertex_position_y[i]	= SimVertex_position_y[j];
+          SimVertex_position_z[i]	= SimVertex_position_z[j];
+          SimVertex_position_t[i]	= SimVertex_position_t[j];
+        }
+      nSimVertex = n;
+    }
+
+  n = 0;
+  try
+    {
        n = indexmap["Tau"].size();
     }
   catch (...)
@@ -832,6 +1020,7 @@ void saveSelectedObjects()
         {
           int j = index[i];
           Track_pt[i]	= Track_pt[j];
+          Track_ptError[i]	= Track_ptError[j];
           Track_px[i]	= Track_px[j];
           Track_py[i]	= Track_py[j];
           Track_pz[i]	= Track_pz[j];
@@ -840,6 +1029,8 @@ void saveSelectedObjects()
           Track_vx[i]	= Track_vx[j];
           Track_vy[i]	= Track_vy[j];
           Track_vz[i]	= Track_vz[j];
+          Track_chi2[i]	= Track_chi2[j];
+          Track_ndof[i]	= Track_ndof[j];
           Track_numberOfValidHits[i]	= Track_numberOfValidHits[j];
           Track_hitPattern_trackerLayersWithoutMeasurement[i]	= Track_hitPattern_trackerLayersWithoutMeasurement[j];
           Track_trackerExpectedHitsInner_numberOfLostHits[i]	= Track_trackerExpectedHitsInner_numberOfLostHits[j];
@@ -852,6 +1043,8 @@ void saveSelectedObjects()
           Track_caloHadDeltaRp4[i]	= Track_caloHadDeltaRp4[j];
           Track_caloEMDeltaRp5[i]	= Track_caloEMDeltaRp5[j];
           Track_caloHadDeltaRp5[i]	= Track_caloHadDeltaRp5[j];
+          Track_dEdxNPASmi[i]	= Track_dEdxNPASmi[j];
+          Track_dEdxASmi[i]	= Track_dEdxASmi[j];
           Track_dEdxNPHarm2[i]	= Track_dEdxNPHarm2[j];
           Track_dEdxNPTru40[i]	= Track_dEdxNPTru40[j];
           Track_dEdxNPNoM[i]	= Track_dEdxNPNoM[j];
@@ -950,6 +1143,24 @@ void selectVariables(itreestream& stream)
   stream.select("PileupSummaryInfo_addPileupInfo.getBunchCrossing", PileupSummaryInfo_getBunchCrossing);
   stream.select("PileupSummaryInfo_addPileupInfo.getPU_NumInteractions", PileupSummaryInfo_getPU_NumInteractions);
   stream.select("PileupSummaryInfo_addPileupInfo.getTrueNumInteractions", PileupSummaryInfo_getTrueNumInteractions);
+  stream.select("SimTrack_g4SimHits.charge", SimTrack_charge);
+  stream.select("SimTrack_g4SimHits.genpartIndex", SimTrack_genpartIndex);
+  stream.select("SimTrack_g4SimHits.momentum_energy", SimTrack_momentum_energy);
+  stream.select("SimTrack_g4SimHits.momentum_eta", SimTrack_momentum_eta);
+  stream.select("SimTrack_g4SimHits.momentum_phi", SimTrack_momentum_phi);
+  stream.select("SimTrack_g4SimHits.momentum_pt", SimTrack_momentum_pt);
+  stream.select("SimTrack_g4SimHits.noGenpart", SimTrack_noGenpart);
+  stream.select("SimTrack_g4SimHits.noVertex", SimTrack_noVertex);
+  stream.select("SimTrack_g4SimHits.trackId", SimTrack_trackId);
+  stream.select("SimTrack_g4SimHits.type", SimTrack_type);
+  stream.select("SimTrack_g4SimHits.vertIndex", SimTrack_vertIndex);
+  stream.select("SimVertex_g4SimHits.noParent", SimVertex_noParent);
+  stream.select("SimVertex_g4SimHits.parentIndex", SimVertex_parentIndex);
+  stream.select("SimVertex_g4SimHits.position_t", SimVertex_position_t);
+  stream.select("SimVertex_g4SimHits.position_x", SimVertex_position_x);
+  stream.select("SimVertex_g4SimHits.position_y", SimVertex_position_y);
+  stream.select("SimVertex_g4SimHits.position_z", SimVertex_position_z);
+  stream.select("SimVertex_g4SimHits.vertexId", SimVertex_vertexId);
   stream.select("patTau_selectedPatTaus.againstElectronLoose", Tau_againstElectronLoose);
   stream.select("patTau_selectedPatTaus.againstMuonTight", Tau_againstMuonTight);
   stream.select("patTau_selectedPatTaus.byLooseCombinedIsolationDeltaBetaCorr", Tau_byLooseCombinedIsolationDeltaBetaCorr);
@@ -966,6 +1177,8 @@ void selectVariables(itreestream& stream)
   stream.select("recoTrackHelper_TrackRefitter.caloHadDeltaRp3", Track_caloHadDeltaRp3);
   stream.select("recoTrackHelper_TrackRefitter.caloHadDeltaRp4", Track_caloHadDeltaRp4);
   stream.select("recoTrackHelper_TrackRefitter.caloHadDeltaRp5", Track_caloHadDeltaRp5);
+  stream.select("recoTrackHelper_TrackRefitter.chi2", Track_chi2);
+  stream.select("recoTrackHelper_TrackRefitter.dEdxASmi", Track_dEdxASmi);
   stream.select("recoTrackHelper_TrackRefitter.dEdxHarm2", Track_dEdxHarm2);
   stream.select("recoTrackHelper_TrackRefitter.dEdxHitsHarm2_1", Track_dEdxHitsHarm2_1);
   stream.select("recoTrackHelper_TrackRefitter.dEdxHitsHarm2_1000", Track_dEdxHitsHarm2_1000);
@@ -985,6 +1198,7 @@ void selectVariables(itreestream& stream)
   stream.select("recoTrackHelper_TrackRefitter.dEdxHitsTrun40_3", Track_dEdxHitsTrun40_3);
   stream.select("recoTrackHelper_TrackRefitter.dEdxHitsTrun40_5", Track_dEdxHitsTrun40_5);
   stream.select("recoTrackHelper_TrackRefitter.dEdxHitsTrun40_7", Track_dEdxHitsTrun40_7);
+  stream.select("recoTrackHelper_TrackRefitter.dEdxNPASmi", Track_dEdxNPASmi);
   stream.select("recoTrackHelper_TrackRefitter.dEdxNPHarm2", Track_dEdxNPHarm2);
   stream.select("recoTrackHelper_TrackRefitter.dEdxNPNoM", Track_dEdxNPNoM);
   stream.select("recoTrackHelper_TrackRefitter.dEdxNPTru40", Track_dEdxNPTru40);
@@ -992,9 +1206,11 @@ void selectVariables(itreestream& stream)
   stream.select("recoTrackHelper_TrackRefitter.dEdxTru40", Track_dEdxTru40);
   stream.select("recoTrackHelper_TrackRefitter.eta", Track_eta);
   stream.select("recoTrackHelper_TrackRefitter.hitPattern_trackerLayersWithoutMeasurement", Track_hitPattern_trackerLayersWithoutMeasurement);
+  stream.select("recoTrackHelper_TrackRefitter.ndof", Track_ndof);
   stream.select("recoTrackHelper_TrackRefitter.numberOfValidHits", Track_numberOfValidHits);
   stream.select("recoTrackHelper_TrackRefitter.phi", Track_phi);
   stream.select("recoTrackHelper_TrackRefitter.pt", Track_pt);
+  stream.select("recoTrackHelper_TrackRefitter.ptError", Track_ptError);
   stream.select("recoTrackHelper_TrackRefitter.px", Track_px);
   stream.select("recoTrackHelper_TrackRefitter.py", Track_py);
   stream.select("recoTrackHelper_TrackRefitter.pz", Track_pz);
@@ -1025,6 +1241,8 @@ void selectVariables(itreestream& stream)
   stream.select("npatJet_selectedPatJetsPFlow", nJet);
   stream.select("npatMuon_selectedPatMuonsLoosePFlow", nMuon);
   stream.select("nPileupSummaryInfo_addPileupInfo", nPileupSummaryInfo);
+  stream.select("nSimTrack_g4SimHits", nSimTrack);
+  stream.select("nSimVertex_g4SimHits", nSimVertex);
   stream.select("npatTau_selectedPatTaus", nTau);
   stream.select("nrecoTrackHelper_TrackRefitter", nTrack);
   stream.select("nrecoVertex_offlinePrimaryVertices", nVertex);
