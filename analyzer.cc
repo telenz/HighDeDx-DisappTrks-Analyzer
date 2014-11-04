@@ -141,8 +141,11 @@ int main(int argc, char** argv)
   fullSelection.trackPreselection         = true;
   fullSelection.qcdSupression             = true;
   fullSelection.trackCandidateCut         = true;
-  class Event chiTracks("chiTracks",ofile);
-  if(isSignal) chiTracks.onlyChi               = true;
+  fullSelection.NumOfLostOuterCut         = true;
+  fullSelection.CaloIsolationCut          = true;
+  fullSelection.NumOfValidHitsCut         = true;
+  class Event chiTracksnoSelection("chiTracksnoSelection",ofile);
+  if(isSignal) chiTracksnoSelection.onlyChi  = true;
   class Event chiTrackstriggerRequirements("chiTrackstriggerRequirements",ofile);
   if(isSignal) chiTrackstriggerRequirements.onlyChi               = true;
   chiTrackstriggerRequirements.preselection        = true;
@@ -160,8 +163,13 @@ int main(int argc, char** argv)
   chiTracksfullSelection.trackPreselection   = true;
   chiTracksfullSelection.qcdSupression       = true;
   chiTracksfullSelection.trackCandidateCut   = true;
+  chiTracksfullSelection.NumOfLostOuterCut   = true;
+  chiTracksfullSelection.CaloIsolationCut    = true;
+  chiTracksfullSelection.NumOfValidHitsCut   = true;
 
-  // Control region 1 small track pt and small dEdx
+
+  //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  // Control region 1 high track pt and small dEdx
   class Event CR1("CR1",ofile);
   CR1.preselection              = true;
   CR1.triggerRequirements       = true;
@@ -185,7 +193,79 @@ int main(int argc, char** argv)
   chiTracksCR1.invertCaloIsolationRequirement   = false;
   chiTracksCR1.invertNumOfLostOuterRequirement  = false;
   chiTracksCR1.invertDeDxRequirement            = true;
-  
+  // Control region 2 small track pt and small dEdx
+  class Event CR2("CR2",ofile);
+  CR2.preselection              = true;
+  CR2.triggerRequirements       = true;
+  CR2.trackPreselection         = true;
+  CR2.qcdSupression             = true;
+  CR2.trackCandidateCut         = true;
+  CR2.invertTrackPtRequirement         = true;
+  CR2.invertNumOfValidHitsRequirement  = false;
+  CR2.invertCaloIsolationRequirement   = false;
+  CR2.invertNumOfLostOuterRequirement  = false;
+  CR2.invertDeDxRequirement            = true;
+  class Event chiTracksCR2("chiTracksCR2",ofile);
+  if(isSignal) chiTracksCR2.onlyChi = true;
+  chiTracksCR2.preselection         = true;
+  chiTracksCR2.triggerRequirements  = true;
+  chiTracksCR2.trackPreselection    = true;
+  chiTracksCR2.qcdSupression        = true;
+  chiTracksCR2.trackCandidateCut    = true;
+  chiTracksCR2.invertTrackPtRequirement         = true;
+  chiTracksCR2.invertNumOfValidHitsRequirement  = false;
+  chiTracksCR2.invertCaloIsolationRequirement   = false;
+  chiTracksCR2.invertNumOfLostOuterRequirement  = false;
+  chiTracksCR2.invertDeDxRequirement            = true;
+  // Control region 3 small track pt and high dEdx
+  class Event CR3("CR3",ofile);
+  CR3.preselection              = true;
+  CR3.triggerRequirements       = true;
+  CR3.trackPreselection         = true;
+  CR3.qcdSupression             = true;
+  CR3.trackCandidateCut         = true;
+  CR3.invertTrackPtRequirement         = true;
+  CR3.invertNumOfValidHitsRequirement  = false;
+  CR3.invertCaloIsolationRequirement   = false;
+  CR3.invertNumOfLostOuterRequirement  = false;
+  CR3.invertDeDxRequirement            = false;
+  class Event chiTracksCR3("chiTracksCR3",ofile);
+  if(isSignal) chiTracksCR3.onlyChi = true;
+  chiTracksCR3.preselection         = true;
+  chiTracksCR3.triggerRequirements  = true;
+  chiTracksCR3.trackPreselection    = true;
+  chiTracksCR3.qcdSupression        = true;
+  chiTracksCR3.trackCandidateCut    = true;
+  chiTracksCR3.invertTrackPtRequirement         = true;
+  chiTracksCR3.invertNumOfValidHitsRequirement  = false;
+  chiTracksCR3.invertCaloIsolationRequirement   = false;
+  chiTracksCR3.invertNumOfLostOuterRequirement  = false;
+  chiTracksCR3.invertDeDxRequirement            = false;
+  // Signal region high track pt and high dEdx
+  class Event SR("SR",ofile);
+  SR.preselection              = true;
+  SR.triggerRequirements       = true;
+  SR.trackPreselection         = true;
+  SR.qcdSupression             = true;
+  SR.trackCandidateCut         = true;
+  SR.invertTrackPtRequirement         = false;
+  SR.invertNumOfValidHitsRequirement  = false;
+  SR.invertCaloIsolationRequirement   = false;
+  SR.invertNumOfLostOuterRequirement  = false;
+  SR.invertDeDxRequirement            = false;
+  class Event chiTracksSR("chiTracksSR",ofile);
+  if(isSignal) chiTracksSR.onlyChi = true;
+  chiTracksSR.preselection         = true;
+  chiTracksSR.triggerRequirements  = true;
+  chiTracksSR.trackPreselection    = true;
+  chiTracksSR.qcdSupression        = true;
+  chiTracksSR.trackCandidateCut    = true;
+  chiTracksSR.invertTrackPtRequirement         = false;
+  chiTracksSR.invertNumOfValidHitsRequirement  = false;
+  chiTracksSR.invertCaloIsolationRequirement   = false;
+  chiTracksSR.invertNumOfLostOuterRequirement  = false;
+  chiTracksSR.invertDeDxRequirement            = false;
+  //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
   //-------------------------------------------------------------------------------------
   // Read file for bad ecal cells and csc chambers 
@@ -295,22 +375,29 @@ int main(int argc, char** argv)
       
       //-------------------------------------------------------------- Cuts ---------------------------------------------------------
       findChiInGenParticleCollection();
+      findChiInSimTrackCollection();
+      findChiDecayVertex();
       nVertices_0->Fill(nVertex);
       hTrueNumInteractions_0->Fill(PileupSummaryInfo[0].getTrueNumInteractions);
       hPU_NumInteractions_0->Fill(PileupSummaryInfo[0].getPU_NumInteractions);
       
-  
       noSelection.Selection();
       triggerRequirements.Selection();
       preselection.Selection();
       fullSelection.Selection();
-      chiTracks.Selection();
+      chiTracksnoSelection.Selection();
       chiTrackstriggerRequirements.Selection();
       chiTrackspreselection.Selection();
       chiTracksfullSelection.Selection();
       CR1.Selection();
       chiTracksCR1.Selection();
-            
+      CR2.Selection();
+      chiTracksCR2.Selection();
+      CR3.Selection();
+      chiTracksCR3.Selection();
+      SR.Selection();
+      chiTracksSR.Selection();
+
     }//end of loop over events
  
   stop = clock();
@@ -321,5 +408,7 @@ int main(int argc, char** argv)
   ofile.close();
   
   cout<<endl;
+  cout<<"nChiInSimVertex = "<<nChiInSimVertex<<endl;
+  cout<<"nChiInSimTrack  = "<<nChiInSimTrack<<endl<<endl;
   return 0;
 }
