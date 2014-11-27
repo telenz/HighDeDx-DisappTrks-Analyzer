@@ -38,7 +38,7 @@ double trackCaloIsolation(struct Track_s *track){
 
   double caloTowerIso05RhoCorr = 
     std::max(0.,track->caloHadDeltaRp5 + track->caloEMDeltaRp5 - sdouble_value*TMath::Pi()*0.5*0.5); 
-  
+
   return caloTowerIso05RhoCorr;
 
 }
@@ -218,7 +218,7 @@ std::vector<Track_s> findChiInRecoTrackCollection(std::vector<Track_s>& inputCol
 */
 //--------------------------------------------------------------------------------------------------
 // Get only the Chi from the full Track Collection
-std::vector<Track_s> findChiInRecoTrackCollection(std::vector<Track_s>& inputCollection, Hist* hist){
+std::vector<Track_s> findChiInRecoTrackCollection(std::vector<Track_s>& trkCollection, Hist* hist){
 
   std::vector<Track_s> chiTrackCollection;
   chiTrackCollection.clear();
@@ -232,9 +232,9 @@ std::vector<Track_s> findChiInRecoTrackCollection(std::vector<Track_s>& inputCol
 
     double dRmin=10000.;
 
-    for(unsigned int i=0; i<inputCollection.size(); i++){
-      dPhi = std::abs(TVector2::Phi_mpi_pi(inputCollection[i].phi - ChiTrack[j].SimTrackmomentum_phi));
-      dEta = std::abs(inputCollection[i].eta - ChiTrack[j].SimTrackmomentum_eta);
+    for(unsigned int i=0; i<trkCollection.size(); i++){
+      dPhi = std::abs(TVector2::Phi_mpi_pi(trkCollection[i].phi - ChiTrack[j].SimTrackmomentum_phi));
+      dEta = std::abs(trkCollection[i].eta - ChiTrack[j].SimTrackmomentum_eta);
       dR   = std::sqrt( dPhi*dPhi + dEta*dEta );
 
       if(dR<dRmin){
@@ -244,13 +244,13 @@ std::vector<Track_s> findChiInRecoTrackCollection(std::vector<Track_s>& inputCol
     }
     
     if(dRmin<0.01){
-      chiTrackCollection.push_back(inputCollection[idxMin]);
-      fillChiTrackWithRecoTrackVariables(&ChiTrack[j], &inputCollection[idxMin]);
+      chiTrackCollection.push_back(trkCollection[idxMin]);
+      fillChiTrackWithRecoTrackVariables(&ChiTrack[j], &trkCollection[idxMin]);
       ChiTrack[j].matched = true;
       matchedGenChiToTrack += 1;
     }
     hist->htrackDeltaRSimRecoTracks -> Fill(dRmin,weight);
-    hist->hSimTrackType             -> Fill(ChiTrack[j].SimTracktype,weight);
+    hist->hSimTrackType             -> Fill(std::abs(ChiTrack[j].SimTracktype),weight);
 
   }
 
@@ -513,6 +513,9 @@ std::vector<evt::Track_s> trackCandidateCuts(std::vector<evt::Track_s> trackColl
     //.................................................................................//
     if(!trackCollection[i].trackHighPurity)                                   continue;
     countsTrackCriteria->Fill("highPurity", weight);
+    //.................................................................................//    
+    if(trackCaloIsolation(&trackCollection[i])>50)                            continue;
+    countsTrackCriteria->Fill("CaloIsoLess50", weight);
     //.................................................................................//
     outputColl.push_back(trackCollection[i]);
   }
@@ -543,13 +546,13 @@ std::vector<evt::Track_s> trackCleaningCuts(std::vector<evt::Track_s> trackColle
     //if(isWithinIntermoduleGapsOfECAL(&trackCollection[i]))                                     continue;
     countsTrackCriteria->Fill("notWithinECALGap", weight);
     //.................................................................................//
-    if(getTrkIsMatchedBadCSC(&trackCollection[i]))                                            continue;
+    //if(getTrkIsMatchedBadCSC(&trackCollection[i]))                                            continue;
     countsTrackCriteria->Fill("isMatchedBadCSC", weight);
     //.................................................................................//
     double _dvx = trackCollection[i].vx - Vertex[0].x;
     double _dvy = trackCollection[i].vy - Vertex[0].y;
-    double d0 = ( - _dvx*trackCollection[i].py + _dvy*trackCollection[i].px )/trackCollection[i].pt;
-    if(abs(d0)>=0.02)                                                                         continue;
+    double d0 = abs( - _dvx*trackCollection[i].py + _dvy*trackCollection[i].px)/trackCollection[i].pt;
+    if(abs(d0)>0.02)                                                                         continue;
     countsTrackCriteria->Fill("d0Less0p2mm", weight);
     //.................................................................................//
     double _dvz = trackCollection[i].vz - Vertex[0].z;
@@ -563,9 +566,16 @@ std::vector<evt::Track_s> trackCleaningCuts(std::vector<evt::Track_s> trackColle
     if(trackCollection[i].trackerExpectedHitsInner_numberOfLostHits>0)                        continue;
     countsTrackCriteria->Fill("NOfLostHitsInnerEq0", weight);
     //.................................................................................//
-    if(trackCollection[i].trackRelIso03>=0.05)                           continue;
+    if(trackCollection[i].trackRelIso03>=0.5)                                                continue;
     countsTrackCriteria->Fill("TrackIsolationDeltaRLess0p05", weight);
     //.................................................................................//
+    //if(trackCollection[i].numberOfValidHits<4)                                                continue;
+    countsTrackCriteria->Fill("NOfValidHitsGreater3", weight);
+    //.................................................................................//
+    //if(trackCollection[i].dEdxHarm2<3)                                                        continue;
+    //countsTrackCriteria->Fill("DeDxHarm2Ge3", weight);
+    //.................................................................................//
+
     outputColl.push_back(trackCollection[i]);
     //.................................................................................//
   

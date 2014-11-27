@@ -31,7 +31,7 @@ int main(int argc, char** argv)
   // Get names of ntuple files to be processed and open chain of ntuples
   bool isSignal = false;
   vector<string> filenames = getFilenames(cmdline.filelist);
-  if(filenames[0].find("pMSSM") != std::string::npos) isSignal = true;
+  if(filenames[0].find("pMSSM") != std::string::npos || filenames[0].find("RECO_RAW2DIGI_L1Reco_RECO") != std::string::npos) isSignal = true;
   bool isData = false;
   if(filenames[0].find("MET_Run2012*_22Jan2013") != std::string::npos) isData = true;
   itreestream stream(filenames, "Events");
@@ -143,15 +143,14 @@ int main(int argc, char** argv)
   fullSelection.trackCandidateCut         = true;
   fullSelection.NumOfLostOuterCut         = true;
   fullSelection.CaloIsolationCut          = true;
-  fullSelection.NumOfValidHitsCut         = true;
   class Event chiTracksnoSelection("chiTracksnoSelection",ofile);
-  if(isSignal) chiTracksnoSelection.onlyChi  = true;
+  if(isSignal) chiTracksnoSelection.onlyChi = true;
   class Event chiTrackstriggerRequirements("chiTrackstriggerRequirements",ofile);
-  if(isSignal) chiTrackstriggerRequirements.onlyChi               = true;
-  chiTrackstriggerRequirements.preselection        = true;
-  chiTrackstriggerRequirements.triggerRequirements = true;
+  if(isSignal) chiTrackstriggerRequirements.onlyChi = true;
+  chiTrackstriggerRequirements.preselection         = true;
+  chiTrackstriggerRequirements.triggerRequirements  = true;
   class Event chiTrackspreselection("chiTrackspreselection",ofile);
-  if(isSignal) chiTrackspreselection.onlyChi             = true;
+  if(isSignal) chiTrackspreselection.onlyChi= true;
   chiTrackspreselection.preselection        = true;
   chiTrackspreselection.triggerRequirements = true;
   chiTrackspreselection.trackPreselection   = true;
@@ -165,7 +164,6 @@ int main(int argc, char** argv)
   chiTracksfullSelection.trackCandidateCut   = true;
   chiTracksfullSelection.NumOfLostOuterCut   = true;
   chiTracksfullSelection.CaloIsolationCut    = true;
-  chiTracksfullSelection.NumOfValidHitsCut   = true;
 
 
   //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -177,8 +175,9 @@ int main(int argc, char** argv)
   CR1.qcdSupression             = true;
   CR1.trackCandidateCut         = true;
   CR1.invertTrackPtRequirement         = false;
-  CR1.invertNumOfValidHitsRequirement  = false;
+  CR1.CaloIsolationCut                 = true; 
   CR1.invertCaloIsolationRequirement   = false;
+  CR1.NumOfLostOuterCut                = true;
   CR1.invertNumOfLostOuterRequirement  = false;
   CR1.invertDeDxRequirement            = true;
   class Event chiTracksCR1("chiTracksCR1",ofile);
@@ -189,8 +188,9 @@ int main(int argc, char** argv)
   chiTracksCR1.qcdSupression        = true;
   chiTracksCR1.trackCandidateCut    = true;
   chiTracksCR1.invertTrackPtRequirement         = false;
-  chiTracksCR1.invertNumOfValidHitsRequirement  = false;
+  chiTracksCR1.CaloIsolationCut                 = true; 
   chiTracksCR1.invertCaloIsolationRequirement   = false;
+  chiTracksCR1.NumOfLostOuterCut                = true;
   chiTracksCR1.invertNumOfLostOuterRequirement  = false;
   chiTracksCR1.invertDeDxRequirement            = true;
   // Control region 2 small track pt and small dEdx
@@ -201,8 +201,9 @@ int main(int argc, char** argv)
   CR2.qcdSupression             = true;
   CR2.trackCandidateCut         = true;
   CR2.invertTrackPtRequirement         = true;
-  CR2.invertNumOfValidHitsRequirement  = false;
+  CR2.CaloIsolationCut                 = true; 
   CR2.invertCaloIsolationRequirement   = false;
+  CR2.NumOfLostOuterCut                = true;
   CR2.invertNumOfLostOuterRequirement  = false;
   CR2.invertDeDxRequirement            = true;
   class Event chiTracksCR2("chiTracksCR2",ofile);
@@ -213,8 +214,9 @@ int main(int argc, char** argv)
   chiTracksCR2.qcdSupression        = true;
   chiTracksCR2.trackCandidateCut    = true;
   chiTracksCR2.invertTrackPtRequirement         = true;
-  chiTracksCR2.invertNumOfValidHitsRequirement  = false;
+  chiTracksCR2.CaloIsolationCut                 = true; 
   chiTracksCR2.invertCaloIsolationRequirement   = false;
+  chiTracksCR2.NumOfLostOuterCut                = true;
   chiTracksCR2.invertNumOfLostOuterRequirement  = false;
   chiTracksCR2.invertDeDxRequirement            = true;
   // Control region 3 small track pt and high dEdx
@@ -225,8 +227,9 @@ int main(int argc, char** argv)
   CR3.qcdSupression             = true;
   CR3.trackCandidateCut         = true;
   CR3.invertTrackPtRequirement         = true;
-  CR3.invertNumOfValidHitsRequirement  = false;
+  CR3.CaloIsolationCut                 = true; 
   CR3.invertCaloIsolationRequirement   = false;
+  CR3.NumOfLostOuterCut                = true;
   CR3.invertNumOfLostOuterRequirement  = false;
   CR3.invertDeDxRequirement            = false;
   class Event chiTracksCR3("chiTracksCR3",ofile);
@@ -237,8 +240,9 @@ int main(int argc, char** argv)
   chiTracksCR3.qcdSupression        = true;
   chiTracksCR3.trackCandidateCut    = true;
   chiTracksCR3.invertTrackPtRequirement         = true;
-  chiTracksCR3.invertNumOfValidHitsRequirement  = false;
+  chiTracksCR3.CaloIsolationCut                 = true; 
   chiTracksCR3.invertCaloIsolationRequirement   = false;
+  chiTracksCR3.NumOfLostOuterCut                = true;
   chiTracksCR3.invertNumOfLostOuterRequirement  = false;
   chiTracksCR3.invertDeDxRequirement            = false;
   // Signal region high track pt and high dEdx
@@ -249,8 +253,9 @@ int main(int argc, char** argv)
   SR.qcdSupression             = true;
   SR.trackCandidateCut         = true;
   SR.invertTrackPtRequirement         = false;
-  SR.invertNumOfValidHitsRequirement  = false;
+  SR.CaloIsolationCut                 = true; 
   SR.invertCaloIsolationRequirement   = false;
+  SR.NumOfLostOuterCut                = true;
   SR.invertNumOfLostOuterRequirement  = false;
   SR.invertDeDxRequirement            = false;
   class Event chiTracksSR("chiTracksSR",ofile);
@@ -261,8 +266,9 @@ int main(int argc, char** argv)
   chiTracksSR.qcdSupression        = true;
   chiTracksSR.trackCandidateCut    = true;
   chiTracksSR.invertTrackPtRequirement         = false;
-  chiTracksSR.invertNumOfValidHitsRequirement  = false;
+  chiTracksSR.CaloIsolationCut                 = true; 
   chiTracksSR.invertCaloIsolationRequirement   = false;
+  chiTracksSR.NumOfLostOuterCut                = true;
   chiTracksSR.invertNumOfLostOuterRequirement  = false;
   chiTracksSR.invertDeDxRequirement            = false;
   //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -372,6 +378,27 @@ int main(int argc, char** argv)
       }
       //weight =1.;
       ofile.count("NoCuts", weight);
+
+
+      //------------- Calculate track dependent variables from hits and save them in trk coll ----
+      for(int i=0; i<evt::Track.size();i++){
+	double ASmiOnTheFly     = dEdxOnTheFly(&(*HitsDeDx)[i], &(*HitsShapetest)[i], &(*HitsPathlength)[i], &(*HitsSubdetid)[i], 1, template_strip, template_pixel,1); 
+	double ASmiNPOnTheFly   = dEdxOnTheFly(&(*HitsDeDx)[i], &(*HitsShapetest)[i], &(*HitsPathlength)[i], &(*HitsSubdetid)[i], 1, template_strip, template_pixel,0); 
+	double ASmiOnTheFly_3   = dEdxOnTheFly(&(*HitsDeDx)[i], &(*HitsShapetest)[i], &(*HitsPathlength)[i], &(*HitsSubdetid)[i], 1, template_strip, template_pixel,1,3);
+	double ASmiNPOnTheFly_3 = dEdxOnTheFly(&(*HitsDeDx)[i], &(*HitsShapetest)[i], &(*HitsPathlength)[i], &(*HitsSubdetid)[i], 1, template_strip, template_strip,0,3);
+	double ASmiOnTheFly_7   = dEdxOnTheFly(&(*HitsDeDx)[i], &(*HitsShapetest)[i], &(*HitsPathlength)[i], &(*HitsSubdetid)[i], 1, template_strip, template_pixel,1,7);
+	double ASmiNPOnTheFly_7 = dEdxOnTheFly(&(*HitsDeDx)[i], &(*HitsShapetest)[i], &(*HitsPathlength)[i], &(*HitsSubdetid)[i], 1, template_strip, template_strip,0,7);
+
+
+	Track[i].ASmi     = ASmiOnTheFly;
+       	Track[i].ASmiNP   = ASmiNPOnTheFly;
+	Track[i].ASmi_3   = ASmiOnTheFly_3;
+       	Track[i].ASmiNP_3 = ASmiNPOnTheFly_3;
+	Track[i].ASmi_7   = ASmiOnTheFly_7;
+       	Track[i].ASmiNP_7 = ASmiNPOnTheFly_7;
+
+      }
+      
       
       //-------------------------------------------------------------- Cuts ---------------------------------------------------------
       findChiInGenParticleCollection();
@@ -380,11 +407,13 @@ int main(int argc, char** argv)
       nVertices_0->Fill(nVertex);
       hTrueNumInteractions_0->Fill(PileupSummaryInfo[0].getTrueNumInteractions);
       hPU_NumInteractions_0->Fill(PileupSummaryInfo[0].getPU_NumInteractions);
+
       
       noSelection.Selection();
       triggerRequirements.Selection();
       preselection.Selection();
       fullSelection.Selection();
+      
       chiTracksnoSelection.Selection();
       chiTrackstriggerRequirements.Selection();
       chiTrackspreselection.Selection();
@@ -397,7 +426,7 @@ int main(int argc, char** argv)
       chiTracksCR3.Selection();
       SR.Selection();
       chiTracksSR.Selection();
-
+      
     }//end of loop over events
  
   stop = clock();

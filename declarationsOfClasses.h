@@ -12,43 +12,46 @@ class Hist
 
  public:
   TH1D *htrackPt;
+  TH1D *htrackPtSmallRange;
   TH1D *htrackP;
   TH1D *htrackEta;
   TH1D *htrackd0;
   TH1D *htrackdz;
   TH1D *htrackNValid;
+  TH1D *htrackNValidSmallRange;
   TH1D *htrackNLostMid;
   TH1D *htrackNLostInner;
   TH1D *htrackNLostOuter;
+  TH1D *htrackNLostOuterSmallRange;
   TH1D *htrackIsolation;
+  TH1D *htrackIsolationSmallRange;
   TH1D *htrackCaloIsolation;
   TH1D *htrackCaloIsolationSmallRange;
   TH1D *htrackASmi;
+  TH1D *htrackASmiSmallRange;
   TH1D *htrackASmi_3;
   TH1D *htrackASmi_7;
   TH1D *htrackASmiNP;
+  TH1D *htrackASmiNPSmallRange;
   TH1D *htrackASmiNP_3;
   TH1D *htrackASmiNP_7;
   TH1D *htrackDeDxHarm2;
+  TH1D *htrackDeDxHarm2SmallRange;
   TH1D *htrackHighPurity;
   TH2D *htrackPtDeDxHarm2;
+  TH2D *htrackPtDeDxHarm2LargeRange;
   TH2D *htrackPtASmi;
+  TH2D *htrackPtASmiLargeRange;
   TH2D *htrackPtCaloIso;
+  TH2D *htrackPtCaloIsoLargeRange;
   TH2D *htrackPtNLostOuter;
+  TH2D *htrackCaloIsoASmi;
+  
 
-
-  //TH1D *hRelativePtError;
   TH1D *htrackPdgId;
   TH1D *htrackgenParticle;
-  //TH2D *htrackPdgIdMass;
-  //TH2D *htrackPMass;
-  //TH2D *htrackgenBetaMass;
-  //TH2D *htrackgenBetaGammaMass;
 
-  //TH1D *hMass;
-  //TH1D *hMass_1Hits;
-  //TH1D *hMass_3Hits;
-  //TH1D *hMass_7Hits;
+  TH1D *hMass;
 
   TH1D* h1stjetpt;
   TH2D* htrackpt1stjetpt;
@@ -62,6 +65,7 @@ class Hist
   TH1D *hgenEtaChi;
   TH1D *hgenPhiChi;
   TH1D *hgenBetaChi;
+  TH1D *hgenBetaTimesGammaChi;
   TH1D *hgenPChi;
 
   // chargino plots
@@ -78,6 +82,8 @@ class Hist
   void FillTrackVariables(std::vector<evt::Track_s> inputCollection,double weight);
   void FillGenParticleHistograms(std::vector<evt::GenParticle_s> inputCollection, double weight);
   void FillCharginoHistograms(std::vector<ChiTrack_s> inputCollection, double weight);
+  TH1D *iniTH1D(TString histoName,int nBins,double low, double high);
+  TH2D *iniTH2D(TString histoName,int nBinsX,double lowX, double highX,int nBinsY,double lowY, double highY);
 };
 
 //--------------------------------------------------------------------------------------------------
