@@ -7,17 +7,31 @@
 #include "declarationsOfClasses.h"
 #include "TH1.h"
 #include "TVector3.h"
+#include <vector>
 
 using namespace std;
 
-const double K = 2.529;
-const double C = 2.772;
+const double K   = 2.529; // checked again at 5th december (same for data and MC -> ask Loic about this)
+const double C   = 2.772;
 
 
 Hist::Hist(TString histName, outputFile ofile_)
 {
+
   ofile_.file_->mkdir(histName);
   ofile_.file_->cd(histName);
+  tree=new TTree("Variables","a Tree with all relevant variables after selection");
+  tree->Branch("weight",&variables.weight);
+  tree->Branch("trackDeDxASmi",&variables.trackDeDxASmi);
+  tree->Branch("trackDeDxHarm2",&variables.trackDeDxHarm2);
+  tree->Branch("trackPt",&variables.trackPt);
+  tree->Branch("trackNLostOuter",&variables.trackNLostOuter);
+  tree->Branch("trackNValid",&variables.trackNValid);
+  tree->Branch("trackCaloIsolation",&variables.trackCaloIsolation);
+  tree->Branch("trackMass",&variables.trackMass);
+  tree->Branch("trackIsolation",&variables.trackIsolation);
+
+
   htrackPt               = iniTH1D("htrackPt",100,0,2000);
   htrackPtSmallRange     = iniTH1D("htrackPtSmallRange",40,0,400);
   htrackP             = iniTH1D("htrackP",100,0,2000);
@@ -85,7 +99,7 @@ Hist::Hist(TString histName, outputFile ofile_)
   hgenEtaChi             = iniTH1D("hgenEtaChi",200,-5,5);
   hgenPhiChi             = iniTH1D("hgenPhiChi",100,0,3.142);
   hgenBetaChi            = iniTH1D("hgenBetaChi",100,0,1);
-  hgenBetaTimesGammaChi  = iniTH1D("hgenBetaTimesGammaChi",100,0,1000);
+  hgenBetaTimesGammaChi  = iniTH1D("hgenBetaTimesGammaChi",20,0,200);
       
   //chargino plots
   htrackPtoverGenPt         = iniTH1D("htrackPtoverGenPt",80,0,4);
@@ -94,18 +108,21 @@ Hist::Hist(TString histName, outputFile ofile_)
   htrackEfficiency          = iniTH1D("htrackEfficiency",2,0,2);
   hAllTracksZRho            = iniTH2D("hAllTracksZRho",700,0,1400,400,0,800.);
   hFoundTracksZRho          = iniTH2D("hFoundTracksZRho",700,0,1400,400,0,800.);
-      
      
 };
 
+
 void Hist::FillTrackVariables(std::vector<evt::Track_s> trkCollection,double weight)
 {  
-  
+
+  //variables.trackDeDxASmi.clear();
+  variables.clearVectors();
+  variables.weight=weight; 
   for(unsigned int i=0; i<trkCollection.size(); i++){
     TVector3 trackVector;
     trackVector.SetPtEtaPhi(trkCollection[i].pt,trkCollection[i].eta,trkCollection[i].phi);
 
-    double p     = std::sqrt(std::pow(trkCollection[i].pt,2) + std::pow(trackVector.Pz(),2));
+    double p     = std::sqrt(std::pow(trkCollection[i].pt,2) + std::pow(trkCollection[i].pz,2));
     double _dvx  = trkCollection[i].vx - Vertex[0].x;
     double _dvy  = trkCollection[i].vy - Vertex[0].y;
     double d0    = ( - _dvx*trkCollection[i].py + _dvy*trkCollection[i].px )/trkCollection[i].pt;
@@ -129,7 +146,7 @@ void Hist::FillTrackVariables(std::vector<evt::Track_s> trkCollection,double wei
     htrackNLostOuterSmallRange    ->Fill(trkCollection[i].trackerExpectedHitsOuter_numberOfHits, weight);
 
 
-    double mass = pow(trkCollection[i].pt,2)/K*(trkCollection[i].dEdxHarm2-C);
+    double mass = sqrt(pow(p,2)/K*(trkCollection[i].dEdxHarm2-C));
 
     hMass                    ->Fill(mass,weight);
     htrackDeDxHarm2          ->Fill(trkCollection[i].dEdxHarm2, weight);
@@ -153,7 +170,6 @@ void Hist::FillTrackVariables(std::vector<evt::Track_s> trkCollection,double wei
     htrackd0                 ->Fill(d0, weight);
     htrackdz                 ->Fill(dZ, weight);
  
-     
     if(abs(trkCollection[i].pdgId==0))        htrackgenParticle->Fill("unmatched", weight);
     else if(abs(trkCollection[i].pdgId)==1)   htrackgenParticle->Fill("d", weight);
     else if(abs(trkCollection[i].pdgId)==2)   htrackgenParticle->Fill("u", weight);
@@ -182,7 +198,24 @@ void Hist::FillTrackVariables(std::vector<evt::Track_s> trkCollection,double wei
       //  htrackgenBetaGammaMass-> Fill(trkCollection[i].beta*1/sqrt(1.-pow(trkCollection[i].beta,2)),mass weight);
       //	}
     }
+
+    
+    // Fill tree variables
+
+    variables.trackDeDxASmi.push_back(trkCollection[i].ASmi); 
+    variables.trackDeDxHarm2.push_back(trkCollection[i].dEdxHarm2);
+    variables.trackPt.push_back(trkCollection[i].pt);
+    variables.trackNLostOuter.push_back(trkCollection[i].trackerExpectedHitsOuter_numberOfHits);
+    variables.trackNValid.push_back(trkCollection[i].numberOfValidHits);
+    variables.trackCaloIsolation.push_back(trackCaloIsolation(&trkCollection[i]));
+    variables.trackMass.push_back(mass);
+    variables.trackIsolation.push_back(trkCollection[i].trackRelIso03);
+
   }
+
+  variables.weight = weight;
+  tree->Fill();
+
 };
 
 void Hist::FillGenParticleHistograms(std::vector<evt::GenParticle_s> genCollection, double weight)
