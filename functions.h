@@ -514,7 +514,7 @@ std::vector<evt::Track_s> trackCandidateCuts(std::vector<evt::Track_s> trackColl
     if(!trackCollection[i].trackHighPurity)                                   continue;
     countsTrackCriteria->Fill("highPurity", weight);
     //.................................................................................//    
-    if(trackCaloIsolation(&trackCollection[i])>50)                            continue;
+    //if(trackCaloIsolation(&trackCollection[i])>50)                            continue;
     countsTrackCriteria->Fill("CaloIsoLess50", weight);
     //.................................................................................//
     outputColl.push_back(trackCollection[i]);
@@ -566,10 +566,10 @@ std::vector<evt::Track_s> trackCleaningCuts(std::vector<evt::Track_s> trackColle
     if(trackCollection[i].trackerExpectedHitsInner_numberOfLostHits>0)                        continue;
     countsTrackCriteria->Fill("NOfLostHitsInnerEq0", weight);
     //.................................................................................//
-    if(trackCollection[i].trackRelIso03>=0.5)                                                continue;
-    countsTrackCriteria->Fill("TrackIsolationDeltaRLess0p05", weight);
+    if(trackCollection[i].trackRelIso03>=0.1)                                                continue;
+    countsTrackCriteria->Fill("TrackIsolationDeltaRLess0p1", weight);
     //.................................................................................//
-    //if(trackCollection[i].numberOfValidHits<4)                                                continue;
+    if(trackCollection[i].numberOfValidHits<3)                                                continue;
     countsTrackCriteria->Fill("NOfValidHitsGreater3", weight);
     //.................................................................................//
     //if(trackCollection[i].dEdxHarm2<3)                                                        continue;
