@@ -3,14 +3,50 @@
 //--------------------------------------------------------------------------------------------------
 
 #include "analyzer.h"
+#include "TTree.h"
+#include <vector>
 using namespace std;
 using namespace evt;
 
 //----------------------------
+typedef struct { 
+
+  double                 weight;
+  std::vector<Double_t>  trackDeDxASmi; 
+  std::vector<Double_t>  trackDeDxHarm2;
+  std::vector<Double_t>  trackPt;
+  std::vector<Int_t>     trackNLostOuter;
+  std::vector<Int_t>     trackNValid;
+  std::vector<Double_t>  trackCaloIsolation;
+  std::vector<Double_t>  trackMass;
+  std::vector<Double_t>  trackIsolation; 
+
+
+  void clearVectors(){
+
+    trackDeDxASmi.clear();
+    trackDeDxHarm2.clear();
+    trackPt.clear();
+    trackNLostOuter.clear();
+    trackNValid.clear();
+    trackCaloIsolation.clear();
+    trackMass.clear();
+    trackIsolation.clear();
+  }
+
+} TreeVariables_t;
+
+//TFile f("treeAfterSelection.root","recreate");
+
 class Hist
 {
 
+
  public:
+
+  TTree *tree;
+  TreeVariables_t variables;
+
   TH1D *htrackPt;
   TH1D *htrackPtSmallRange;
   TH1D *htrackP;
@@ -93,6 +129,7 @@ class Event
 {
 
  public:
+
   std::vector<Track_s> TrackColl;
   std::vector<Jet_s> JetColl;
   std::vector<Jet_s> subleadingJetColl;
@@ -100,22 +137,19 @@ class Event
   struct GenParticle_s leadJetGenParticle;
   TH1D *countsTrackCriteria;
   TH1D *countsEventCuts;
-  bool preselection;
   bool triggerRequirements;
   bool trackPreselection;
   bool qcdSupression;
-  bool trackCandidateCut;
-  bool trackCandidateSoftCut;
+  bool trackCandidateCutFinal;
   bool onlyChi;
   bool noChi;
 
-
+  bool TrackPtRequirement;
   bool NumOfLostOuterCut;
   bool CaloIsolationCut;
-  bool NumOfValidHitsCut;
-
+  bool DeDxRequirement;
+  
   bool invertTrackPtRequirement;
-  bool invertNumOfValidHitsRequirement;
   bool invertCaloIsolationRequirement;
   bool invertNumOfLostOuterRequirement;
   bool invertDeDxRequirement;
