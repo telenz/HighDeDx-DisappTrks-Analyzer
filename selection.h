@@ -9,8 +9,6 @@
 #include <vector>
 using namespace std;
 //-----------------------------------------------------------------------------
-//std::vector<Track_s> getCandidateTrackCollection(std::vector<Track_s>& Track, std::vector<Jet_s>& jetColl,  TH1D* countsTrackCriteria, TH1D* countsEventCuts);
-//std::vector<Track_s> getCandidateTrackCollection_SoftCuts(std::vector<Track_s>& Track, TH1D* countsTrackCriteria);
 
 Event::Event(TString histName, outputFile ofile_):
   hist(histName, ofile_)
@@ -23,17 +21,17 @@ Event::Event(TString histName, outputFile ofile_):
       countsEventCuts->SetBit(TH1::kCanRebin);
       countsEventCuts->SetStats(0);
       
-      preselection          = false;
-      trackCandidateCut     = false;
-      trackCandidateSoftCut = false;
-      onlyChi               = false;
-      noChi                 = false;
-      triggerRequirements   = false;
-      trackPreselection     = false;
-      qcdSupression         = false;
+      onlyChi                = false;
+      noChi                  = false;
+      triggerRequirements    = false;
+      trackPreselection      = false;
+      qcdSupression          = false;
+      trackCandidateCutFinal = false;
 
-      NumOfLostOuterCut  = false;
-      CaloIsolationCut   = false;
+      TrackPtRequirement = true;
+      NumOfLostOuterCut  = true;
+      CaloIsolationCut   = true;
+      DeDxRequirement    = true;
 
       invertTrackPtRequirement         = false;
       invertCaloIsolationRequirement   = false;
@@ -78,7 +76,7 @@ int Event::Selection()
   //%%%%%%%%% Trigger Requirements %%%%%%%%%%%%%
   if(triggerRequirements){
     // 1.) Trigger Cut
-	  
+    /* 
     if(edmEventHelper_isRealData){
       if(
 	 edmTriggerResultsHelper_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v1   == 1 ||
@@ -116,6 +114,7 @@ int Event::Selection()
 	 ){}
       else{ return 0; }
     }
+    */
     countsEventCuts->Fill("triggerCut_OnlyData", weight);
 	     
     // 2.) MET cut
@@ -165,14 +164,15 @@ int Event::Selection()
   countsEventCuts->Fill("1MetwithDeltaPhiMin2Jetsgt0p5", weight);
    
   //.................................................................................//
-  //%%%%%%%%% Final track cuts %%%%%%%%%%%%%
+  //%%%%%%%%% Final track cuts  BEGIN %%%%%%%%%%%%%
   // Final Track Cuts
-  if(trackCandidateCut)
+  if(trackCandidateCutFinal)
     {
       TrackColl = finalTrackCuts(TrackColl,countsTrackCriteria);
       if(TrackColl.size()==0) return 0;
     }
   countsEventCuts->Fill("finalTrackCuts", weight);
+  //%%%%%%%%% Final track cuts  END %%%%%%%%%%%%%%%
   //.................................................................................//
        
   matchTrackToGenParticle(TrackColl);
@@ -205,41 +205,45 @@ std::vector<Track_s> Event::finalTrackCuts(std::vector<Track_s> trackCollection,
 
   for(unsigned int i=0; i<trackCollection.size(); i++){
     //.................................................................................//
-    if(invertTrackPtRequirement){
-      if(trackCollection[i].pt>70.)                                             continue;
-    }
-    else{
-      if(trackCollection[i].pt<=70.)                                            continue;
+    if(TrackPtRequirement){
+      if(invertTrackPtRequirement){
+	if(trackCollection[i].pt>70.)                                             continue;
+      }
+      else{
+	if(trackCollection[i].pt<=70.)                                            continue;
+      }
     }
     countsTrackCriteria->Fill("PtGreater70GeV", weight);
     //.................................................................................//
     if(CaloIsolationCut){
       if(invertCaloIsolationRequirement){
-	//if(trackCaloIsolation(&trackCollection[i])<=10)                           continue;
+	if(trackCaloIsolation(&trackCollection[i])<=10)                           continue;
       }
       else{
-	//if(trackCaloIsolation(&trackCollection[i])>10)                            continue;
+	if(trackCaloIsolation(&trackCollection[i])>10)                            continue;
       }
     }
     countsTrackCriteria->Fill("CaloIsolation0p5", weight);
     //.................................................................................//
     if(NumOfLostOuterCut){
       if(invertNumOfLostOuterRequirement){
-	//if(trackCollection[i].trackerExpectedHitsOuter_numberOfHits>=3)           continue;
+	if(trackCollection[i].trackerExpectedHitsOuter_numberOfHits>=3)           continue;
       }
       else{
-	//if(trackCollection[i].trackerExpectedHitsOuter_numberOfHits<3)            continue;
+	if(trackCollection[i].trackerExpectedHitsOuter_numberOfHits<3)            continue;
       }
     }
     countsTrackCriteria->Fill("NOfLostHitsOuterGe3", weight);
     //.................................................................................//
-    if(invertDeDxRequirement){
-      if(trackCollection[i].ASmi>=0.2){
-	continue;
+    if(DeDxRequirement){
+      if(invertDeDxRequirement){
+	if(trackCollection[i].ASmi>=0.2){
+	  continue;
+	}
       }
-    }
-    else{
-      if(trackCollection[i].ASmi<0.2)                                                              continue;
+      else{
+	if(trackCollection[i].ASmi<0.2)                                                              continue;
+      }
     }
     countsTrackCriteria->Fill("DeDxASmiGe0p2", weight);
     //.................................................................................//
