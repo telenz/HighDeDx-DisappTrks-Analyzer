@@ -48,7 +48,7 @@ Hist::Hist(TString histName, outputFile ofile_)
   htrackIsolationSmallRange = iniTH1D("htrackIsolationSmallRange",20,0,0.2);
   htrackCaloIsolation = iniTH1D("htrackCaloIsolation",100,0,500);
   htrackCaloIsolationSmallRange = iniTH1D("htrackCaloIsolationSmallRange",20,0,20);
-  hMass                  = iniTH1D("hMass",100,0,1000);   
+  htrackMass             = iniTH1D("htrackMass",100,0,1000);   
   htrackDeDxHarm2        = iniTH1D("htrackDeDxHarm2",100,0,40);
   htrackDeDxHarm2SmallRange = iniTH1D("htrackDeDxHarm2SmallRange",50,0,10);
   htrackASmi             = iniTH1D("htrackASmi",50,-1.1,1.1);
@@ -83,16 +83,21 @@ Hist::Hist(TString histName, outputFile ofile_)
   hDeltaPhi          = iniTH1D("hDeltaPhi",32,0,3.2);
   hDeltaPhiMax       = iniTH1D("hDeltaPhiMax",32,0,3.2);
   h1stjetpt          = iniTH1D("h1stjetpt",200,0,2000);
-  htrackpt1stjetpt            = iniTH2D("htrackpt1stjetpt",100,0,1000,200,0,2000);
-  htrackPtDeDxHarm2           = iniTH2D("htrackPtDeDxHarm2",50,0,500,50,0,50);
-  htrackPtDeDxHarm2LargeRange = iniTH2D("htrackPtDeDxHarm2LargeRange",2000,0,2000,50,0,50);
-  htrackPtASmi                = iniTH2D("htrackPtASmi",50,00,500,20,0,1);
-  htrackPtASmiLargeRange      = iniTH2D("htrackPtASmiLargeRange",2000,00,2000,20,0,1);
-  htrackPtCaloIso             = iniTH2D("htrackPtCaloIso",50,0,500,20,0,100);
-  htrackPtCaloIsoLargeRange   = iniTH2D("htrackPtCaloIsoLargeRange",2000,0,2000,20,0,100);
-  htrackPtNLostOuter          = iniTH2D("htrackPtNLostOuter",50,0,500,20,0,20);
-  htrackCaloIsoASmi           = iniTH2D("htrackCaloIsoASmi",20,0,100,20,0,1);
-  hMet                        = iniTH1D("hMet",150,0,1500);
+  htrackpt1stjetpt              = iniTH2D("htrackpt1stjetpt",100,0,1000,200,0,2000);
+  htrackPtDeDxHarm2             = iniTH2D("htrackPtDeDxHarm2",50,0,500,50,0,50);
+  htrackPtDeDxHarm2LargeRange   = iniTH2D("htrackPtDeDxHarm2LargeRange",2000,0,2000,50,0,50);
+  htrackPtDeDxHarm2SmallBinning = iniTH2D("htrackPtDeDxHarm2SmallBinning",100,0,500,100,0,50);
+  htrackPtASmi                  = iniTH2D("htrackPtASmi",50,00,500,20,0,1);
+  htrackPtASmiLargeRange        = iniTH2D("htrackPtASmiLargeRange",2000,00,2000,20,0,1);
+  htrackPtASmiSmallBinning      = iniTH2D("htrackPtASmiSmallBinning",100,00,500,50,0,1);
+  htrackPtCaloIso               = iniTH2D("htrackPtCaloIso",50,0,500,20,0,100);
+  htrackPtCaloIsoLargeRange     = iniTH2D("htrackPtCaloIsoLargeRange",2000,0,2000,20,0,100);
+  htrackPtCaloIsoSmallBinning   = iniTH2D("htrackPtCaloIsoSmallBinning",100,0,500,50,0,100);
+  htrackPtNLostOuter            = iniTH2D("htrackPtNLostOuter",50,0,500,20,0,20);
+  htrackCaloIsoASmi             = iniTH2D("htrackCaloIsoASmi",20,0,100,20,0,1);
+  htrackCaloIsoASmiLargeRange   = iniTH2D("htrackCaloIsoASmiLargeRange",40,0,200,10,0,1);
+  htrackCaloIsoASmiSmallBinning = iniTH2D("htrackCaloIsoASmiSmallBinning",50,0,100,50,0,1);
+  hMet                          = iniTH1D("hMet",150,0,1500);
 
   hgenPtChi              = iniTH1D("hgenPtChi",150,0,1500);
   hgenPChi               = iniTH1D("hgenPChi",300,0,3000);
@@ -148,7 +153,7 @@ void Hist::FillTrackVariables(std::vector<evt::Track_s> trkCollection,double wei
 
     double mass = sqrt(pow(p,2)/K*(trkCollection[i].dEdxHarm2-C));
 
-    hMass                    ->Fill(mass,weight);
+    htrackMass               ->Fill(mass,weight);
     htrackDeDxHarm2          ->Fill(trkCollection[i].dEdxHarm2, weight);
     htrackDeDxHarm2SmallRange->Fill(trkCollection[i].dEdxHarm2, weight);
     htrackASmi               ->Fill(trkCollection[i].ASmi, weight);
@@ -159,13 +164,20 @@ void Hist::FillTrackVariables(std::vector<evt::Track_s> trkCollection,double wei
     htrackASmiNPSmallRange   ->Fill(trkCollection[i].ASmiNP, weight);
     htrackASmiNP_3           ->Fill(trkCollection[i].ASmiNP_3, weight);
     htrackASmiNP_7           ->Fill(trkCollection[i].ASmiNP_7, weight);
-    htrackHighPurity         ->Fill(trkCollection[i].trackHighPurity, weight);
-    htrackPtDeDxHarm2        ->Fill(trkCollection[i].pt,trkCollection[i].dEdxHarm2, weight);
-    htrackPtASmi             ->Fill(trkCollection[i].pt,trkCollection[i].ASmi, weight);
-    htrackPtASmiLargeRange   ->Fill(trkCollection[i].pt,trkCollection[i].ASmi, weight);
-    htrackPtCaloIso          ->Fill(trkCollection[i].pt,trackCaloIsolation(&trkCollection[i]), weight);
-    htrackPtNLostOuter       ->Fill(trkCollection[i].pt,trkCollection[i].trackerExpectedHitsOuter_numberOfHits, weight);
-    htrackCaloIsoASmi        ->Fill(trackCaloIsolation(&trkCollection[i]), trkCollection[i].ASmi, weight);
+    htrackHighPurity              ->Fill(trkCollection[i].trackHighPurity, weight);
+    htrackPtDeDxHarm2             ->Fill(trkCollection[i].pt,trkCollection[i].dEdxHarm2, weight);
+    htrackPtDeDxHarm2LargeRange   ->Fill(trkCollection[i].pt,trkCollection[i].dEdxHarm2, weight);
+    htrackPtDeDxHarm2SmallBinning ->Fill(trkCollection[i].pt,trkCollection[i].dEdxHarm2, weight);
+    htrackPtASmi                  ->Fill(trkCollection[i].pt,trkCollection[i].ASmi, weight);
+    htrackPtASmiLargeRange        ->Fill(trkCollection[i].pt,trkCollection[i].ASmi, weight);
+    htrackPtASmiSmallBinning      ->Fill(trkCollection[i].pt,trkCollection[i].ASmi, weight);
+    htrackPtCaloIso               ->Fill(trkCollection[i].pt,trackCaloIsolation(&trkCollection[i]), weight);
+    htrackPtCaloIsoLargeRange     ->Fill(trkCollection[i].pt,trackCaloIsolation(&trkCollection[i]), weight);
+    htrackPtCaloIsoSmallBinning   ->Fill(trkCollection[i].pt,trackCaloIsolation(&trkCollection[i]), weight);
+    htrackCaloIsoASmi             ->Fill(trackCaloIsolation(&trkCollection[i]), trkCollection[i].ASmi, weight);
+    htrackCaloIsoASmiLargeRange   ->Fill(trackCaloIsolation(&trkCollection[i]), trkCollection[i].ASmi, weight);
+    htrackCaloIsoASmiSmallBinning ->Fill(trackCaloIsolation(&trkCollection[i]), trkCollection[i].ASmi, weight);
+    htrackPtNLostOuter            ->Fill(trkCollection[i].pt,trkCollection[i].trackerExpectedHitsOuter_numberOfHits, weight);
 
     htrackd0                 ->Fill(d0, weight);
     htrackdz                 ->Fill(dZ, weight);
