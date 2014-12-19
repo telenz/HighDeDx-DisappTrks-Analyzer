@@ -505,8 +505,8 @@ std::vector<evt::Track_s> trackCandidateCuts(std::vector<evt::Track_s> trackColl
   for(unsigned int i=0; i<trackCollection.size(); i++){
     countsTrackCriteria->Fill("beforeTrackCriteria", weight);
     //.................................................................................//
-    if(trackCollection[i].pt<=30.)                                            continue;
-    countsTrackCriteria->Fill("PtGreater30GeV", weight);
+    if(trackCollection[i].pt<=10.)                                            continue;
+    countsTrackCriteria->Fill("PtGreater10GeV", weight);
     //.................................................................................//
     if(std::abs(trackCollection[i].eta)>2.1)                                  continue;
     countsTrackCriteria->Fill("EtaLess2p1", weight);
