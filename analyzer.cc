@@ -186,14 +186,14 @@ int main(int argc, char** argv)
   chiTracksCR1.qcdSupression          = true;
   chiTracksCR1.trackCandidateCutFinal = true;
 
-  chiTracksCR1.TrackPtRequirement = true;
   chiTracksCR1.NumOfLostOuterCut  = false;
+  chiTracksCR1.TrackPtRequirement = true;
   chiTracksCR1.CaloIsolationCut   = false;
   chiTracksCR1.DeDxRequirement    = true;
   
   chiTracksCR1.invertTrackPtRequirement         = false;
   chiTracksCR1.invertDeDxRequirement            = true;
-
+  
   // Control region 2 small track pt and small dEdx
   class Event chiTracksCR2("chiTracksCR2",ofile);
   if(isSignal) chiTracksCR2.onlyChi   = true;
@@ -202,14 +202,14 @@ int main(int argc, char** argv)
   chiTracksCR2.qcdSupression          = true;
   chiTracksCR2.trackCandidateCutFinal = true;
 
-  chiTracksCR2.TrackPtRequirement = true;
   chiTracksCR2.NumOfLostOuterCut  = false;
+  chiTracksCR2.TrackPtRequirement = true;
   chiTracksCR2.CaloIsolationCut   = false;
   chiTracksCR2.DeDxRequirement    = true;
-  
+    
   chiTracksCR2.invertTrackPtRequirement         = true;
   chiTracksCR2.invertDeDxRequirement            = true;
-
+  
   // Control region 3 small track pt and high dEdx
   class Event chiTracksCR3("chiTracksCR3",ofile);
   if(isSignal) chiTracksCR3.onlyChi   = true;
@@ -218,14 +218,14 @@ int main(int argc, char** argv)
   chiTracksCR3.qcdSupression          = true;
   chiTracksCR3.trackCandidateCutFinal = true;
 
-  chiTracksCR3.TrackPtRequirement = true;
   chiTracksCR3.NumOfLostOuterCut  = false;
+  chiTracksCR3.TrackPtRequirement = true;
   chiTracksCR3.CaloIsolationCut   = false;
   chiTracksCR3.DeDxRequirement    = true;
   
   chiTracksCR3.invertTrackPtRequirement         = true;
   chiTracksCR3.invertDeDxRequirement            = false;
-
+  
   // Signal region high track pt and high dEdx
   class Event chiTracksSR("chiTracksSR",ofile);
   if(isSignal) chiTracksSR.onlyChi   = true;
@@ -234,8 +234,9 @@ int main(int argc, char** argv)
   chiTracksSR.qcdSupression          = true;
   chiTracksSR.trackCandidateCutFinal = true;
 
-  chiTracksSR.TrackPtRequirement = true;
+
   chiTracksSR.NumOfLostOuterCut  = false;
+  chiTracksSR.TrackPtRequirement = true;
   chiTracksSR.CaloIsolationCut   = false;
   chiTracksSR.DeDxRequirement    = true;
   
