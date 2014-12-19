@@ -15,8 +15,8 @@ typedef struct {
   std::vector<Double_t>  trackDeDxASmi; 
   std::vector<Double_t>  trackDeDxHarm2;
   std::vector<Double_t>  trackPt;
-  std::vector<Int_t>     trackNLostOuter;
-  std::vector<Int_t>     trackNValid;
+  std::vector<Double_t>  trackNLostOuter;
+  std::vector<Double_t>  trackNValid;
   std::vector<Double_t>  trackCaloIsolation;
   std::vector<Double_t>  trackMass;
   std::vector<Double_t>  trackIsolation; 
@@ -76,18 +76,24 @@ class Hist
   TH1D *htrackHighPurity;
   TH2D *htrackPtDeDxHarm2;
   TH2D *htrackPtDeDxHarm2LargeRange;
+  TH2D *htrackPtDeDxHarm2SmallBinning;
   TH2D *htrackPtASmi;
   TH2D *htrackPtASmiLargeRange;
+  TH2D *htrackPtASmiSmallBinning;
   TH2D *htrackPtCaloIso;
   TH2D *htrackPtCaloIsoLargeRange;
-  TH2D *htrackPtNLostOuter;
+  TH2D *htrackPtCaloIsoSmallBinning;
   TH2D *htrackCaloIsoASmi;
+  TH2D *htrackCaloIsoASmiLargeRange;
+  TH2D *htrackCaloIsoASmiSmallBinning;
+  TH2D *htrackPtNLostOuter;
+
   
 
   TH1D *htrackPdgId;
   TH1D *htrackgenParticle;
 
-  TH1D *hMass;
+  TH1D *htrackMass;
 
   TH1D* h1stjetpt;
   TH2D* htrackpt1stjetpt;
