@@ -59,8 +59,8 @@ int Event::Selection()
   }
   //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   countsEventCuts->Fill("noCuts", weight);
-    
-
+  
+  
   subleadingJetColl = getSubleadingJetCollection();
   // Special Collection
   if(onlyChi)
@@ -71,7 +71,7 @@ int Event::Selection()
     {
       TrackColl = getFakeTracksInTrackCollection(TrackColl);
     }
-      
+  
   //.................................................................................//
   //%%%%%%%%% Trigger Requirements %%%%%%%%%%%%%
   if(triggerRequirements){
@@ -129,6 +129,8 @@ int Event::Selection()
   //%%%%%%%%% Track Preselection %%%%%%%%%%%%%
   if(trackPreselection){
     // 4.)
+    if(TrackColl.size()==0) return 0;
+    countsEventCuts->Fill("NonEmptyTrkColl", weight);
     TrackColl = trackCandidateCuts(TrackColl,countsTrackCriteria);
     countsEventCuts->Fill("trackCandCut", weight);
 	  
