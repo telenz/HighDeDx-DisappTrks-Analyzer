@@ -170,4 +170,65 @@ class Event
 
 };
 //--------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
+class ABCD
+{
+
+ public:
+  Event CR1;
+  Event CR2;
+  Event CR3;
+  Event SR;
+
+ public:
+  ABCD(TString variables,outputFile ofile_,bool isSignal): CR1("chiTracksCR1"+variables,ofile_), CR2("chiTracksCR2"+variables,ofile_), CR3("chiTracksCR3"+variables,ofile_), SR("chiTracksSR"+variables,ofile_) 
+    {
+
+    if(isSignal) CR1.onlyChi   = true;
+    CR1.triggerRequirements    = true;
+    CR1.trackPreselection      = true;
+    CR1.qcdSupression          = true;
+    CR1.trackCandidateCutFinal = true;
+    CR1.NumOfLostOuterCut      = false;
+    CR1.TrackPtRequirement     = false;
+    CR1.CaloIsolationCut       = false;
+    CR1.DeDxRequirement        = false;
+
+    if(isSignal) CR2.onlyChi   = true;
+    CR2.triggerRequirements    = true;
+    CR2.trackPreselection      = true;
+    CR2.qcdSupression          = true;
+    CR2.trackCandidateCutFinal = true;
+    CR2.NumOfLostOuterCut      = false;
+    CR2.TrackPtRequirement     = false;
+    CR2.CaloIsolationCut       = false;
+    CR2.DeDxRequirement        = false;
+
+    if(isSignal) CR3.onlyChi   = true;
+    CR3.triggerRequirements    = true;
+    CR3.trackPreselection      = true;
+    CR3.qcdSupression          = true;
+    CR3.trackCandidateCutFinal = true;
+    CR3.NumOfLostOuterCut      = false;
+    CR3.TrackPtRequirement     = false;
+    CR3.CaloIsolationCut       = false;
+    CR3.DeDxRequirement        = false;
+
+    if(isSignal) SR.onlyChi   = true;
+    SR.triggerRequirements    = true;
+    SR.trackPreselection      = true;
+    SR.qcdSupression          = true;
+    SR.trackCandidateCutFinal = true;
+    SR.NumOfLostOuterCut      = false;
+    SR.TrackPtRequirement     = false;
+    SR.CaloIsolationCut       = false;
+    SR.DeDxRequirement        = false;
+
+  };
+    
+
+  
+};
+//--------------------------------------------------------------------------------------------------
 #endif
