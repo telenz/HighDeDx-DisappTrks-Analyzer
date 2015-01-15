@@ -234,7 +234,6 @@ int main(int argc, char** argv)
   chiTracksSR.qcdSupression          = true;
   chiTracksSR.trackCandidateCutFinal = true;
 
-
   chiTracksSR.NumOfLostOuterCut  = false;
   chiTracksSR.TrackPtRequirement = true;
   chiTracksSR.CaloIsolationCut   = false;
@@ -242,6 +241,75 @@ int main(int argc, char** argv)
   
   chiTracksSR.invertTrackPtRequirement         = false;
   chiTracksSR.invertDeDxRequirement            = false;
+  //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  // ABCD method with track Pt and DeDx
+  ABCD trackPt_DeDx("_trackPt_DeDx",ofile,isSignal);
+ 
+  trackPt_DeDx.CR1.TrackPtRequirement = true;
+  trackPt_DeDx.CR1.DeDxRequirement    = true;
+  trackPt_DeDx.CR1.invertTrackPtRequirement = false;
+  trackPt_DeDx.CR1.invertDeDxRequirement    = true;
+
+  trackPt_DeDx.CR2.TrackPtRequirement = true;
+  trackPt_DeDx.CR2.DeDxRequirement    = true;
+  trackPt_DeDx.CR2.invertTrackPtRequirement = true;
+  trackPt_DeDx.CR2.invertDeDxRequirement    = true;
+
+  trackPt_DeDx.CR3.TrackPtRequirement = true;
+  trackPt_DeDx.CR3.DeDxRequirement    = true;
+  trackPt_DeDx.CR3.invertTrackPtRequirement = true;
+  trackPt_DeDx.CR3.invertDeDxRequirement    = false;
+
+  trackPt_DeDx.SR.TrackPtRequirement = true;
+  trackPt_DeDx.SR.DeDxRequirement    = true;
+  trackPt_DeDx.SR.invertTrackPtRequirement = false;
+  trackPt_DeDx.SR.invertDeDxRequirement    = false;
+  //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  // ABCD method with track Pt and CaloIsolation
+  ABCD trackPt_CaloIso("_trackPt_CaloIso",ofile,isSignal);
+ 
+  trackPt_CaloIso.CR1.TrackPtRequirement = true;
+  trackPt_CaloIso.CR1.CaloIsolationCut   = true;
+  trackPt_CaloIso.CR1.invertTrackPtRequirement       = false;
+  trackPt_CaloIso.CR1.invertCaloIsolationRequirement = true;
+
+  trackPt_CaloIso.CR2.TrackPtRequirement = true;
+  trackPt_CaloIso.CR2.CaloIsolationCut   = true;
+  trackPt_CaloIso.CR2.invertTrackPtRequirement       = true;
+  trackPt_CaloIso.CR2.invertCaloIsolationRequirement = true;
+
+  trackPt_CaloIso.CR3.TrackPtRequirement = true;
+  trackPt_CaloIso.CR3.CaloIsolationCut   = true;
+  trackPt_CaloIso.CR3.invertTrackPtRequirement       = true;
+  trackPt_CaloIso.CR3.invertCaloIsolationRequirement = false;
+
+  trackPt_CaloIso.SR.TrackPtRequirement = true;
+  trackPt_CaloIso.SR.CaloIsolationCut   = true;
+  trackPt_CaloIso.SR.invertTrackPtRequirement       = false;
+  trackPt_CaloIso.SR.invertCaloIsolationRequirement = false;
+  //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  // ABCD method with track Pt and DeDx
+  ABCD DeDx_CaloIso("_DeDx_CaloIso",ofile,isSignal);
+ 
+  DeDx_CaloIso.CR1.DeDxRequirement  = true;
+  DeDx_CaloIso.CR1.CaloIsolationCut = true;
+  DeDx_CaloIso.CR1.invertDeDxRequirement          = false;
+  DeDx_CaloIso.CR1.invertCaloIsolationRequirement = true;
+
+  DeDx_CaloIso.CR2.DeDxRequirement  = true;
+  DeDx_CaloIso.CR2.CaloIsolationCut = true;
+  DeDx_CaloIso.CR2.invertDeDxRequirement          = true;
+  DeDx_CaloIso.CR2.invertCaloIsolationRequirement = true;
+
+  DeDx_CaloIso.CR3.DeDxRequirement  = true;
+  DeDx_CaloIso.CR3.CaloIsolationCut = true;
+  DeDx_CaloIso.CR3.invertDeDxRequirement          = true;
+  DeDx_CaloIso.CR3.invertCaloIsolationRequirement = false;
+
+  DeDx_CaloIso.SR.DeDxRequirement   = true;
+  DeDx_CaloIso.SR.CaloIsolationCut  = true;
+  DeDx_CaloIso.SR.invertDeDxRequirement          = false;
+  DeDx_CaloIso.SR.invertCaloIsolationRequirement = false;
   //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
   //-------------------------------------------------------------------------------------
@@ -393,8 +461,20 @@ int main(int argc, char** argv)
       chiTracksCR2.Selection();
       chiTracksCR3.Selection();
       chiTracksSR.Selection();
+      trackPt_DeDx.CR1.Selection();
+      trackPt_DeDx.CR2.Selection();
+      trackPt_DeDx.CR3.Selection();
+      trackPt_DeDx.SR.Selection();
+      trackPt_CaloIso.CR1.Selection();
+      trackPt_CaloIso.CR2.Selection();
+      trackPt_CaloIso.CR3.Selection();
+      trackPt_CaloIso.SR.Selection();
+      DeDx_CaloIso.CR1.Selection();
+      DeDx_CaloIso.CR2.Selection();
+      DeDx_CaloIso.CR3.Selection();
+      DeDx_CaloIso.SR.Selection();
       chiTracksSMControlCalo.Selection();      
-
+      
     }//end of loop over events
  
   stop = clock();
