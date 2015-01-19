@@ -49,22 +49,34 @@ class Hist
 
   TH1D *htrackPt;
   TH1D *htrackPtSmallRange;
+  TH1D *htrackPtEventCount;
+  TH1D *htrackPtSmallRangeEventCount;
   TH1D *htrackP;
   TH1D *htrackEta;
   TH1D *htrackd0;
   TH1D *htrackdz;
   TH1D *htrackNValid;
   TH1D *htrackNValidSmallRange;
+  TH1D *htrackNValidEventCount;
+  TH1D *htrackNValidSmallRangeEventCount;
   TH1D *htrackNLostMid;
   TH1D *htrackNLostInner;
   TH1D *htrackNLostOuter;
   TH1D *htrackNLostOuterSmallRange;
+  TH1D *htrackNLostOuterEventCount;
+  TH1D *htrackNLostOuterSmallRangeEventCount;
   TH1D *htrackIsolation;
   TH1D *htrackIsolationSmallRange;
+  TH1D *htrackIsolationEventCount;
+  TH1D *htrackIsolationSmallRangeEventCount;
   TH1D *htrackCaloIsolation;
   TH1D *htrackCaloIsolationSmallRange;
+  TH1D *htrackCaloIsolationEventCount;
+  TH1D *htrackCaloIsolationSmallRangeEventCount;
   TH1D *htrackASmi;
   TH1D *htrackASmiSmallRange;
+  TH1D *htrackASmiEventCount;
+  TH1D *htrackASmiSmallRangeEventCount;
   TH1D *htrackASmi_3;
   TH1D *htrackASmi_7;
   TH1D *htrackASmiNP;
@@ -73,7 +85,10 @@ class Hist
   TH1D *htrackASmiNP_7;
   TH1D *htrackDeDxHarm2;
   TH1D *htrackDeDxHarm2SmallRange;
+  TH1D *htrackDeDxHarm2EventCount;
+  TH1D *htrackDeDxHarm2SmallRangeEventCount;
   TH1D *htrackHighPurity;
+  TH1D *hNumberOfTracks;
   TH2D *htrackPtDeDxHarm2;
   TH2D *htrackPtDeDxHarm2LargeRange;
   TH2D *htrackPtDeDxHarm2SmallBinning;
@@ -94,6 +109,7 @@ class Hist
   TH1D *htrackgenParticle;
 
   TH1D *htrackMass;
+  TH1D *htrackMassEventCount;
 
   TH1D* h1stjetpt;
   TH2D* htrackpt1stjetpt;
@@ -151,8 +167,8 @@ class Event
   bool noChi;
 
   bool TrackPtRequirement;
-  bool NumOfLostOuterCut;
-  bool CaloIsolationCut;
+  bool NumOfLostOuterRequirement;
+  bool CaloIsolationRequirement;
   bool DeDxRequirement;
   
   bool invertTrackPtRequirement;
@@ -190,40 +206,40 @@ class ABCD
     CR1.trackPreselection      = true;
     CR1.qcdSupression          = true;
     CR1.trackCandidateCutFinal = true;
-    CR1.NumOfLostOuterCut      = false;
-    CR1.TrackPtRequirement     = false;
-    CR1.CaloIsolationCut       = false;
-    CR1.DeDxRequirement        = false;
+    CR1.NumOfLostOuterRequirement = false;
+    CR1.TrackPtRequirement        = false;
+    CR1.CaloIsolationRequirement  = false;
+    CR1.DeDxRequirement           = false;
 
     if(isSignal) CR2.onlyChi   = true;
     CR2.triggerRequirements    = true;
     CR2.trackPreselection      = true;
     CR2.qcdSupression          = true;
     CR2.trackCandidateCutFinal = true;
-    CR2.NumOfLostOuterCut      = false;
-    CR2.TrackPtRequirement     = false;
-    CR2.CaloIsolationCut       = false;
-    CR2.DeDxRequirement        = false;
+    CR2.NumOfLostOuterRequirement = false;
+    CR2.TrackPtRequirement        = false;
+    CR2.CaloIsolationRequirement  = false;
+    CR2.DeDxRequirement           = false;
 
     if(isSignal) CR3.onlyChi   = true;
     CR3.triggerRequirements    = true;
     CR3.trackPreselection      = true;
     CR3.qcdSupression          = true;
     CR3.trackCandidateCutFinal = true;
-    CR3.NumOfLostOuterCut      = false;
-    CR3.TrackPtRequirement     = false;
-    CR3.CaloIsolationCut       = false;
-    CR3.DeDxRequirement        = false;
+    CR3.NumOfLostOuterRequirement = false;
+    CR3.TrackPtRequirement        = false;
+    CR3.CaloIsolationRequirement  = false;
+    CR3.DeDxRequirement           = false;
 
     if(isSignal) SR.onlyChi   = true;
     SR.triggerRequirements    = true;
     SR.trackPreselection      = true;
     SR.qcdSupression          = true;
     SR.trackCandidateCutFinal = true;
-    SR.NumOfLostOuterCut      = false;
-    SR.TrackPtRequirement     = false;
-    SR.CaloIsolationCut       = false;
-    SR.DeDxRequirement        = false;
+    SR.NumOfLostOuterRequirement = false;
+    SR.TrackPtRequirement        = false;
+    SR.CaloIsolationRequirement  = false;
+    SR.DeDxRequirement           = false;
 
   };
     
