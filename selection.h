@@ -29,8 +29,8 @@ Event::Event(TString histName, outputFile ofile_):
       trackCandidateCutFinal = false;
 
       TrackPtRequirement = true;
-      NumOfLostOuterCut  = true;
-      CaloIsolationCut   = true;
+      NumOfLostOuterRequirement  = true;
+      CaloIsolationRequirement   = true;
       DeDxRequirement    = true;
 
       invertTrackPtRequirement         = false;
@@ -54,7 +54,7 @@ int Event::Selection()
   if(edmEventHelper_isRealData){
    
     for(unsigned int i=0; i<TrackColl.size(); i++){
-      if(TrackColl[i].pt>=50 && TrackColl[i].ASmi>=0.4 /*&& trackCaloIsolation(&TrackColl[i])<10*/) return 0;
+      if(TrackColl[i].pt>=70 && TrackColl[i].ASmi>=0.4 /*&& trackCaloIsolation(&TrackColl[i])<10*/) return 0;
     }
   }
   //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -76,49 +76,81 @@ int Event::Selection()
   //%%%%%%%%% Trigger Requirements %%%%%%%%%%%%%
   if(triggerRequirements){
     // 1.) Trigger Cut
-    /* 
+ 
     if(edmEventHelper_isRealData){
       if(
-	 edmTriggerResultsHelper_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v1   == 1 ||
-	 edmTriggerResultsHelper_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v2   == 1 ||
-	 edmTriggerResultsHelper_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v3   == 1 ||
-	 edmTriggerResultsHelper_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v4   == 1 ||
-	 edmTriggerResultsHelper_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v5   == 1 ||
-	 edmTriggerResultsHelper_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v6   == 1 ||
-	 edmTriggerResultsHelper_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v7   == 1 ||
-	 edmTriggerResultsHelper_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v8   == 1 ||
-	 edmTriggerResultsHelper_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v9   == 1 ||
-	 edmTriggerResultsHelper_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v10  == 1 ||
-
-	 edmTriggerResultsHelper_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v1  == 1 ||
-	 edmTriggerResultsHelper_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v2  == 1 ||
-	 edmTriggerResultsHelper_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v3  == 1 ||
-	 edmTriggerResultsHelper_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v4  == 1 ||
-	 edmTriggerResultsHelper_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v5  == 1 ||
-	 edmTriggerResultsHelper_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v6  == 1 ||
-	 edmTriggerResultsHelper_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v7  == 1 ||
-	 edmTriggerResultsHelper_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v8  == 1 ||
-	 edmTriggerResultsHelper_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v9  == 1 ||
-	 edmTriggerResultsHelper_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v10 == 1 ||
-
-	 edmTriggerResultsHelper_HLT_MET120_HBHENoiseCleaned_v1                   == 1 ||
-	 edmTriggerResultsHelper_HLT_MET120_HBHENoiseCleaned_v2                   == 1 ||
-	 edmTriggerResultsHelper_HLT_MET120_HBHENoiseCleaned_v3                   == 1 ||
-	 edmTriggerResultsHelper_HLT_MET120_HBHENoiseCleaned_v4                   == 1 ||
-	 edmTriggerResultsHelper_HLT_MET120_HBHENoiseCleaned_v5                   == 1 ||
-	 edmTriggerResultsHelper_HLT_MET120_HBHENoiseCleaned_v6                   == 1 ||
-	 edmTriggerResultsHelper_HLT_MET120_HBHENoiseCleaned_v7                   == 1 ||
-	 edmTriggerResultsHelper_HLT_MET120_HBHENoiseCleaned_v8                   == 1 ||
-	 edmTriggerResultsHelper_HLT_MET120_HBHENoiseCleaned_v9                   == 1 ||
-	 edmTriggerResultsHelper_HLT_MET120_HBHENoiseCleaned_v10                  == 1 
+	 edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v1    == 1 ||
+	 edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v2    == 1 ||
+	 edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v3    == 1 ||
+	 edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v4    == 1 ||
+	 edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v5    == 1 ||
+	 edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v6    == 1 ||
+	 edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v7    == 1 ||
+	 edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v8    == 1 ||
+	 edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v9    == 1 ||
+	 edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v10   == 1 ||
+	 edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v11   == 1 ||
+	 edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v12   == 1 ||
+	 edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v13   == 1 ||
+	 edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v14   == 1 ||
+	 edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v15   == 1 ||
+	 edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v16   == 1 ||
+	 edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v17   == 1 ||
+	 edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v18   == 1 ||
+	 edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v19   == 1 ||
+	 edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v20   == 1 ||
+	 
+	 edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v1   == 1 ||
+	 edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v2   == 1 ||
+	 edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v3   == 1 ||
+	 edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v4   == 1 ||
+	 edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v5   == 1 ||
+	 edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v6   == 1 ||
+	 edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v7   == 1 ||
+	 edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v8   == 1 ||
+	 edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v9   == 1 ||
+	 edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v10  == 1 ||
+	 edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v11  == 1 ||
+	 edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v12  == 1 ||
+	 edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v13  == 1 ||
+	 edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v14  == 1 ||
+	 edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v15  == 1 ||
+	 edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v16  == 1 ||
+	 edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v17  == 1 ||
+	 edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v18  == 1 ||
+	 edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v19  == 1 ||
+	 edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v20  == 1 ||
+	 
+	 edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v1                    == 1 ||
+	 edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v2                    == 1 ||
+	 edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v3                    == 1 ||
+	 edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v4                    == 1 ||
+	 edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v5                    == 1 ||
+	 edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v6                    == 1 ||
+	 edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v7                    == 1 ||
+	 edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v8                    == 1 ||
+	 edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v9                    == 1 ||
+	 edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v10                   == 1 ||
+	 edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v11                   == 1 ||
+	 edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v12                   == 1 ||
+	 edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v13                   == 1 ||
+	 edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v14                   == 1 ||
+	 edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v15                   == 1 ||
+	 edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v16                   == 1 ||
+	 edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v17                   == 1 ||
+	 edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v18                   == 1 ||
+	 edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v19                   == 1 ||
+	 edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v20                   == 1 
 	 ){}
-      else{ return 0; }
+      else{
+	cout<<"no trigger fired"<<endl;
+	return 0; }
     }
-    */
+ 
     countsEventCuts->Fill("triggerCut_OnlyData", weight);
 	     
     // 2.) MET cut
-    if(MET_pt<=100.) return 0;
+    if(MET_pt<=250.) return 0;
     countsEventCuts->Fill("metCut", weight);
     
     // 3.) Leading Jet Cut
@@ -217,7 +249,7 @@ std::vector<Track_s> Event::finalTrackCuts(std::vector<Track_s> trackCollection,
     }
     countsTrackCriteria->Fill("PtGreater70GeV", weight);
     //.................................................................................//
-    if(CaloIsolationCut){
+    if(CaloIsolationRequirement){
       if(invertCaloIsolationRequirement){
 	if(trackCaloIsolation(&trackCollection[i])<=10)                           continue;
       }
@@ -227,15 +259,15 @@ std::vector<Track_s> Event::finalTrackCuts(std::vector<Track_s> trackCollection,
     }
     countsTrackCriteria->Fill("CaloIsolation0p5", weight);
     //.................................................................................//
-    if(NumOfLostOuterCut){
+    if(NumOfLostOuterRequirement){
       if(invertNumOfLostOuterRequirement){
-	if(trackCollection[i].trackerExpectedHitsOuter_numberOfHits>=3)           continue;
+	if(trackCollection[i].trackerExpectedHitsOuter_numberOfHits>=1)           continue;
       }
       else{
-	if(trackCollection[i].trackerExpectedHitsOuter_numberOfHits<3)            continue;
+	if(trackCollection[i].trackerExpectedHitsOuter_numberOfHits<1)            continue;
       }
     }
-    countsTrackCriteria->Fill("NOfLostHitsOuterGe3", weight);
+    countsTrackCriteria->Fill("NOfLostHitsOuterGe1", weight);
     //.................................................................................//
     if(DeDxRequirement){
       if(invertDeDxRequirement){
