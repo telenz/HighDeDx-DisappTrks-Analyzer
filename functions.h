@@ -328,27 +328,6 @@ struct evt::GenParticle_s  findLeadingJetInGenParticleCollectionWithPtGt30(){
 
 //--------------------------------------------------------------------------------------------------
 
-std::vector<evt::Jet_s>  getSubleadingJetCollection(){
-
-  std::vector<evt::Jet_s> jetCollection;
-  jetCollection.clear();
-  for(unsigned int i=0; i<evt::Jet.size(); i++){
-
-    //bool isCharginoCandidate = false;
-
-    if(evt::Jet[i].pt<=30.)                          continue;
-    if(std::abs(evt::Jet[i].eta)>=4.5)               continue;
-    if(evt::Jet[i].neutralHadronEnergyFraction>=0.7) continue;
-    if(evt::Jet[i].chargedEmEnergyFraction>=0.5)     continue;
-
-    jetCollection.push_back(evt::Jet[i]);
-  }
-
-  return jetCollection;
-}
-
-//--------------------------------------------------------------------------------------------------
-
 bool areTwoJetsBackToBack(std::vector<evt::Jet_s>& jetColl){
 
   for(unsigned int i=0; i<jetColl.size(); i++){
@@ -404,7 +383,26 @@ bool leadingJetRequirementsFullfilled(struct evt::Jet_s* leadingJet, TH1D* count
 
   return true;
 }
+//--------------------------------------------------------------------------------------------------
 
+std::vector<evt::Jet_s>  getSubleadingJetCollection(){
+
+  std::vector<evt::Jet_s> jetCollection;
+  jetCollection.clear();
+  for(unsigned int i=0; i<evt::Jet.size(); i++){
+
+    //bool isCharginoCandidate = false;
+
+    if(evt::Jet[i].pt<=30.)                          continue;
+    if(std::abs(evt::Jet[i].eta)>=4.5)               continue;
+    if(evt::Jet[i].neutralHadronEnergyFraction>=0.7) continue;
+    if(evt::Jet[i].chargedEmEnergyFraction>=0.5)     continue;
+
+    jetCollection.push_back(evt::Jet[i]);
+  }
+
+  return jetCollection;
+}
 //--------------------------------------------------------------------------------------------------
   
 bool isGoodVertex(){
@@ -508,8 +506,8 @@ std::vector<evt::Track_s> trackCandidateCuts(std::vector<evt::Track_s> trackColl
     if(trackCollection[i].pt<=10.)                                            continue;
     countsTrackCriteria->Fill("PtGreater10GeV", weight);
     //.................................................................................//
-    if(std::abs(trackCollection[i].eta)>2.1)                                  continue;
-    countsTrackCriteria->Fill("EtaLess2p1", weight);
+    if(std::abs(trackCollection[i].eta)>2.5)                                  continue;
+    countsTrackCriteria->Fill("EtaLess2p5", weight);
     //.................................................................................//
     if(!trackCollection[i].trackHighPurity)                                   continue;
     countsTrackCriteria->Fill("highPurity", weight);
