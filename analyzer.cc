@@ -451,7 +451,7 @@ int main(int argc, char** argv)
       hTrueNumInteractions_0->Fill(PileupSummaryInfo[0].getTrueNumInteractions);
       hPU_NumInteractions_0->Fill(PileupSummaryInfo[0].getPU_NumInteractions);
 
-      
+
       noSelection.Selection();
       triggerRequirements.Selection();
       preselection.Selection();
