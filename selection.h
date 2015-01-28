@@ -4,6 +4,7 @@
 #include "analyzer.h"
 #include "histogramClass.h"
 #include "functions.h"
+#include "triggerFunctions.h"
 #include "declarationsOfClasses.h"
 #include <iostream>
 #include <vector>
@@ -42,6 +43,8 @@ Event::Event(TString histName, outputFile ofile_):
 int Event::Selection()
 {
     
+  hist.variables.clearVectors();
+
   TrackColl.clear();
   JetColl.clear();
     
@@ -76,77 +79,31 @@ int Event::Selection()
   //%%%%%%%%% Trigger Requirements %%%%%%%%%%%%%
   if(triggerRequirements){
     // 1.) Trigger Cut
- 
+
     if(edmEventHelper_isRealData){
-      if(
-	 edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v1    == 1 ||
-	 edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v2    == 1 ||
-	 edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v3    == 1 ||
-	 edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v4    == 1 ||
-	 edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v5    == 1 ||
-	 edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v6    == 1 ||
-	 edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v7    == 1 ||
-	 edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v8    == 1 ||
-	 edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v9    == 1 ||
-	 edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v10   == 1 ||
-	 edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v11   == 1 ||
-	 edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v12   == 1 ||
-	 edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v13   == 1 ||
-	 edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v14   == 1 ||
-	 edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v15   == 1 ||
-	 edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v16   == 1 ||
-	 edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v17   == 1 ||
-	 edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v18   == 1 ||
-	 edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v19   == 1 ||
-	 edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v20   == 1 ||
-	 
-	 edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v1   == 1 ||
-	 edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v2   == 1 ||
-	 edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v3   == 1 ||
-	 edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v4   == 1 ||
-	 edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v5   == 1 ||
-	 edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v6   == 1 ||
-	 edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v7   == 1 ||
-	 edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v8   == 1 ||
-	 edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v9   == 1 ||
-	 edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v10  == 1 ||
-	 edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v11  == 1 ||
-	 edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v12  == 1 ||
-	 edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v13  == 1 ||
-	 edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v14  == 1 ||
-	 edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v15  == 1 ||
-	 edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v16  == 1 ||
-	 edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v17  == 1 ||
-	 edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v18  == 1 ||
-	 edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v19  == 1 ||
-	 edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v20  == 1 ||
-	 
-	 edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v1                    == 1 ||
-	 edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v2                    == 1 ||
-	 edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v3                    == 1 ||
-	 edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v4                    == 1 ||
-	 edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v5                    == 1 ||
-	 edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v6                    == 1 ||
-	 edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v7                    == 1 ||
-	 edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v8                    == 1 ||
-	 edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v9                    == 1 ||
-	 edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v10                   == 1 ||
-	 edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v11                   == 1 ||
-	 edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v12                   == 1 ||
-	 edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v13                   == 1 ||
-	 edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v14                   == 1 ||
-	 edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v15                   == 1 ||
-	 edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v16                   == 1 ||
-	 edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v17                   == 1 ||
-	 edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v18                   == 1 ||
-	 edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v19                   == 1 ||
-	 edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v20                   == 1 
-	 ){}
-      else{
-	cout<<"no trigger fired"<<endl;
+      int edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v           = getTriggerResult("edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v");
+      int edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v          = getTriggerResult("edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v");
+      int edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v                           = getTriggerResult("edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v");
+      int Prescale_edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v  = getTriggerPrescales("edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v");
+      int Prescale_edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v = getTriggerPrescales("edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v");
+      int Prescale_edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v                  = getTriggerPrescales("edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v");
+      hist.hMonoCentralPFJet80_PFMETnoMu95            -> Fill(edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v,weight);
+      hist.hMonoCentralPFJet80_PFMETnoMu105           -> Fill(edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v,weight);
+      hist.hMET120_HBHENoiseCleaned                   -> Fill(edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v,weight);
+      hist.hMonoCentralPFJet80_PFMETnoMu95_prescale   -> Fill(Prescale_edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v,weight);
+      hist.hMonoCentralPFJet80_PFMETnoMu105_prescale  -> Fill(Prescale_edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v,weight);
+      hist.hMET120_HBHENoiseCleaned_prescale          -> Fill(Prescale_edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v,weight);
+
+      
+      
+      if(edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v  == 1 ||
+	 edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v == 1 ||
+	 edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v                  == 1)
+	{}
+      else{ 
+	cout<<"something wrong with triggers!"<<endl;
 	return 0; }
     }
- 
     countsEventCuts->Fill("triggerCut_OnlyData", weight);
 	     
     // 2.) MET cut
@@ -154,7 +111,6 @@ int Event::Selection()
     countsEventCuts->Fill("metCut", weight);
     
     // 3.) Leading Jet Cut
-    if(JetColl.size()==0) return 0;
     if(!leadingJetRequirementsFullfilled(&JetColl[0], countsEventCuts)) return 0;
   }
   //.................................................................................//
@@ -213,7 +169,12 @@ int Event::Selection()
   hist.FillTrackVariables(TrackColl,weight);
   hist.FillCharginoHistograms(ChiTrack,weight);
   hist.hMet->Fill(evt::MET_pt,weight);
-  if(JetColl.size()!=0) hist.h1stjetpt->Fill(JetColl[0].pt,weight);
+  hist.hLuminosityBlock->Fill(evt::edmEventHelper_luminosityBlock, weight);
+  if(JetColl.size()!=0){
+    hist.h1stjetpt->Fill(JetColl[0].pt,weight);
+    hist.variables.LeadingJetPt = JetColl[0].pt;
+  }
+  hist.variables.met       = MET_pt;
   if(dPhiMax>0.) hist.hDeltaPhiMax->Fill(dPhiMax,weight);
   hist.hnPFJetsub->Fill(subleadingJetColl.size(),weight);
 
@@ -224,6 +185,8 @@ int Event::Selection()
 
   if(chipmGenParticle.size()>0) hist.FillGenParticleHistograms(chipmGenParticle,weight);
 
+
+  hist.tree->Fill();
 
   return 0;
 
