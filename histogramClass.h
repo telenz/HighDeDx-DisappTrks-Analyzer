@@ -22,6 +22,10 @@ Hist::Hist(TString histName, outputFile ofile_)
   ofile_.file_->cd(histName);
   tree=new TTree("Variables","a Tree with all relevant variables after selection");
   tree->Branch("weight",&variables.weight);
+  tree->Branch("run",&variables.run);
+  tree->Branch("lumiBlock",&variables.lumiBlock);
+  tree->Branch("MET",&variables.met);
+  tree->Branch("LeadingJetPt",&variables.LeadingJetPt);
   tree->Branch("trackDeDxASmi",&variables.trackDeDxASmi);
   tree->Branch("trackDeDxHarm2",&variables.trackDeDxHarm2);
   tree->Branch("trackPt",&variables.trackPt);
@@ -113,6 +117,14 @@ Hist::Hist(TString histName, outputFile ofile_)
   htrackCaloIsoASmi             = iniTH2D("htrackCaloIsoASmi",20,0,100,20,0,1);
   htrackCaloIsoASmiLargeRange   = iniTH2D("htrackCaloIsoASmiLargeRange",40,0,200,10,0,1);
   htrackCaloIsoASmiSmallBinning = iniTH2D("htrackCaloIsoASmiSmallBinning",50,0,100,50,0,1);
+  
+  hMonoCentralPFJet80_PFMETnoMu95            = iniTH1D("hMonoCentralPFJet80_PFMETnoMu95",3,-1,2);
+  hMonoCentralPFJet80_PFMETnoMu105           = iniTH1D("hMonoCentralPFJet80_PFMETnoMu105",3,-1,2);
+  hMET120_HBHENoiseCleaned                   = iniTH1D("hMET120_HBHENoiseCleaned",3,-1,2);
+  hMonoCentralPFJet80_PFMETnoMu95_prescale   = iniTH1D("hMonoCentralPFJet80_PFMETnoMu95_prescale",101,-1,100);
+  hMonoCentralPFJet80_PFMETnoMu105_prescale  = iniTH1D("hMonoCentralPFJet80_PFMETnoMu105_prescale",101,-1,100);
+  hMET120_HBHENoiseCleaned_prescale          = iniTH1D("hMET120_HBHENoiseCleaned_prescale",101,-1,100);
+  hLuminosityBlock                           = iniTH1D("hLuminosityBlock",2500,0,2500);
   hMet                          = iniTH1D("hMet",150,0,1500);
 
   hgenPtChi              = iniTH1D("hgenPtChi",150,0,1500);
@@ -136,7 +148,6 @@ Hist::Hist(TString histName, outputFile ofile_)
 void Hist::FillTrackVariables(std::vector<evt::Track_s> trkCollection,double weight)
 {  
 
-  variables.clearVectors();
   variables.weight=weight; 
 
   hNumberOfTracks    ->   Fill(trkCollection.size(), weight);
@@ -253,7 +264,6 @@ void Hist::FillTrackVariables(std::vector<evt::Track_s> trkCollection,double wei
 
     
     // Fill tree variables
-
     variables.trackDeDxASmi.push_back(trkCollection[i].ASmi); 
     variables.trackDeDxHarm2.push_back(trkCollection[i].dEdxHarm2);
     variables.trackPt.push_back(trkCollection[i].pt);
@@ -265,9 +275,10 @@ void Hist::FillTrackVariables(std::vector<evt::Track_s> trkCollection,double wei
 
   }
 
-  variables.weight = weight;
-  tree->Fill();
-
+  variables.weight    = weight;
+  variables.run       = edmEventHelper_run;
+  variables.lumiBlock = edmEventHelper_luminosityBlock;
+  
 };
 
 void Hist::FillGenParticleHistograms(std::vector<evt::GenParticle_s> genCollection, double weight)
