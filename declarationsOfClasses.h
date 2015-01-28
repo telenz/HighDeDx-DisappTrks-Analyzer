@@ -12,14 +12,18 @@ using namespace evt;
 typedef struct { 
 
   double                 weight;
-  std::vector<Double_t>  trackDeDxASmi; 
+  std::vector<Double_t>  trackDeDxASmi;
   std::vector<Double_t>  trackDeDxHarm2;
   std::vector<Double_t>  trackPt;
   std::vector<Double_t>  trackNLostOuter;
   std::vector<Double_t>  trackNValid;
   std::vector<Double_t>  trackCaloIsolation;
   std::vector<Double_t>  trackMass;
-  std::vector<Double_t>  trackIsolation; 
+  std::vector<Double_t>  trackIsolation;
+  UInt_t                 run;
+  UInt_t                 lumiBlock;
+  double                 met;
+  double                 LeadingJetPt;
 
 
   void clearVectors(){
@@ -36,7 +40,6 @@ typedef struct {
 
 } TreeVariables_t;
 
-//TFile f("treeAfterSelection.root","recreate");
 
 class Hist
 {
@@ -113,6 +116,14 @@ class Hist
 
   TH1D* h1stjetpt;
   TH2D* htrackpt1stjetpt;
+  TH1D *hTriggerResults;
+  TH1D *hMonoCentralPFJet80_PFMETnoMu95;
+  TH1D *hMonoCentralPFJet80_PFMETnoMu105;
+  TH1D *hMET120_HBHENoiseCleaned ;
+  TH1D *hMonoCentralPFJet80_PFMETnoMu95_prescale;
+  TH1D *hMonoCentralPFJet80_PFMETnoMu105_prescale;
+  TH1D *hMET120_HBHENoiseCleaned_prescale ;
+  TH1D *hLuminosityBlock;
   TH1D* hMet;
   TH1D *hnPFJetsub;
 
