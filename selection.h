@@ -129,6 +129,7 @@ int Event::Selection()
     // 6.)
     TrackColl = trackCleaningCuts(TrackColl,countsTrackCriteria);
     countsEventCuts->Fill("trackCleaningCut", weight);
+    if(TrackColl.size()==0) return 0;
   }
   //.................................................................................//
   //%%%%%%%%% QCD supression %%%%%%%%%%%%%
