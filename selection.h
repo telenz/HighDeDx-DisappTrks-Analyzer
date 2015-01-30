@@ -29,10 +29,10 @@ Event::Event(TString histName, outputFile ofile_):
       qcdSupression          = false;
       trackCandidateCutFinal = false;
 
-      TrackPtRequirement = true;
-      NumOfLostOuterRequirement  = true;
-      CaloIsolationRequirement   = true;
-      DeDxRequirement    = true;
+      TrackPtRequirement         = false;
+      NumOfLostOuterRequirement  = false;
+      CaloIsolationRequirement   = false;
+      DeDxRequirement            = false;
 
       invertTrackPtRequirement         = false;
       invertCaloIsolationRequirement   = false;
@@ -201,7 +201,8 @@ std::vector<Track_s> Event::finalTrackCuts(std::vector<Track_s> trackCollection,
 
   TrackColl.clear();
 
-  for(unsigned int i=0; i<trackCollection.size(); i++){
+  for(unsigned int i=0; i<1; i++){
+
     //.................................................................................//
     if(TrackPtRequirement){
       if(invertTrackPtRequirement){
