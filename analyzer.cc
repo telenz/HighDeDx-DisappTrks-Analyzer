@@ -138,8 +138,10 @@ int main(int argc, char** argv)
   fullSelection.trackPreselection         = true;
   fullSelection.qcdSupression             = true;
   fullSelection.trackCandidateCutFinal    = true;
+  fullSelection.TrackPtRequirement        = true;
   fullSelection.NumOfLostOuterRequirement = true;
   fullSelection.CaloIsolationRequirement  = true;
+  fullSelection.DeDxRequirement           = true;
 
   //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   // Only Chi
@@ -159,9 +161,11 @@ int main(int argc, char** argv)
   chiTracksfullSelection.trackPreselection      = true;
   chiTracksfullSelection.qcdSupression          = true;
   chiTracksfullSelection.trackCandidateCutFinal = true;
+  chiTracksfullSelection.TrackPtRequirement        = true;
   chiTracksfullSelection.NumOfLostOuterRequirement = true;
   chiTracksfullSelection.CaloIsolationRequirement  = true;
-
+  chiTracksfullSelection.DeDxRequirement           = true;
+  
   //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   // SM model control regions
   class Event chiTracksSMControlCalo("chiTracksSMControlCalo",ofile);
