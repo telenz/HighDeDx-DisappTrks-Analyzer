@@ -15,8 +15,8 @@ typedef struct {
   std::vector<Double_t>  trackDeDxASmi;
   std::vector<Double_t>  trackDeDxHarm2;
   std::vector<Double_t>  trackPt;
-  std::vector<Double_t>  trackNLostOuter;
-  std::vector<Double_t>  trackNValid;
+  std::vector<Int_t>     trackNLostOuter;
+  std::vector<Int_t>     trackNValid;
   std::vector<Double_t>  trackCaloIsolation;
   std::vector<Double_t>  trackMass;
   std::vector<Double_t>  trackIsolation;
