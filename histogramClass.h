@@ -102,6 +102,7 @@ Hist::Hist(TString histName, outputFile ofile_)
   hnPFJetsub         = iniTH1D("hnPFJetsub",20,0,20);
   hDeltaPhi          = iniTH1D("hDeltaPhi",32,0,3.2);
   hDeltaPhiMax       = iniTH1D("hDeltaPhiMax",32,0,3.2);
+  hDeltaPhiMaxbeforeCut = iniTH1D("hDeltaPhiMaxbeforeCut",32,0,3.2);
   h1stjetpt          = iniTH1D("h1stjetpt",200,0,2000);
   htrackpt1stjetpt              = iniTH2D("htrackpt1stjetpt",100,0,1000,200,0,2000);
   htrackPtDeDxHarm2             = iniTH2D("htrackPtDeDxHarm2",50,0,500,50,0,50);
