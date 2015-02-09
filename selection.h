@@ -12,33 +12,33 @@ using namespace std;
 //-----------------------------------------------------------------------------
 
 Event::Event(TString histName, outputFile ofile_):
-  hist(histName, ofile_)
-    { 
+hist(histName, ofile_)
+{ 
 
-      countsTrackCriteria = new TH1D("countsTrackCriteria","countsTrackCriteria",1,0,1);
-      countsTrackCriteria->SetBit(TH1::kCanRebin);
-      countsTrackCriteria->SetStats(0);
-      countsEventCuts = new TH1D("countsEventCuts","countsEventCuts",1,0,1);
-      countsEventCuts->SetBit(TH1::kCanRebin);
-      countsEventCuts->SetStats(0);
+  countsTrackCriteria = new TH1D("countsTrackCriteria","countsTrackCriteria",1,0,1);
+  countsTrackCriteria->SetBit(TH1::kCanRebin);
+  countsTrackCriteria->SetStats(0);
+  countsEventCuts = new TH1D("countsEventCuts","countsEventCuts",1,0,1);
+  countsEventCuts->SetBit(TH1::kCanRebin);
+  countsEventCuts->SetStats(0);
       
-      onlyChi                = false;
-      noChi                  = false;
-      triggerRequirements    = false;
-      trackPreselection      = false;
-      qcdSupression          = false;
-      trackCandidateCutFinal = false;
+  onlyChi                = false;
+  noChi                  = false;
+  triggerRequirements    = false;
+  trackPreselection      = false;
+  qcdSupression          = false;
+  trackCandidateCutFinal = false;
 
-      TrackPtRequirement         = false;
-      NumOfLostOuterRequirement  = false;
-      CaloIsolationRequirement   = false;
-      DeDxRequirement            = false;
+  TrackPtRequirement         = false;
+  NumOfLostOuterRequirement  = false;
+  CaloIsolationRequirement   = false;
+  DeDxRequirement            = false;
 
-      invertTrackPtRequirement         = false;
-      invertCaloIsolationRequirement   = false;
-      invertNumOfLostOuterRequirement  = false;
-      invertDeDxRequirement            = false;
-    }
+  invertTrackPtRequirement         = false;
+  invertCaloIsolationRequirement   = false;
+  invertNumOfLostOuterRequirement  = false;
+  invertDeDxRequirement            = false;
+}
 
 int Event::Selection()
 {
@@ -120,16 +120,19 @@ int Event::Selection()
     if(TrackColl.size()==0) return 0;
     countsEventCuts->Fill("NonEmptyTrkColl", weight);
     TrackColl = trackCandidateCuts(TrackColl,countsTrackCriteria);
+    if(TrackColl.size()==0) return 0;
     countsEventCuts->Fill("trackCandCut", weight);
 	  
     // 5.)
     TrackColl = trackParticleMatchingCuts(TrackColl,subleadingJetColl,countsTrackCriteria);
+    if(TrackColl.size()==0) return 0;
     countsEventCuts->Fill("trackParticleMatchingCut", weight);
 
     // 6.)
     TrackColl = trackCleaningCuts(TrackColl,countsTrackCriteria);
-    countsEventCuts->Fill("trackCleaningCut", weight);
     if(TrackColl.size()==0) return 0;
+    countsEventCuts->Fill("trackCleaningCut", weight);
+    
   }
   //.................................................................................//
   //%%%%%%%%% QCD supression %%%%%%%%%%%%%
@@ -142,9 +145,11 @@ int Event::Selection()
       hist.hDeltaPhi->Fill(dPhi,weight);     
     }
   }
+  hist.hDeltaPhiMaxbeforeCut->Fill(dPhiMax,weight);
   if(qcdSupression){
     if(areTwoJetsBackToBack(subleadingJetColl)) return 0;
   }
+  hist.hDeltaPhiMax->Fill(dPhiMax,weight);
   countsEventCuts->Fill("DeltaPhiCut", weight);
 	
   // DeltaPhi(Jet,MET) cut
@@ -176,7 +181,6 @@ int Event::Selection()
     hist.variables.LeadingJetPt = JetColl[0].pt;
   }
   hist.variables.met       = MET_pt;
-  if(dPhiMax>0.) hist.hDeltaPhiMax->Fill(dPhiMax,weight);
   hist.hnPFJetsub->Fill(subleadingJetColl.size(),weight);
 
   for(unsigned int i=0; i<TrackColl.size(); i++){
