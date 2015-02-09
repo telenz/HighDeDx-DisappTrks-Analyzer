@@ -180,40 +180,40 @@ void findChiInGenParticleCollection(){
 // Get only the Chi from the full Track Collection
 std::vector<Track_s> findChiInRecoTrackCollection(std::vector<Track_s>& inputCollection){
 
-  std::vector<Track_s> chiTrackCollection;
-  chiTrackCollection.clear();
+std::vector<Track_s> chiTrackCollection;
+chiTrackCollection.clear();
 
-  double dPhi = 0;
-  double dEta = 0;
-  double dR   = 0;
-  int idxMin  = -100;
+double dPhi = 0;
+double dEta = 0;
+double dR   = 0;
+int idxMin  = -100;
  
-  for(unsigned int j=0; j<ChiTrack.size();j++){
+for(unsigned int j=0; j<ChiTrack.size();j++){
 
-    double dRmin=10000.;
+double dRmin=10000.;
 
-    for(unsigned int i=0; i<inputCollection.size(); i++){
-      dPhi = std::abs(TVector2::Phi_mpi_pi(inputCollection[i].phi - ChiTrack[j].genphi));
-      dEta = std::abs(inputCollection[i].eta - ChiTrack[j].geneta);
-      dR   = std::sqrt( dPhi*dPhi + dEta*dEta );
+for(unsigned int i=0; i<inputCollection.size(); i++){
+dPhi = std::abs(TVector2::Phi_mpi_pi(inputCollection[i].phi - ChiTrack[j].genphi));
+dEta = std::abs(inputCollection[i].eta - ChiTrack[j].geneta);
+dR   = std::sqrt( dPhi*dPhi + dEta*dEta );
 
-      if(dR<dRmin){
-	dRmin=dR;
-	idxMin=i;
-      }
-    }
+if(dR<dRmin){
+dRmin=dR;
+idxMin=i;
+}
+}
     
-    if(dRmin<0.001){
-      chiTrackCollection.push_back(inputCollection[idxMin]);
-      fillChiTrackWithRecoTrackVariables(&ChiTrack[j], &inputCollection[idxMin]);
-      ChiTrack[j].matched = true;
-      matchedGenChiToTrack += 1;
-    }
+if(dRmin<0.001){
+chiTrackCollection.push_back(inputCollection[idxMin]);
+fillChiTrackWithRecoTrackVariables(&ChiTrack[j], &inputCollection[idxMin]);
+ChiTrack[j].matched = true;
+matchedGenChiToTrack += 1;
+}
 
 
-  }
+}
 
-  return chiTrackCollection;
+return chiTrackCollection;
 }
 */
 //--------------------------------------------------------------------------------------------------
@@ -292,9 +292,9 @@ void findChiDecayVertex(){
 
 	  if(std::abs(SimTrack[l].type)==1000022){
 	    if((unsigned int) SimTrack[l].vertIndex == SimVertex[i].vertexId){
-		decayed = true;
-		break;
-	      }
+	      decayed = true;
+	      break;
+	    }
 	  }
 	}
 
@@ -334,7 +334,6 @@ bool areTwoJetsBackToBack(std::vector<evt::Jet_s>& jetColl){
     for(unsigned int j=i+1; j<jetColl.size(); j++){
 
       double dPhi = std::abs(TVector2::Phi_mpi_pi(jetColl[i].phi-jetColl[j].phi));
- 
       if(abs(dPhi)>=2.5) return true;     
       
     }
@@ -615,32 +614,32 @@ std::vector<evt::Track_s> trackParticleMatchingCuts(std::vector<evt::Track_s> tr
 }
 //--------------------------------------------------------------------------------------------------
 TH3* loadDeDxTemplate(string path){
-   TFile* InputFile = new TFile(path.c_str());
-   TH3*  DeDxMap_;
-   InputFile->GetObject("Charge_Vs_Path",DeDxMap_);
-   if(!DeDxMap_){printf("dEdx templates in file %s can't be open\n", path.c_str()); exit(0);}
+  TFile* InputFile = new TFile(path.c_str());
+  TH3*  DeDxMap_;
+  InputFile->GetObject("Charge_Vs_Path",DeDxMap_);
+  if(!DeDxMap_){printf("dEdx templates in file %s can't be open\n", path.c_str()); exit(0);}
 
-   TH3* Prob_ChargePath  = (TH3*)(DeDxMap_->Clone("Prob_ChargePath"));
-   Prob_ChargePath->Reset();
-   Prob_ChargePath->SetDirectory(0);
+  TH3* Prob_ChargePath  = (TH3*)(DeDxMap_->Clone("Prob_ChargePath"));
+  Prob_ChargePath->Reset();
+  Prob_ChargePath->SetDirectory(0);
 
-   for(int i=0;i<=Prob_ChargePath->GetXaxis()->GetNbins()+1;i++){        // pt dimension
-     for(int j=0;j<=Prob_ChargePath->GetYaxis()->GetNbins()+1;j++){      // path dimension
-         double Ni = 0;
-	 for(int k=0;k<=Prob_ChargePath->GetZaxis()->GetNbins()+1;k++){Ni+=DeDxMap_->GetBinContent(i,j,k);}  
-         for(int k=0;k<=Prob_ChargePath->GetZaxis()->GetNbins()+1;k++){  // charge/path dimension 
-            double tmp = 0;
-            for(int l=0;l<=k;l++){ tmp+=DeDxMap_->GetBinContent(i,j,l);} // sum over all bins with dEdx equal or smaller than the current one
-            if(Ni>0){
-               Prob_ChargePath->SetBinContent (i, j, k, tmp/Ni);
-            }else{
-               Prob_ChargePath->SetBinContent (i, j, k, 0);
-            }
-         }
+  for(int i=0;i<=Prob_ChargePath->GetXaxis()->GetNbins()+1;i++){        // pt dimension
+    for(int j=0;j<=Prob_ChargePath->GetYaxis()->GetNbins()+1;j++){      // path dimension
+      double Ni = 0;
+      for(int k=0;k<=Prob_ChargePath->GetZaxis()->GetNbins()+1;k++){Ni+=DeDxMap_->GetBinContent(i,j,k);}  
+      for(int k=0;k<=Prob_ChargePath->GetZaxis()->GetNbins()+1;k++){  // charge/path dimension 
+	double tmp = 0;
+	for(int l=0;l<=k;l++){ tmp+=DeDxMap_->GetBinContent(i,j,l);} // sum over all bins with dEdx equal or smaller than the current one
+	if(Ni>0){
+	  Prob_ChargePath->SetBinContent (i, j, k, tmp/Ni);
+	}else{
+	  Prob_ChargePath->SetBinContent (i, j, k, 0);
+	}
       }
-   }
-   InputFile->Close();
-   return Prob_ChargePath;
+    }
+  }
+  InputFile->Close();
+  return Prob_ChargePath;
 }
 //--------------------------------------------------------------------------------------------------
 double dEdxOnTheFly(std::vector<double> *HitsDeDx, std::vector<int> *HitsShapetest, std::vector<double> *HitsPathlength, std::vector<int> *HitsSubdetid, bool isData, TH3 *templateHistoStrip, TH3 *templateHistoPixel, bool usePixel, int nHits=-1)
