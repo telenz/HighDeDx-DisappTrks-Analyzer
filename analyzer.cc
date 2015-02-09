@@ -155,6 +155,7 @@ int main(int argc, char** argv)
   chiTrackspreselection.triggerRequirements = true;
   chiTrackspreselection.trackPreselection   = true;
   chiTrackspreselection.qcdSupression       = true;
+
   class Event chiTracksfullSelection("chiTracksfullSelection",ofile);
   if(isSignal) chiTracksfullSelection.onlyChi   = true;
   chiTracksfullSelection.triggerRequirements    = true;
@@ -348,12 +349,12 @@ int main(int argc, char** argv)
   // Read discriminator templates
   //-------------------------------------------------------------------------------------
   if(isData){
-  template_pixel = loadDeDxTemplate("/afs/desy.de/user/t/tlenz/HighDeDx-DisappTrks-Analyzer/data/Discrim_template_pixel_data_2012.root");
-  template_strip = loadDeDxTemplate("/afs/desy.de/user/t/tlenz/HighDeDx-DisappTrks-Analyzer/data/Data7TeV_Deco_SiStripDeDxMip_3D_Rcd.root");
+    template_pixel = loadDeDxTemplate("/afs/desy.de/user/t/tlenz/HighDeDx-DisappTrks-Analyzer/data/Discrim_template_pixel_data_2012.root");
+    template_strip = loadDeDxTemplate("/afs/desy.de/user/t/tlenz/HighDeDx-DisappTrks-Analyzer/data/Data7TeV_Deco_SiStripDeDxMip_3D_Rcd.root");
   }
   else{
-  template_pixel = loadDeDxTemplate("/afs/desy.de/user/t/tlenz/HighDeDx-DisappTrks-Analyzer/data/Discrim_template_pixel_mc_2012.root");
-  template_strip = loadDeDxTemplate("/afs/desy.de/user/t/tlenz/HighDeDx-DisappTrks-Analyzer/data/Discrim_Templates_MC_2012.root");
+    template_pixel = loadDeDxTemplate("/afs/desy.de/user/t/tlenz/HighDeDx-DisappTrks-Analyzer/data/Discrim_template_pixel_mc_2012.root");
+    template_strip = loadDeDxTemplate("/afs/desy.de/user/t/tlenz/HighDeDx-DisappTrks-Analyzer/data/Discrim_Templates_MC_2012.root");
   }
 
   //-------------------------------------------------------------------------------------
@@ -467,7 +468,7 @@ int main(int argc, char** argv)
       chiTrackspreselection.Selection();
       chiTracksfullSelection.Selection();
       chiTracksSMControlCalo.Selection();
-
+      
       if(!isData){
 	trackPt_DeDx.CR1.Selection();
 	trackPt_DeDx.CR2.Selection();
@@ -494,7 +495,7 @@ int main(int argc, char** argv)
 	CaloIso_lostOuterHits.CR3.Selection();
 	CaloIso_lostOuterHits.SR.Selection();
       }
-
+      
     }//end of loop over events
  
   stop = clock();
