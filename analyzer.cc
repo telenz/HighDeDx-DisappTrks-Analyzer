@@ -120,6 +120,7 @@ int main(int argc, char** argv)
   TH1D *nVertices_0            = new TH1D("nVertices_0","nVertices_0",100,0,100);
   TH1D *hPU_NumInteractions_0  = new TH1D("hPU_NumInteractions_0","hPU_NumInteractions_0",100,0,100);
   TH1D *hTrueNumInteractions_0 = new TH1D("hTrueNumInteractions_0","hTrueNumInteractions_0",100,0,100);
+  TH2D* hHitRadiusDeDx         = new TH2D("hHitRadiusDeDx","hHitRadiusDeDx",110,0,110,50,0,1);
 
   //-------------------------------------------------------------------------------------
   // Declaration of Variables
@@ -366,7 +367,8 @@ int main(int argc, char** argv)
   stream._chain->SetBranchAddress("recoTrackHelper_TrackRefitter_HitsSubdetId",&HitsSubdetid);
   stream._chain->SetBranchAddress("recoTrackHelper_TrackRefitter_HitsEta",&HitsEta);
   stream._chain->SetBranchAddress("recoTrackHelper_TrackRefitter_HitsPhi",&HitsPhi);
-  
+  stream._chain->SetBranchAddress("recoTrackHelper_TrackRefitter_HitsTransverse",&HitsTransverse);
+    
   //-------------------------------------------------------------------------------------
   // Loop over events
   //-------------------------------------------------------------------------------------
@@ -398,6 +400,8 @@ int main(int argc, char** argv)
   // ***********************************************************************************************************************
 
   cout<<endl<<"Number Of Events = "<<nevents<<endl<<endl;
+  
+  hHitRadiusDeDx -> Sumw2();
 
   for(int entry=0; entry <nevents; ++entry)
     {
@@ -430,20 +434,22 @@ int main(int argc, char** argv)
 
       //------------- Calculate track dependent variables from hits and save them in trk coll ----
       for(unsigned int i=0; i<evt::Track.size();i++){
-	double ASmiOnTheFly     = dEdxOnTheFly(&(*HitsDeDx)[i], &(*HitsShapetest)[i], &(*HitsPathlength)[i], &(*HitsSubdetid)[i], 1, template_strip, template_pixel,1); 
-	double ASmiNPOnTheFly   = dEdxOnTheFly(&(*HitsDeDx)[i], &(*HitsShapetest)[i], &(*HitsPathlength)[i], &(*HitsSubdetid)[i], 1, template_strip, template_pixel,0); 
-	double ASmiOnTheFly_3   = dEdxOnTheFly(&(*HitsDeDx)[i], &(*HitsShapetest)[i], &(*HitsPathlength)[i], &(*HitsSubdetid)[i], 1, template_strip, template_pixel,1,3);
-	double ASmiNPOnTheFly_3 = dEdxOnTheFly(&(*HitsDeDx)[i], &(*HitsShapetest)[i], &(*HitsPathlength)[i], &(*HitsSubdetid)[i], 1, template_strip, template_strip,0,3);
-	double ASmiOnTheFly_7   = dEdxOnTheFly(&(*HitsDeDx)[i], &(*HitsShapetest)[i], &(*HitsPathlength)[i], &(*HitsSubdetid)[i], 1, template_strip, template_pixel,1,7);
-	double ASmiNPOnTheFly_7 = dEdxOnTheFly(&(*HitsDeDx)[i], &(*HitsShapetest)[i], &(*HitsPathlength)[i], &(*HitsSubdetid)[i], 1, template_strip, template_strip,0,7);
 
+	double ASmiOnTheFly            = dEdxOnTheFly(&(*HitsDeDx)[i], &(*HitsShapetest)[i], &(*HitsPathlength)[i], &(*HitsSubdetid)[i], &(*HitsTransverse)[i], 1, template_strip, template_pixel,1,0,hHitRadiusDeDx); 
+	double ASmiNPOnTheFly          = dEdxOnTheFly(&(*HitsDeDx)[i], &(*HitsShapetest)[i], &(*HitsPathlength)[i], &(*HitsSubdetid)[i], &(*HitsTransverse)[i], 1, template_strip, template_pixel,0); 
+	double ASmiOnTheFly_3          = dEdxOnTheFly(&(*HitsDeDx)[i], &(*HitsShapetest)[i], &(*HitsPathlength)[i], &(*HitsSubdetid)[i], &(*HitsTransverse)[i], 1, template_strip, template_pixel,1,3);
+	double ASmiNPOnTheFly_3        = dEdxOnTheFly(&(*HitsDeDx)[i], &(*HitsShapetest)[i], &(*HitsPathlength)[i], &(*HitsSubdetid)[i], &(*HitsTransverse)[i], 1, template_strip, template_pixel,0,3);
+	double ASmiOnTheFly_7          = dEdxOnTheFly(&(*HitsDeDx)[i], &(*HitsShapetest)[i], &(*HitsPathlength)[i], &(*HitsSubdetid)[i], &(*HitsTransverse)[i], 1, template_strip, template_pixel,1,7);
+	double ASmiNPOnTheFly_7        = dEdxOnTheFly(&(*HitsDeDx)[i], &(*HitsShapetest)[i], &(*HitsPathlength)[i], &(*HitsSubdetid)[i], &(*HitsTransverse)[i], 1, template_strip, template_pixel,0,7);
+	double ASmiOnTheFly_woLastHit  = dEdxOnTheFly(&(*HitsDeDx)[i], &(*HitsShapetest)[i], &(*HitsPathlength)[i], &(*HitsSubdetid)[i], &(*HitsTransverse)[i], 1, template_strip, template_pixel,1,-1);
 
-	Track[i].ASmi     = ASmiOnTheFly;
-       	Track[i].ASmiNP   = ASmiNPOnTheFly;
-	Track[i].ASmi_3   = ASmiOnTheFly_3;
-       	Track[i].ASmiNP_3 = ASmiNPOnTheFly_3;
-	Track[i].ASmi_7   = ASmiOnTheFly_7;
-       	Track[i].ASmiNP_7 = ASmiNPOnTheFly_7;
+	Track[i].ASmi           = ASmiOnTheFly;
+       	Track[i].ASmiNP         = ASmiNPOnTheFly;
+	Track[i].ASmi_3         = ASmiOnTheFly_3;
+       	Track[i].ASmiNP_3       = ASmiNPOnTheFly_3;
+	Track[i].ASmi_7         = ASmiOnTheFly_7;
+       	Track[i].ASmiNP_7       = ASmiNPOnTheFly_7;
+	Track[i].ASmi_woLastHit = ASmiOnTheFly_woLastHit;
 
       }
       
@@ -463,7 +469,7 @@ int main(int argc, char** argv)
       fullSelection.Selection();
       
 
-      chiTracksnoSelection.Selection();
+      //chiTracksnoSelection.Selection();
       chiTrackstriggerRequirements.Selection();
       chiTrackspreselection.Selection();
       chiTracksfullSelection.Selection();
