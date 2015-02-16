@@ -13,6 +13,7 @@ typedef struct {
 
   double                 weight;
   std::vector<Double_t>  trackDeDxASmi;
+  std::vector<Double_t>  trackDeDxASmi_woLastHit;
   std::vector<Double_t>  trackDeDxHarm2;
   std::vector<Double_t>  trackPt;
   std::vector<Int_t>     trackNLostOuter;
@@ -29,6 +30,7 @@ typedef struct {
   void clearVectors(){
 
     trackDeDxASmi.clear();
+    trackDeDxASmi_woLastHit.clear();
     trackDeDxHarm2.clear();
     trackPt.clear();
     trackNLostOuter.clear();
@@ -91,6 +93,8 @@ class Hist
   TH1D *htrackDeDxHarm2EventCount;
   TH1D *htrackDeDxHarm2SmallRangeEventCount;
   TH1D *htrackHighPurity;
+  TH1D *htrackMT;
+
   TH1D *hNumberOfTracks;
   TH2D *htrackPtDeDxHarm2;
   TH2D *htrackPtDeDxHarm2LargeRange;
