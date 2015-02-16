@@ -642,29 +642,60 @@ TH3* loadDeDxTemplate(string path){
   return Prob_ChargePath;
 }
 //--------------------------------------------------------------------------------------------------
-double dEdxOnTheFly(std::vector<double> *HitsDeDx, std::vector<int> *HitsShapetest, std::vector<double> *HitsPathlength, std::vector<int> *HitsSubdetid, bool isData, TH3 *templateHistoStrip, TH3 *templateHistoPixel, bool usePixel, int nHits=-1)
+/* This is a sorting algorithm, which sorts the dE/dx entries of vector_prob according the radius 
+   where they are deposited. The sorted vector is filled into vect_prob_sorted.
+   The new vector vect_prob_sorted is sorted such that the dE/dx value deposited closest to the 
+   beam pipe is the first entry. */
+void sortVectorAccordingRadius(vector<double> *vect_prob_sorted, vector<double> *vect_prob, vector<double> *vect_R)
+{
+  int *idx = new int[vect_prob->size()];
+  vector<double> aux_R (*vect_R);
+
+  for(unsigned int j=0; j<vect_prob->size(); j++)
+    {
+      double aux = 10000;
+      for(unsigned int i=0; i<vect_R->size(); i++)
+	{
+	  if((*vect_R)[i]<aux)
+	    {
+	      aux=(*vect_R)[i];
+	      idx[j] = i;
+	    }
+	}
+      (*vect_R)[idx[j]]=1000000.;
+    }
+
+  for(unsigned int j=0; j<vect_prob->size(); j++){
+    vect_prob_sorted->push_back((*vect_prob)[idx[j]]);
+  }
+
+  delete[] idx;
+}
+//--------------------------------------------------------------------------------------------------
+double dEdxOnTheFly(std::vector<double> *HitsDeDx, std::vector<int> *HitsShapetest, std::vector<double> *HitsPathlength, std::vector<int> *HitsSubdetid, std::vector<double> *HitsTransverse, bool isData, TH3 *templateHistoStrip, TH3 *templateHistoPixel, bool usePixel, int nHits=0, TH2D* histo=0)
 {
 
   const double globalPixelMC    = 3.50843;
   const double globalPixelData  = 3.5090;
   const double globalStrip      = 3.3027;
-
+  
   int numStripMeas = 0;
   int numPixelMeas = 0;
-
+  
   std::vector<double> vect_probs_strip;
   std::vector<double> vect_probs_pixel;
   std::vector<double> vect_probs;
-
+  std::vector<double> vect_R;
+    
   double scaleFactorStrip = 1.;
   double scaleFactorPixel = 0.;
   if(isData) scaleFactorPixel = globalStrip/globalPixelData;
   else       scaleFactorPixel = globalStrip/globalPixelMC;
 
   scaleFactorPixel = scaleFactorPixel/265.;
-
+  
   for(unsigned int j=0;j<(*HitsDeDx).size();j++){
-    
+  
     if((*HitsSubdetid)[j]>2 && !(*HitsShapetest)[j]){continue;}
 
     if(!usePixel && (*HitsSubdetid)[j]<=2) continue;
@@ -674,6 +705,7 @@ double dEdxOnTheFly(std::vector<double> *HitsDeDx, std::vector<int> *HitsShapete
     
     // Strip
     if((*HitsSubdetid)[j]>2){
+  
       if(templateHistoStrip){
 	numStripMeas += 1;
 	int    BinX   = templateHistoStrip->GetXaxis()->FindBin(50.0); // momentum bin -> not important
@@ -681,10 +713,15 @@ double dEdxOnTheFly(std::vector<double> *HitsDeDx, std::vector<int> *HitsShapete
 	int    BinZ   = templateHistoStrip->GetZaxis()->FindBin(scaleFactorStrip*(*HitsDeDx)[j]/(*HitsPathlength)[j]);
 	ProbStrip     = templateHistoStrip->GetBinContent(BinX,BinY,BinZ);
       }
+  
+      if(histo) histo->Fill((*HitsTransverse)[j],ProbStrip);
       vect_probs_strip.push_back(ProbStrip);
       vect_probs.push_back(ProbStrip);
+      vect_R.push_back((*HitsTransverse)[j]);
+      
     }
     else{
+
       if(templateHistoPixel){
 	numPixelMeas += 1;
 	int    BinX   = templateHistoPixel->GetXaxis()->FindBin(50.0); // momentum bin -> not important
@@ -692,23 +729,39 @@ double dEdxOnTheFly(std::vector<double> *HitsDeDx, std::vector<int> *HitsShapete
 	int    BinZ   = templateHistoPixel->GetZaxis()->FindBin(scaleFactorPixel*(*HitsDeDx)[j]/(*HitsPathlength)[j]);
 	ProbPixel     = templateHistoPixel->GetBinContent(BinX,BinY,BinZ);
       }
+      if(histo) histo->Fill((*HitsTransverse)[j],ProbPixel);
       vect_probs_pixel.push_back(ProbPixel);
       vect_probs.push_back(ProbPixel);
+      vect_R.push_back((*HitsTransverse)[j]);
     }
   }
   
   int size      = vect_probs.size();
 
-  if(nHits !=-1){
-    if(size>nHits) size=nHits;
-  }
+  
+  //vector<double> vector_prob_sorted;
+  //vector_prob_sorted.reserve(10000);
+  //sortVectorAccordingRadius(&vector_prob_sorted, &vect_probs, &vect_R);
+  //vect_prob_sorted.erase(vect_prob_sorted.begin()+vect_prob_sorted.size()-1,vect_prob_sorted.end());
 
+  if(nHits !=0  && size+nHits>=0){
+    if(nHits<0)   size=size+nHits;
+    else{
+      if(size>nHits) size=nHits;
+    }
+    vect_probs.erase(vect_probs.begin()+size,vect_probs.end());
+  }
+ 
   //Ias pixel + strip
   double P = 1.0/(12*size);
+
+  // Why do I need to sort here? This makes a difference -> Yes it does
   std::sort(vect_probs.begin(), vect_probs.end(), std::less<double>() );
   for(int i=1;i<=size;i++){
     P += vect_probs[i-1] * pow(vect_probs[i-1] - ((2.0*i-1.0)/(2.0*size)),2);
+    //P += vector_prob_sorted[i-1] * pow(vector_prob_sorted[i-1] - ((2.0*i-1.0)/(2.0*size)),2);
   }
+
   P *= (3.0/size);
   if(size<=0) P=-1;
 
