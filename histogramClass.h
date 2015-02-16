@@ -27,6 +27,7 @@ Hist::Hist(TString histName, outputFile ofile_)
   tree->Branch("MET",&variables.met);
   tree->Branch("LeadingJetPt",&variables.LeadingJetPt);
   tree->Branch("trackDeDxASmi",&variables.trackDeDxASmi);
+  tree->Branch("trackDeDxASmi_woLastHit",&variables.trackDeDxASmi_woLastHit);
   tree->Branch("trackDeDxHarm2",&variables.trackDeDxHarm2);
   tree->Branch("trackPt",&variables.trackPt);
   tree->Branch("trackNLostOuter",&variables.trackNLostOuter);
@@ -98,6 +99,7 @@ Hist::Hist(TString histName, outputFile ofile_)
   htrackgenParticle->Fill("baryons", 0);
   htrackgenParticle->Fill("others", 0);
   hNumberOfTracks = iniTH1D("hNumberOfTracks",10,0,10);
+  htrackMT           = iniTH1D("htrackMT",250,0,500);
 
   hnPFJetsub         = iniTH1D("hnPFJetsub",20,0,20);
   hDeltaPhi          = iniTH1D("hDeltaPhi",32,0,3.2);
@@ -201,7 +203,8 @@ void Hist::FillTrackVariables(std::vector<evt::Track_s> trkCollection,double wei
     htrackCaloIsolationSmallRange ->Fill(trackCaloIsolation(&trkCollection[i]), weight);
     htrackNLostOuter              ->Fill(trkCollection[i].trackerExpectedHitsOuter_numberOfHits, weight);
     htrackNLostOuterSmallRange    ->Fill(trkCollection[i].trackerExpectedHitsOuter_numberOfHits, weight);
-
+    double MT = sqrt(2*trkCollection[i].pt*MET_pt*(1.-TMath::Cos(TVector2::Phi_mpi_pi(trkCollection[i].phi-MET_phi))));
+    htrackMT                      ->Fill(MT, weight); 
 
     double mass = sqrt(pow(p,2)/K*(trkCollection[i].dEdxHarm2-C));
 
@@ -230,6 +233,7 @@ void Hist::FillTrackVariables(std::vector<evt::Track_s> trkCollection,double wei
     htrackCaloIsoASmiLargeRange   ->Fill(trackCaloIsolation(&trkCollection[i]), trkCollection[i].ASmi, weight);
     htrackCaloIsoASmiSmallBinning ->Fill(trackCaloIsolation(&trkCollection[i]), trkCollection[i].ASmi, weight);
     htrackPtNLostOuter            ->Fill(trkCollection[i].pt,trkCollection[i].trackerExpectedHitsOuter_numberOfHits, weight);
+
 
     htrackd0                 ->Fill(d0, weight);
     htrackdz                 ->Fill(dZ, weight);
@@ -265,7 +269,8 @@ void Hist::FillTrackVariables(std::vector<evt::Track_s> trkCollection,double wei
 
     
     // Fill tree variables
-    variables.trackDeDxASmi.push_back(trkCollection[i].ASmi); 
+    variables.trackDeDxASmi.push_back(trkCollection[i].ASmi);
+    variables.trackDeDxASmi_woLastHit.push_back(trkCollection[i].ASmi_woLastHit);
     variables.trackDeDxHarm2.push_back(trkCollection[i].dEdxHarm2);
     variables.trackPt.push_back(trkCollection[i].pt);
     variables.trackNLostOuter.push_back(trkCollection[i].trackerExpectedHitsOuter_numberOfHits);
