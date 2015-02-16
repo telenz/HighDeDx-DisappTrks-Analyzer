@@ -622,6 +622,7 @@ struct Track_s
   double ASmiNP_3;
   double ASmi_7;
   double ASmiNP_7;
+  double ASmi_woLastHit;
 };
 std::vector<Track_s> Track(2000);
 
