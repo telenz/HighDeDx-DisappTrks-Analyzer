@@ -40,7 +40,6 @@ double trackCaloIsolation(struct Track_s *track){
     std::max(0.,track->caloHadDeltaRp5 + track->caloEMDeltaRp5 - sdouble_value*TMath::Pi()*0.5*0.5); 
 
   return caloTowerIso05RhoCorr;
-
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -537,13 +536,13 @@ std::vector<evt::Track_s> trackCleaningCuts(std::vector<evt::Track_s> trackColle
     //if(std::abs(trackCollection[i].eta)>1.55 && std::abs(trackCollection[i].eta)<1.85)        continue;
     countsTrackCriteria->Fill("EtaLess1p55Gt1p85", weight);
     //.................................................................................//
-    //if(getTrkIsMatchedDeadEcal(&trackCollection[i]))                                          continue;
+    if(getTrkIsMatchedDeadEcal(&trackCollection[i]))                                          continue;
     countsTrackCriteria->Fill("isMatchedDeadEcal", weight);
     //.................................................................................//
-    //if(isWithinIntermoduleGapsOfECAL(&trackCollection[i]))                                     continue;
+    if(isWithinIntermoduleGapsOfECAL(&trackCollection[i]))                                     continue;
     countsTrackCriteria->Fill("notWithinECALGap", weight);
     //.................................................................................//
-    //if(getTrkIsMatchedBadCSC(&trackCollection[i]))                                            continue;
+    if(getTrkIsMatchedBadCSC(&trackCollection[i]))                                            continue;
     countsTrackCriteria->Fill("isMatchedBadCSC", weight);
     //.................................................................................//
     double _dvx = trackCollection[i].vx - Vertex[0].x;
@@ -646,34 +645,55 @@ TH3* loadDeDxTemplate(string path){
    where they are deposited. The sorted vector is filled into vect_prob_sorted.
    The new vector vect_prob_sorted is sorted such that the dE/dx value deposited closest to the 
    beam pipe is the first entry. */
-void sortVectorAccordingRadius(vector<double> *vect_prob_sorted, vector<double> *vect_prob, vector<double> *vect_R)
+void sortVectorAccordingRadius(vector<double> *vect_prob_sorted, vector<double> *vect_prob, vector<double> *vect_R, vector<double> *vect_dx, double* dedx1=0, double* dedx2=0, double* dedx3=0, double* dedx4=0, double* dx1=0, double* dx2=0, double* dx3=0, double* dx4=0)
 {
   int *idx = new int[vect_prob->size()];
   vector<double> aux_R (*vect_R);
+  vector<double> aux_dx_sorted;
 
-  for(unsigned int j=0; j<vect_prob->size(); j++)
+  for(unsigned int j=0; j<vect_R->size(); j++)
     {
       double aux = 10000;
-      for(unsigned int i=0; i<vect_R->size(); i++)
-	{
-	  if((*vect_R)[i]<aux)
+      for(unsigned int i=0; i<aux_R.size(); i++)
+	{ 
+	  if(aux_R[i]<aux)
 	    {
-	      aux=(*vect_R)[i];
+	      aux=aux_R[i];
 	      idx[j] = i;
 	    }
 	}
-      (*vect_R)[idx[j]]=1000000.;
+      aux_R[idx[j]]=1000000.;
     }
 
   for(unsigned int j=0; j<vect_prob->size(); j++){
     vect_prob_sorted->push_back((*vect_prob)[idx[j]]);
+    aux_dx_sorted.push_back((*vect_dx)[idx[j]]);
+  }
+
+  if(dedx1 && vect_R->size()>0){
+    *dedx1=(*vect_prob_sorted)[0];
+    *dx1  =aux_dx_sorted[0];
+  }
+  if(dedx2 && vect_R->size()>0){
+    *dedx2=(*vect_prob_sorted)[1];
+    *dx2  =aux_dx_sorted[1];
+  }
+  if(dedx3 && vect_R->size()>0){
+    *dedx3=(*vect_prob_sorted)[2];
+    *dx3  =aux_dx_sorted[2];
+  }
+  if(dedx4 && vect_R->size()>0){
+    *dedx4=(*vect_prob_sorted)[3];
+    *dx4  =aux_dx_sorted[3];
   }
 
   delete[] idx;
 }
 //--------------------------------------------------------------------------------------------------
-double dEdxOnTheFly(std::vector<double> *HitsDeDx, std::vector<int> *HitsShapetest, std::vector<double> *HitsPathlength, std::vector<int> *HitsSubdetid, std::vector<double> *HitsTransverse, bool isData, TH3 *templateHistoStrip, TH3 *templateHistoPixel, bool usePixel, int nHits=0, TH2D* histo=0)
+double dEdxOnTheFly(std::vector<double> *HitsDeDx, std::vector<int> *HitsShapetest, std::vector<double> *HitsPathlength, std::vector<int> *HitsSubdetid, std::vector<double> *HitsTransverse, bool isData, TH3 *templateHistoStrip, TH3 *templateHistoPixel, bool usePixel, int nHits=0, double* dedx1=0, double* dedx2=0, double* dedx3=0, double* dedx4=0, double* dx1=0, double* dx2=0, double* dx3=0, double* dx4=0, int* measSize=0)
 {
+
+  
 
   const double globalPixelMC    = 3.50843;
   const double globalPixelData  = 3.5090;
@@ -686,6 +706,7 @@ double dEdxOnTheFly(std::vector<double> *HitsDeDx, std::vector<int> *HitsShapete
   std::vector<double> vect_probs_pixel;
   std::vector<double> vect_probs;
   std::vector<double> vect_R;
+  std::vector<double> vect_pathlength;
     
   double scaleFactorStrip = 1.;
   double scaleFactorPixel = 0.;
@@ -714,11 +735,10 @@ double dEdxOnTheFly(std::vector<double> *HitsDeDx, std::vector<int> *HitsShapete
 	ProbStrip     = templateHistoStrip->GetBinContent(BinX,BinY,BinZ);
       }
   
-      if(histo) histo->Fill((*HitsTransverse)[j],ProbStrip);
       vect_probs_strip.push_back(ProbStrip);
       vect_probs.push_back(ProbStrip);
       vect_R.push_back((*HitsTransverse)[j]);
-      
+      vect_pathlength.push_back((*HitsPathlength)[j]);
     }
     else{
 
@@ -729,19 +749,21 @@ double dEdxOnTheFly(std::vector<double> *HitsDeDx, std::vector<int> *HitsShapete
 	int    BinZ   = templateHistoPixel->GetZaxis()->FindBin(scaleFactorPixel*(*HitsDeDx)[j]/(*HitsPathlength)[j]);
 	ProbPixel     = templateHistoPixel->GetBinContent(BinX,BinY,BinZ);
       }
-      if(histo) histo->Fill((*HitsTransverse)[j],ProbPixel);
       vect_probs_pixel.push_back(ProbPixel);
       vect_probs.push_back(ProbPixel);
       vect_R.push_back((*HitsTransverse)[j]);
+      vect_pathlength.push_back((*HitsPathlength)[j]);
     }
   }
   
   int size      = vect_probs.size();
 
-  
-  //vector<double> vector_prob_sorted;
-  //vector_prob_sorted.reserve(10000);
-  //sortVectorAccordingRadius(&vector_prob_sorted, &vect_probs, &vect_R);
+  if(size<=5 && dedx1){
+    vector<double> vector_prob_sorted;
+    sortVectorAccordingRadius(&vector_prob_sorted, &vect_probs, &vect_R, &vect_pathlength, dedx1, dedx2, dedx3, dedx4, dx1, dx2, dx3, dx4);
+    if(measSize) *measSize=size;
+  }
+
   //vect_prob_sorted.erase(vect_prob_sorted.begin()+vect_prob_sorted.size()-1,vect_prob_sorted.end());
 
   if(nHits !=0  && size+nHits>=0){
@@ -764,7 +786,7 @@ double dEdxOnTheFly(std::vector<double> *HitsDeDx, std::vector<int> *HitsShapete
 
   P *= (3.0/size);
   if(size<=0) P=-1;
-
+  
   return P;
 }
 //--------------------------------------------------------------------------------------------------
@@ -807,7 +829,7 @@ void matchTrackToGenParticle(std::vector<Track_s>& inputCollection){
 
     inputCollection[i].pdgId=0;
     inputCollection[i].beta=10;
-    double dRsaved = 0.5;
+    double dRsaved = 0.01;
 
     for(unsigned int j=0; j<GenParticle.size(); j++){
 
@@ -816,13 +838,56 @@ void matchTrackToGenParticle(std::vector<Track_s>& inputCollection){
       dPhi = std::abs(TVector2::Phi_mpi_pi(inputCollection[i].phi - GenParticle[j].phi));
       dR   = std::sqrt( dPhi*dPhi + dEta*dEta );
       if(dR<dRsaved){
-	inputCollection[i].pdgId=GenParticle[j].pdgId;
-	inputCollection[i].beta=GenParticle[j].p/GenParticle[j].energy;
+	//inputCollection[i].pdgId = GenParticle[j].pdgId;
+	inputCollection[i].beta  = GenParticle[j].p/GenParticle[j].energy;
+	inputCollection[i].genPt = GenParticle[j].pt;
+	inputCollection[i].genE  = GenParticle[j].energy;
+	inputCollection[i].genEt = GenParticle[j].et;
 	dRsaved = dR;
       }
     }
   }
   
+}
+//--------------------------------------------------------------------------------------------------
+// Match Tracks to a generator particle in the GenCollection
+void matchTrackToSimTrack(std::vector<Track_s>& inputCollection){
+
+  double dPhi    = 0.0;
+  double dEta    = 0.0;
+  double dR      = 0.0;
+  double dRsaved = 0.05;
+  int    idx     = -1;
+
+  for(unsigned int i=0; i<inputCollection.size(); i++){
+
+    for(int j=0; j<nSimTrack; j++){
+
+      dEta = std::abs(inputCollection[i].eta - SimTrack[j].momentum_eta);
+      dPhi = std::abs(TVector2::Phi_mpi_pi(inputCollection[i].phi - SimTrack[j].momentum_phi));
+      dR   = std::sqrt( dPhi*dPhi + dEta*dEta );
+      if(dR<dRsaved){
+	// Match save index j
+	idx=j;
+	dRsaved=dR;
+      }
+    }
+    if(idx==-1){
+      inputCollection[i].simEndVertexRho=-1;
+      inputCollection[i].pdgId = 0;
+      continue;
+    }
+    else inputCollection[i].pdgId = SimTrack[idx].type;
+    // Find corresponding SimVertex where the track ends.
+    double rho = -1;
+    for(int j=0; j<nSimVertex; j++){
+
+      if((unsigned int) SimVertex[j].parentIndex==SimTrack[idx].trackId){
+	rho = sqrt(pow(SimVertex[j].position_x,2)+pow(SimVertex[j].position_y,2));
+      }
+    }
+    inputCollection[i].simEndVertexRho = rho;
+  }
 }
 //--------------------------------------------------------------------------------------------------
 #endif
