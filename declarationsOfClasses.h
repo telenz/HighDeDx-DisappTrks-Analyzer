@@ -16,11 +16,33 @@ typedef struct {
   std::vector<Double_t>  trackDeDxASmi_woLastHit;
   std::vector<Double_t>  trackDeDxHarm2;
   std::vector<Double_t>  trackPt;
+  std::vector<Double_t>  trackP;
+  std::vector<Double_t>  trackGenPt;
+  std::vector<Double_t>  trackGenE;
+  std::vector<Double_t>  trackGenEt;
+  std::vector<Double_t>  trackEta;
   std::vector<Int_t>     trackNLostOuter;
+  std::vector<Int_t>     trackNLostInner;
+  std::vector<Int_t>     trackNLostMiddle;
   std::vector<Int_t>     trackNValid;
+  std::vector<Int_t>     trackPdgId;
   std::vector<Double_t>  trackCaloIsolation;
+  std::vector<Double_t>  trackHCALIsolation;
+  std::vector<Double_t>  trackECALIsolation;
   std::vector<Double_t>  trackMass;
   std::vector<Double_t>  trackIsolation;
+  std::vector<Double_t>  trackEndVertexRho;
+  std::vector<Double_t>  trackChi2;
+  std::vector<Double_t>  trackNdof;
+  std::vector<Double_t>  trackDeDx1;
+  std::vector<Double_t>  trackDeDx2;
+  std::vector<Double_t>  trackDeDx3;
+  std::vector<Double_t>  trackDeDx4;
+  std::vector<Double_t>  trackDx1;
+  std::vector<Double_t>  trackDx2;
+  std::vector<Double_t>  trackDx3;
+  std::vector<Double_t>  trackDx4;
+  std::vector<Int_t>     trackMeasSize;
   UInt_t                 run;
   UInt_t                 lumiBlock;
   double                 met;
@@ -33,11 +55,33 @@ typedef struct {
     trackDeDxASmi_woLastHit.clear();
     trackDeDxHarm2.clear();
     trackPt.clear();
+    trackP.clear();
+    trackGenPt.clear();
+    trackGenE.clear();
+    trackGenEt.clear();
+    trackEta.clear();
     trackNLostOuter.clear();
+    trackNLostInner.clear();
+    trackNLostMiddle.clear();
     trackNValid.clear();
+    trackPdgId.clear();
     trackCaloIsolation.clear();
+    trackHCALIsolation.clear();
+    trackECALIsolation.clear();
     trackMass.clear();
     trackIsolation.clear();
+    trackEndVertexRho.clear();
+    trackChi2.clear();
+    trackNdof.clear();
+    trackDeDx1.clear();
+    trackDeDx2.clear();
+    trackDeDx3.clear();
+    trackDeDx4.clear();
+    trackDx1.clear();
+    trackDx2.clear();
+    trackDx3.clear();
+    trackDx4.clear();
+    trackMeasSize.clear();
   }
 
 } TreeVariables_t;
@@ -114,6 +158,7 @@ class Hist
 
   TH1D *htrackPdgId;
   TH1D *htrackgenParticle;
+  TH1D *htrackgenParticleSmallRange;
 
   TH1D *htrackMass;
   TH1D *htrackMassEventCount;
