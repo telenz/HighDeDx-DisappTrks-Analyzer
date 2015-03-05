@@ -122,7 +122,7 @@ int Event::Selection()
     TrackColl = trackCandidateCuts(TrackColl,countsTrackCriteria);
     if(TrackColl.size()==0) return 0;
     countsEventCuts->Fill("trackCandCut", weight);
-	  
+    
     // 5.)
     TrackColl = trackParticleMatchingCuts(TrackColl,subleadingJetColl,countsTrackCriteria);
     if(TrackColl.size()==0) return 0;
@@ -137,7 +137,7 @@ int Event::Selection()
   //.................................................................................//
   //%%%%%%%%% QCD supression %%%%%%%%%%%%%
   for(unsigned int i=0; i<subleadingJetColl.size(); i++){
-	  
+
     for(unsigned int j=i+1; j< subleadingJetColl.size(); j++){
 	    
       double dPhi = std::abs(TVector2::Phi_mpi_pi( subleadingJetColl[i].phi- subleadingJetColl[j].phi));
@@ -151,14 +151,14 @@ int Event::Selection()
   }
   hist.hDeltaPhiMax->Fill(dPhiMax,weight);
   countsEventCuts->Fill("DeltaPhiCut", weight);
-	
+
   // DeltaPhi(Jet,MET) cut
   if(qcdSupression)
     {
       if(isMetInJetDirection(subleadingJetColl,MET_phi)) return 0;
     }
   countsEventCuts->Fill("1MetwithDeltaPhiMin2Jetsgt0p5", weight);
-   
+
   //.................................................................................//
   //%%%%%%%%% Final track cuts  BEGIN %%%%%%%%%%%%%
   // Final Track Cuts
@@ -172,6 +172,7 @@ int Event::Selection()
   //.................................................................................//
        
   matchTrackToGenParticle(TrackColl);
+  matchTrackToSimTrack(TrackColl);
   hist.FillTrackVariables(TrackColl,weight);
   hist.FillCharginoHistograms(ChiTrack,weight);
   hist.hMet->Fill(evt::MET_pt,weight);
@@ -210,20 +211,20 @@ std::vector<Track_s> Event::finalTrackCuts(std::vector<Track_s> trackCollection,
     //.................................................................................//
     if(TrackPtRequirement){
       if(invertTrackPtRequirement){
-	if(trackCollection[i].pt>70.)                                             continue;
+	if(trackCollection[i].pt>35.)                                             continue;
       }
       else{
-	if(trackCollection[i].pt<=70.)                                            continue;
+	if(trackCollection[i].pt<=35.)                                            continue;
       }
     }
     countsTrackCriteria->Fill("PtGreater70GeV", weight);
     //.................................................................................//
     if(CaloIsolationRequirement){
       if(invertCaloIsolationRequirement){
-	if(trackCaloIsolation(&trackCollection[i])<=10)                           continue;
+	if(trackCaloIsolation(&trackCollection[i])<=5)                           continue;
       }
       else{
-	if(trackCaloIsolation(&trackCollection[i])>10)                            continue;
+	if(trackCaloIsolation(&trackCollection[i])>5)                            continue;
       }
     }
     countsTrackCriteria->Fill("CaloIsolation0p5", weight);
