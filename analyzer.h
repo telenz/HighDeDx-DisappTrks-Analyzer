@@ -615,6 +615,10 @@ struct Track_s
   double	dEdxHitsMedian_2;
   double	dEdxHitsMedian_1;
   int pdgId;
+  double genPt;
+  double genE;
+  double genEt;
+  double simEndVertexRho;
   double beta;
   double ASmi;
   double ASmiNP;
@@ -623,6 +627,15 @@ struct Track_s
   double ASmi_7;
   double ASmiNP_7;
   double ASmi_woLastHit;
+  double DeDx1;
+  double DeDx2;
+  double DeDx3;
+  double DeDx4;
+  double Dx1;
+  double Dx2;
+  double Dx3;
+  double Dx4;
+  int MeasSize;
 };
 std::vector<Track_s> Track(2000);
 
@@ -889,6 +902,30 @@ inline void fillTrack()
       Track[i].dEdxHitsMedian_3	= Track_dEdxHitsMedian_3[i];
       Track[i].dEdxHitsMedian_2	= Track_dEdxHitsMedian_2[i];
       Track[i].dEdxHitsMedian_1	= Track_dEdxHitsMedian_1[i];
+
+
+      Track[i].pdgId           = -1;
+      Track[i].genPt           = -1;
+      Track[i].genE            = -1;
+      Track[i].genEt           = -1;
+      Track[i].simEndVertexRho = -1;
+      Track[i].beta            = -1;
+      Track[i].ASmi            = -1;
+      Track[i].ASmiNP          = -1;
+      Track[i].ASmi_3          = -1;
+      Track[i].ASmiNP_3        = -1;
+      Track[i].ASmi_7          = -1;
+      Track[i].ASmiNP_7        = -1;
+      Track[i].ASmi_woLastHit  = -1;
+      Track[i].DeDx1           = -1;
+      Track[i].DeDx2           = -1;
+      Track[i].DeDx3           = -1;
+      Track[i].DeDx4           = -1;
+      Track[i].Dx1             = -1;
+      Track[i].Dx2             = -1;
+      Track[i].Dx3             = -1;
+      Track[i].Dx4             = -1;
+      Track[i].MeasSize        = -1;
     }
 }
 
