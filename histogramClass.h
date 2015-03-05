@@ -30,11 +30,33 @@ Hist::Hist(TString histName, outputFile ofile_)
   tree->Branch("trackDeDxASmi_woLastHit",&variables.trackDeDxASmi_woLastHit);
   tree->Branch("trackDeDxHarm2",&variables.trackDeDxHarm2);
   tree->Branch("trackPt",&variables.trackPt);
+  tree->Branch("trackP",&variables.trackP);
+  tree->Branch("trackGenPt",&variables.trackGenPt);
+  tree->Branch("trackGenE",&variables.trackGenE);
+  tree->Branch("trackGenEt",&variables.trackGenEt);
+  tree->Branch("trackEta",&variables.trackEta);
   tree->Branch("trackNLostOuter",&variables.trackNLostOuter);
+  tree->Branch("trackNLostInner",&variables.trackNLostInner);
+  tree->Branch("trackNLostMiddle",&variables.trackNLostMiddle);
   tree->Branch("trackNValid",&variables.trackNValid);
+  tree->Branch("trackPdgId",&variables.trackPdgId);
   tree->Branch("trackCaloIsolation",&variables.trackCaloIsolation);
+  tree->Branch("trackHCALIsolation",&variables.trackHCALIsolation);
+  tree->Branch("trackECALIsolation",&variables.trackECALIsolation);
   tree->Branch("trackMass",&variables.trackMass);
   tree->Branch("trackIsolation",&variables.trackIsolation);
+  tree->Branch("trackEndVertexRho",&variables.trackEndVertexRho);
+  tree->Branch("trackChi2",&variables.trackChi2);
+  tree->Branch("trackNdof",&variables.trackNdof);
+  tree->Branch("trackDeDx1",&variables.trackDeDx1);
+  tree->Branch("trackDeDx2",&variables.trackDeDx2);
+  tree->Branch("trackDeDx3",&variables.trackDeDx3);
+  tree->Branch("trackDeDx4",&variables.trackDeDx4);
+  tree->Branch("trackDx1",&variables.trackDx1);
+  tree->Branch("trackDx2",&variables.trackDx2);
+  tree->Branch("trackDx3",&variables.trackDx3);
+  tree->Branch("trackDx4",&variables.trackDx4);
+  tree->Branch("trackMeasSize",&variables.trackMeasSize);
 
 
   htrackPt            = iniTH1D("htrackPt",100,0,2000);
@@ -98,6 +120,14 @@ Hist::Hist(TString histName, outputFile ofile_)
   htrackgenParticle->Fill("mesons", 0);
   htrackgenParticle->Fill("baryons", 0);
   htrackgenParticle->Fill("others", 0);
+  htrackgenParticleSmallRange = iniTH1D("htrackgenParticleSmallRange",1,0,1);
+  htrackgenParticleSmallRange -> Fill("unmatched", 0);
+  htrackgenParticleSmallRange -> Fill("e", 0);
+  htrackgenParticleSmallRange -> Fill("mu", 0);
+  htrackgenParticleSmallRange -> Fill("pi", 0);
+  htrackgenParticleSmallRange -> Fill("others", 0);
+  
+
   hNumberOfTracks = iniTH1D("hNumberOfTracks",10,0,10);
   htrackMT           = iniTH1D("htrackMT",250,0,500);
 
@@ -255,6 +285,13 @@ void Hist::FillTrackVariables(std::vector<evt::Track_s> trkCollection,double wei
     else if(abs(trkCollection[i].pdgId)>1000 && abs(trkCollection[i].pdgId)<10000)   htrackgenParticle->Fill("baryons", weight);
     else                                        htrackgenParticle->Fill("others", weight);
 
+    if(abs(trkCollection[i].pdgId==0))        htrackgenParticleSmallRange->Fill("unmatched", weight);
+    else if(abs(trkCollection[i].pdgId)==11)  htrackgenParticleSmallRange->Fill("e", weight);
+    else if(abs(trkCollection[i].pdgId)==13)  htrackgenParticleSmallRange->Fill("mu", weight);
+    else if(abs(trkCollection[i].pdgId)==211) htrackgenParticleSmallRange->Fill("pi", weight);
+    else                                      htrackgenParticleSmallRange->Fill("others", weight);
+
+
     if(trkCollection[i].beta<10){
       htrackPdgId->Fill(abs(trkCollection[i].pdgId), weight);
       //htrackPdgIdMass->Fill(abs(trkCollection[i].pdgId),mass weight);
@@ -273,11 +310,33 @@ void Hist::FillTrackVariables(std::vector<evt::Track_s> trkCollection,double wei
     variables.trackDeDxASmi_woLastHit.push_back(trkCollection[i].ASmi_woLastHit);
     variables.trackDeDxHarm2.push_back(trkCollection[i].dEdxHarm2);
     variables.trackPt.push_back(trkCollection[i].pt);
+    variables.trackP.push_back(p);
+    variables.trackGenPt.push_back(trkCollection[i].genPt);
+    variables.trackGenE.push_back(trkCollection[i].genE);
+    variables.trackGenEt.push_back(trkCollection[i].genEt);
+    variables.trackEta.push_back(trkCollection[i].eta);
     variables.trackNLostOuter.push_back(trkCollection[i].trackerExpectedHitsOuter_numberOfHits);
+    variables.trackNLostInner.push_back(trkCollection[i].trackerExpectedHitsInner_numberOfLostHits);
+    variables.trackNLostMiddle.push_back(trkCollection[i].hitPattern_trackerLayersWithoutMeasurement);
     variables.trackNValid.push_back(trkCollection[i].numberOfValidHits);
+    variables.trackPdgId.push_back(trkCollection[i].pdgId);
     variables.trackCaloIsolation.push_back(trackCaloIsolation(&trkCollection[i]));
+    variables.trackHCALIsolation.push_back(trkCollection[i].caloHadDeltaRp5);
+    variables.trackECALIsolation.push_back(trkCollection[i].caloEMDeltaRp5);
     variables.trackMass.push_back(mass);
     variables.trackIsolation.push_back(trkCollection[i].trackRelIso03);
+    variables.trackEndVertexRho.push_back(trkCollection[i].simEndVertexRho);
+    variables.trackChi2.push_back(trkCollection[i].chi2);
+    variables.trackNdof.push_back(trkCollection[i].ndof);
+    variables.trackDeDx1.push_back(trkCollection[i].DeDx1);
+    variables.trackDeDx2.push_back(trkCollection[i].DeDx2);
+    variables.trackDeDx3.push_back(trkCollection[i].DeDx3);
+    variables.trackDeDx4.push_back(trkCollection[i].DeDx4);
+    variables.trackDx1.push_back(trkCollection[i].Dx1);
+    variables.trackDx2.push_back(trkCollection[i].Dx2);
+    variables.trackDx3.push_back(trkCollection[i].Dx3);
+    variables.trackDx4.push_back(trkCollection[i].Dx4);
+    variables.trackMeasSize.push_back(trkCollection[i].MeasSize);
 
   }
 
