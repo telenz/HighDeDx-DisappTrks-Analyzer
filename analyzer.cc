@@ -120,7 +120,6 @@ int main(int argc, char** argv)
   TH1D *nVertices_0            = new TH1D("nVertices_0","nVertices_0",100,0,100);
   TH1D *hPU_NumInteractions_0  = new TH1D("hPU_NumInteractions_0","hPU_NumInteractions_0",100,0,100);
   TH1D *hTrueNumInteractions_0 = new TH1D("hTrueNumInteractions_0","hTrueNumInteractions_0",100,0,100);
-  TH2D* hHitRadiusDeDx         = new TH2D("hHitRadiusDeDx","hHitRadiusDeDx",110,0,110,50,0,1);
 
   //-------------------------------------------------------------------------------------
   // Declaration of Variables
@@ -148,14 +147,82 @@ int main(int argc, char** argv)
   // Only Chi
   class Event chiTracksnoSelection("chiTracksnoSelection",ofile);
   if(isSignal) chiTracksnoSelection.onlyChi = true;
+
   class Event chiTrackstriggerRequirements("chiTrackstriggerRequirements",ofile);
   if(isSignal) chiTrackstriggerRequirements.onlyChi = true;
   chiTrackstriggerRequirements.triggerRequirements  = true;
+
   class Event chiTrackspreselection("chiTrackspreselection",ofile);
   if(isSignal) chiTrackspreselection.onlyChi= true;
   chiTrackspreselection.triggerRequirements = true;
   chiTrackspreselection.trackPreselection   = true;
   chiTrackspreselection.qcdSupression       = true;
+
+  class Event chiTrackspreselectionPlusNLostEq1("chiTrackspreselectionPlusNLostEq1",ofile);
+  if(isSignal) chiTrackspreselectionPlusNLostEq1.onlyChi      = true;
+  chiTrackspreselectionPlusNLostEq1.triggerRequirements       = true;
+  chiTrackspreselectionPlusNLostEq1.trackPreselection         = true;
+  chiTrackspreselectionPlusNLostEq1.qcdSupression             = true;
+  chiTrackspreselectionPlusNLostEq1.trackCandidateCutFinal    = true;
+  chiTrackspreselectionPlusNLostEq1.TrackPtRequirement        = false;
+  chiTrackspreselectionPlusNLostEq1.NumOfLostOuterRequirement = true;
+  chiTrackspreselectionPlusNLostEq1.CaloIsolationRequirement  = false;
+  chiTrackspreselectionPlusNLostEq1.DeDxRequirement           = false;
+
+  class Event chiTrackspreselection1LostPlusIsoCut("chiTrackspreselection1LostPlusIsoCut",ofile);
+  if(isSignal) chiTrackspreselection1LostPlusIsoCut.onlyChi      = true;
+  chiTrackspreselection1LostPlusIsoCut.triggerRequirements       = true;
+  chiTrackspreselection1LostPlusIsoCut.trackPreselection         = true;
+  chiTrackspreselection1LostPlusIsoCut.qcdSupression             = true;
+  chiTrackspreselection1LostPlusIsoCut.trackCandidateCutFinal    = true;
+  chiTrackspreselection1LostPlusIsoCut.TrackPtRequirement        = false;
+  chiTrackspreselection1LostPlusIsoCut.NumOfLostOuterRequirement = true;
+  chiTrackspreselection1LostPlusIsoCut.CaloIsolationRequirement  = true;
+  chiTrackspreselection1LostPlusIsoCut.DeDxRequirement           = false;
+
+  class Event chiTrackspreselection1LostPlusPtCut("chiTrackspreselection1LostPlusPtCut",ofile);
+  if(isSignal) chiTrackspreselection1LostPlusPtCut.onlyChi      = true;
+  chiTrackspreselection1LostPlusPtCut.triggerRequirements       = true;
+  chiTrackspreselection1LostPlusPtCut.trackPreselection         = true;
+  chiTrackspreselection1LostPlusPtCut.qcdSupression             = true;
+  chiTrackspreselection1LostPlusPtCut.trackCandidateCutFinal    = true;
+  chiTrackspreselection1LostPlusPtCut.TrackPtRequirement        = true;
+  chiTrackspreselection1LostPlusPtCut.NumOfLostOuterRequirement = true;
+  chiTrackspreselection1LostPlusPtCut.CaloIsolationRequirement  = false;
+  chiTrackspreselection1LostPlusPtCut.DeDxRequirement           = false;
+
+  class Event chiTrackspreselection1LostPlusIsoAndPtCut("chiTrackspreselection1LostPlusIsoAndPtCut",ofile);
+  if(isSignal) chiTrackspreselection1LostPlusIsoAndPtCut.onlyChi      = true;
+  chiTrackspreselection1LostPlusIsoAndPtCut.triggerRequirements       = true;
+  chiTrackspreselection1LostPlusIsoAndPtCut.trackPreselection         = true;
+  chiTrackspreselection1LostPlusIsoAndPtCut.qcdSupression             = true;
+  chiTrackspreselection1LostPlusIsoAndPtCut.trackCandidateCutFinal    = true;
+  chiTrackspreselection1LostPlusIsoAndPtCut.TrackPtRequirement        = true;
+  chiTrackspreselection1LostPlusIsoAndPtCut.NumOfLostOuterRequirement = true;
+  chiTrackspreselection1LostPlusIsoAndPtCut.CaloIsolationRequirement  = true;
+  chiTrackspreselection1LostPlusIsoAndPtCut.DeDxRequirement           = false;
+
+  class Event chiTrackspreselection1LostPlusIsoAndDeDxCut("chiTrackspreselection1LostPlusIsoAndDeDxCut",ofile);
+  if(isSignal) chiTrackspreselection1LostPlusIsoAndDeDxCut.onlyChi      = true;
+  chiTrackspreselection1LostPlusIsoAndDeDxCut.triggerRequirements       = true;
+  chiTrackspreselection1LostPlusIsoAndDeDxCut.trackPreselection         = true;
+  chiTrackspreselection1LostPlusIsoAndDeDxCut.qcdSupression             = true;
+  chiTrackspreselection1LostPlusIsoAndDeDxCut.trackCandidateCutFinal    = true;
+  chiTrackspreselection1LostPlusIsoAndDeDxCut.TrackPtRequirement        = false;
+  chiTrackspreselection1LostPlusIsoAndDeDxCut.NumOfLostOuterRequirement = true;
+  chiTrackspreselection1LostPlusIsoAndDeDxCut.CaloIsolationRequirement  = true;
+  chiTrackspreselection1LostPlusIsoAndDeDxCut.DeDxRequirement           = true;
+
+  class Event chiTrackspreselection1LostPlusPtAndDeDxCut("chiTrackspreselection1LostPlusPtAndDeDxCut",ofile);
+  if(isSignal) chiTrackspreselection1LostPlusPtAndDeDxCut.onlyChi      = true;
+  chiTrackspreselection1LostPlusPtAndDeDxCut.triggerRequirements       = true;
+  chiTrackspreselection1LostPlusPtAndDeDxCut.trackPreselection         = true;
+  chiTrackspreselection1LostPlusPtAndDeDxCut.qcdSupression             = true;
+  chiTrackspreselection1LostPlusPtAndDeDxCut.trackCandidateCutFinal    = true;
+  chiTrackspreselection1LostPlusPtAndDeDxCut.TrackPtRequirement        = true;
+  chiTrackspreselection1LostPlusPtAndDeDxCut.NumOfLostOuterRequirement = true;
+  chiTrackspreselection1LostPlusPtAndDeDxCut.CaloIsolationRequirement  = false;
+  chiTrackspreselection1LostPlusPtAndDeDxCut.DeDxRequirement           = true;
 
   class Event chiTracksfullSelection("chiTracksfullSelection",ofile);
   if(isSignal) chiTracksfullSelection.onlyChi   = true;
@@ -184,6 +251,7 @@ int main(int argc, char** argv)
   
   //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   // ABCD method with track Pt and DeDx
+  /*
   ABCD trackPt_DeDx("_trackPt_DeDx",ofile,isSignal);
  
   trackPt_DeDx.CR1.TrackPtRequirement = true;
@@ -320,6 +388,7 @@ int main(int argc, char** argv)
   CaloIso_lostOuterHits.SR.NumOfLostOuterRequirement = true;
   CaloIso_lostOuterHits.SR.invertCaloIsolationRequirement  = false;
   CaloIso_lostOuterHits.SR.invertNumOfLostOuterRequirement = false;
+  */
   //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
   //-------------------------------------------------------------------------------------
@@ -401,8 +470,6 @@ int main(int argc, char** argv)
 
   cout<<endl<<"Number Of Events = "<<nevents<<endl<<endl;
   
-  hHitRadiusDeDx -> Sumw2();
-
   for(int entry=0; entry <nevents; ++entry)
     {
 
@@ -434,14 +501,15 @@ int main(int argc, char** argv)
 
       //------------- Calculate track dependent variables from hits and save them in trk coll ----
       for(unsigned int i=0; i<evt::Track.size();i++){
-
-	double ASmiOnTheFly            = dEdxOnTheFly(&(*HitsDeDx)[i], &(*HitsShapetest)[i], &(*HitsPathlength)[i], &(*HitsSubdetid)[i], &(*HitsTransverse)[i], 1, template_strip, template_pixel,1,0,hHitRadiusDeDx); 
+	
+	
+	double ASmiOnTheFly            = dEdxOnTheFly(&(*HitsDeDx)[i], &(*HitsShapetest)[i], &(*HitsPathlength)[i], &(*HitsSubdetid)[i], &(*HitsTransverse)[i], 1, template_strip, template_pixel,1,0); 
 	double ASmiNPOnTheFly          = dEdxOnTheFly(&(*HitsDeDx)[i], &(*HitsShapetest)[i], &(*HitsPathlength)[i], &(*HitsSubdetid)[i], &(*HitsTransverse)[i], 1, template_strip, template_pixel,0); 
-	double ASmiOnTheFly_3          = dEdxOnTheFly(&(*HitsDeDx)[i], &(*HitsShapetest)[i], &(*HitsPathlength)[i], &(*HitsSubdetid)[i], &(*HitsTransverse)[i], 1, template_strip, template_pixel,1,3);
-	double ASmiNPOnTheFly_3        = dEdxOnTheFly(&(*HitsDeDx)[i], &(*HitsShapetest)[i], &(*HitsPathlength)[i], &(*HitsSubdetid)[i], &(*HitsTransverse)[i], 1, template_strip, template_pixel,0,3);
-	double ASmiOnTheFly_7          = dEdxOnTheFly(&(*HitsDeDx)[i], &(*HitsShapetest)[i], &(*HitsPathlength)[i], &(*HitsSubdetid)[i], &(*HitsTransverse)[i], 1, template_strip, template_pixel,1,7);
-	double ASmiNPOnTheFly_7        = dEdxOnTheFly(&(*HitsDeDx)[i], &(*HitsShapetest)[i], &(*HitsPathlength)[i], &(*HitsSubdetid)[i], &(*HitsTransverse)[i], 1, template_strip, template_pixel,0,7);
-	double ASmiOnTheFly_woLastHit  = dEdxOnTheFly(&(*HitsDeDx)[i], &(*HitsShapetest)[i], &(*HitsPathlength)[i], &(*HitsSubdetid)[i], &(*HitsTransverse)[i], 1, template_strip, template_pixel,1,-1);
+	double ASmiOnTheFly_3          = -1;//dEdxOnTheFly(&(*HitsDeDx)[i], &(*HitsShapetest)[i], &(*HitsPathlength)[i], &(*HitsSubdetid)[i], &(*HitsTransverse)[i], 1, template_strip, template_pixel,1,3);
+	double ASmiNPOnTheFly_3        = -1;//dEdxOnTheFly(&(*HitsDeDx)[i], &(*HitsShapetest)[i], &(*HitsPathlength)[i], &(*HitsSubdetid)[i], &(*HitsTransverse)[i], 1, template_strip, template_pixel,0,3);
+	double ASmiOnTheFly_7          = -1;//dEdxOnTheFly(&(*HitsDeDx)[i], &(*HitsShapetest)[i], &(*HitsPathlength)[i], &(*HitsSubdetid)[i], &(*HitsTransverse)[i], 1, template_strip, template_pixel,1,7);
+	double ASmiNPOnTheFly_7        = -1;//dEdxOnTheFly(&(*HitsDeDx)[i], &(*HitsShapetest)[i], &(*HitsPathlength)[i], &(*HitsSubdetid)[i], &(*HitsTransverse)[i], 1, template_strip, template_pixel,0,7);
+	double ASmiOnTheFly_woLastHit  = -1;//dEdxOnTheFly(&(*HitsDeDx)[i], &(*HitsShapetest)[i], &(*HitsPathlength)[i], &(*HitsSubdetid)[i], &(*HitsTransverse)[i], 1, template_strip, template_pixel,1,-1);
 
 	Track[i].ASmi           = ASmiOnTheFly;
        	Track[i].ASmiNP         = ASmiNPOnTheFly;
@@ -450,6 +518,8 @@ int main(int argc, char** argv)
 	Track[i].ASmi_7         = ASmiOnTheFly_7;
        	Track[i].ASmiNP_7       = ASmiNPOnTheFly_7;
 	Track[i].ASmi_woLastHit = ASmiOnTheFly_woLastHit;
+
+	double test           = dEdxOnTheFly(&(*HitsDeDx)[i], &(*HitsShapetest)[i], &(*HitsPathlength)[i], &(*HitsSubdetid)[i], &(*HitsTransverse)[i], 1, template_strip, template_pixel,1,0,&Track[i].DeDx1,&Track[i].DeDx2,&Track[i].DeDx3,&Track[i].DeDx4,&Track[i].Dx1,&Track[i].Dx2,&Track[i].Dx3,&Track[i].Dx4,&Track[i].MeasSize);
 
       }
       
@@ -465,16 +535,24 @@ int main(int argc, char** argv)
 
       //noSelection.Selection();
       //triggerRequirements.Selection();
-      preselection.Selection();
-      fullSelection.Selection();
+      //preselection.Selection();
+      //fullSelection.Selection();
       
 
       //chiTracksnoSelection.Selection();
-      chiTrackstriggerRequirements.Selection();
+      //chiTrackstriggerRequirements.Selection();
       chiTrackspreselection.Selection();
       chiTracksfullSelection.Selection();
       chiTracksSMControlCalo.Selection();
-      
+
+      chiTrackspreselectionPlusNLostEq1.Selection();
+      chiTrackspreselection1LostPlusIsoCut.Selection();
+      chiTrackspreselection1LostPlusPtCut.Selection();
+      chiTrackspreselection1LostPlusIsoAndPtCut.Selection();
+      chiTrackspreselection1LostPlusIsoAndDeDxCut.Selection();
+      chiTrackspreselection1LostPlusPtAndDeDxCut.Selection();
+
+      /*
       if(!isData){
 	trackPt_DeDx.CR1.Selection();
 	trackPt_DeDx.CR2.Selection();
@@ -501,6 +579,7 @@ int main(int argc, char** argv)
 	CaloIso_lostOuterHits.CR3.Selection();
 	CaloIso_lostOuterHits.SR.Selection();
       }
+      */
       
     }//end of loop over events
  
