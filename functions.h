@@ -829,7 +829,7 @@ void matchTrackToGenParticle(std::vector<Track_s>& inputCollection){
 
     inputCollection[i].pdgId=0;
     inputCollection[i].beta=10;
-    double dRsaved = 0.01;
+    double dRsaved = 0.05;
 
     for(unsigned int j=0; j<GenParticle.size(); j++){
 
