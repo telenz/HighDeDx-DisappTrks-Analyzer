@@ -77,6 +77,10 @@ std::vector<double>	Muon_eta(200,0);
 std::vector<double>	Muon_phi(200,0);
 std::vector<double>	Muon_pt(200,0);
 std::vector<double>	Muon_pz(200,0);
+std::vector<int>	Muon_isGlobalMuon(200,0);
+std::vector<int>	Muon_isPFMuon(200,0);
+std::vector<int>	Muon_isStandAloneMuon(200,0);
+std::vector<int>	Muon_isTrackerMuon(200,0);
 std::vector<int>	PileupSummaryInfo_getBunchCrossing(10,0);
 std::vector<int>	PileupSummaryInfo_getPU_NumInteractions(10,0);
 std::vector<float>	PileupSummaryInfo_getTrueNumInteractions(10,0);
@@ -436,6 +440,10 @@ struct Muon_s
   double	pt;
   double	phi;
   double	eta;
+  int	isPFMuon;
+  int	isGlobalMuon;
+  int	isTrackerMuon;
+  int	isStandAloneMuon;
 };
 std::vector<Muon_s> Muon(200);
 
@@ -449,6 +457,10 @@ std::ostream& operator<<(std::ostream& os, const Muon_s& o)
   sprintf(r, "  %-32s: %f\n", "pt", (double)o.pt); os << r;
   sprintf(r, "  %-32s: %f\n", "phi", (double)o.phi); os << r;
   sprintf(r, "  %-32s: %f\n", "eta", (double)o.eta); os << r;
+  sprintf(r, "  %-32s: %f\n", "isPFMuon", (double)o.isPFMuon); os << r;
+  sprintf(r, "  %-32s: %f\n", "isGlobalMuon", (double)o.isGlobalMuon); os << r;
+  sprintf(r, "  %-32s: %f\n", "isTrackerMuon", (double)o.isTrackerMuon); os << r;
+  sprintf(r, "  %-32s: %f\n", "isStandAloneMuon", (double)o.isStandAloneMuon); os << r;
   return os;
 }
 //-----------------------------------------------------------------------------
@@ -781,6 +793,10 @@ inline void fillMuon()
       Muon[i].pt	= Muon_pt[i];
       Muon[i].phi	= Muon_phi[i];
       Muon[i].eta	= Muon_eta[i];
+      Muon[i].isPFMuon	= Muon_isPFMuon[i];
+      Muon[i].isGlobalMuon	= Muon_isGlobalMuon[i];
+      Muon[i].isTrackerMuon	= Muon_isTrackerMuon[i];
+      Muon[i].isStandAloneMuon	= Muon_isStandAloneMuon[i];
     }
 }
 
@@ -1063,6 +1079,10 @@ void saveSelectedObjects()
           Muon_pt[i]	= Muon_pt[j];
           Muon_phi[i]	= Muon_phi[j];
           Muon_eta[i]	= Muon_eta[j];
+          Muon_isPFMuon[i]	= Muon_isPFMuon[j];
+          Muon_isGlobalMuon[i]	= Muon_isGlobalMuon[j];
+          Muon_isTrackerMuon[i]	= Muon_isTrackerMuon[j];
+          Muon_isStandAloneMuon[i]	= Muon_isStandAloneMuon[j];
         }
       nMuon = n;
     }
@@ -1300,6 +1320,10 @@ void selectVariables(itreestream& stream)
   stream.select("patMuon_selectedPatMuonsLoosePFlow.phi", Muon_phi);
   stream.select("patMuon_selectedPatMuonsLoosePFlow.pt", Muon_pt);
   stream.select("patMuon_selectedPatMuonsLoosePFlow.pz", Muon_pz);
+  stream.select("patMuon_selectedPatMuonsLoosePFlow.isGlobalMuon", Muon_isGlobalMuon);
+  stream.select("patMuon_selectedPatMuonsLoosePFlow.isPFMuon", Muon_isPFMuon);
+  stream.select("patMuon_selectedPatMuonsLoosePFlow.isStandAloneMuon", Muon_isStandAloneMuon);
+  stream.select("patMuon_selectedPatMuonsLoosePFlow.isTrackerMuon", Muon_isTrackerMuon);
   stream.select("PileupSummaryInfo_addPileupInfo.getBunchCrossing", PileupSummaryInfo_getBunchCrossing);
   stream.select("PileupSummaryInfo_addPileupInfo.getPU_NumInteractions", PileupSummaryInfo_getPU_NumInteractions);
   stream.select("PileupSummaryInfo_addPileupInfo.getTrueNumInteractions", PileupSummaryInfo_getTrueNumInteractions);
