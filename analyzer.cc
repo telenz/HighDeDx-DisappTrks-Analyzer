@@ -158,16 +158,16 @@ int main(int argc, char** argv)
   chiTrackspreselection.trackPreselection   = true;
   chiTrackspreselection.qcdSupression       = true;
 
-  class Event chiTrackspreselectionPlusNLostEq1("chiTrackspreselectionPlusNLostEq1",ofile);
-  if(isSignal) chiTrackspreselectionPlusNLostEq1.onlyChi      = true;
-  chiTrackspreselectionPlusNLostEq1.triggerRequirements       = true;
-  chiTrackspreselectionPlusNLostEq1.trackPreselection         = true;
-  chiTrackspreselectionPlusNLostEq1.qcdSupression             = true;
-  chiTrackspreselectionPlusNLostEq1.trackCandidateCutFinal    = true;
-  chiTrackspreselectionPlusNLostEq1.TrackPtRequirement        = false;
-  chiTrackspreselectionPlusNLostEq1.NumOfLostOuterRequirement = true;
-  chiTrackspreselectionPlusNLostEq1.CaloIsolationRequirement  = false;
-  chiTrackspreselectionPlusNLostEq1.DeDxRequirement           = false;
+  class Event chiTrackspreselectionPlusNLostGt1("chiTrackspreselectionPlusNLostGt1",ofile);
+  if(isSignal) chiTrackspreselectionPlusNLostGt1.onlyChi      = true;
+  chiTrackspreselectionPlusNLostGt1.triggerRequirements       = true;
+  chiTrackspreselectionPlusNLostGt1.trackPreselection         = true;
+  chiTrackspreselectionPlusNLostGt1.qcdSupression             = true;
+  chiTrackspreselectionPlusNLostGt1.trackCandidateCutFinal    = true;
+  chiTrackspreselectionPlusNLostGt1.TrackPtRequirement        = false;
+  chiTrackspreselectionPlusNLostGt1.NumOfLostOuterRequirement = true;
+  chiTrackspreselectionPlusNLostGt1.CaloIsolationRequirement  = false;
+  chiTrackspreselectionPlusNLostGt1.DeDxRequirement           = false;
 
   class Event chiTrackspreselection1LostPlusIsoCut("chiTrackspreselection1LostPlusIsoCut",ofile);
   if(isSignal) chiTrackspreselection1LostPlusIsoCut.onlyChi      = true;
@@ -545,7 +545,7 @@ int main(int argc, char** argv)
       chiTracksfullSelection.Selection();
       chiTracksSMControlCalo.Selection();
 
-      chiTrackspreselectionPlusNLostEq1.Selection();
+      chiTrackspreselectionPlusNLostGt1.Selection();
       chiTrackspreselection1LostPlusIsoCut.Selection();
       chiTrackspreselection1LostPlusPtCut.Selection();
       chiTrackspreselection1LostPlusIsoAndPtCut.Selection();
