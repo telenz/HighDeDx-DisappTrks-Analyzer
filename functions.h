@@ -504,7 +504,7 @@ std::vector<evt::Track_s> trackCandidateCuts(std::vector<evt::Track_s> trackColl
     if(trackCollection[i].pt<=10.)                                            continue;
     countsTrackCriteria->Fill("PtGreater10GeV", weight);
     //.................................................................................//
-    if(std::abs(trackCollection[i].eta)>2.5)                                  continue;
+    if(std::abs(trackCollection[i].eta)>2.4)                                  continue;
     countsTrackCriteria->Fill("EtaLess2p5", weight);
     //.................................................................................//
     if(!trackCollection[i].trackHighPurity)                                   continue;
@@ -561,6 +561,9 @@ std::vector<evt::Track_s> trackCleaningCuts(std::vector<evt::Track_s> trackColle
     //.................................................................................//
     if(trackCollection[i].trackerExpectedHitsInner_numberOfLostHits>0)                        continue;
     countsTrackCriteria->Fill("NOfLostHitsInnerEq0", weight);
+    //.................................................................................//
+    //if(trackCollection[i].hitPattern_trackerLayersWithoutMeasurement==0 && trackCollection[i].trackerExpectedHitsInner_numberOfLostHits==0)            continue;
+    //countsTrackCriteria->Fill("missingMiddleAndInnerHits", weight);
     //.................................................................................//
     if(trackCollection[i].trackRelIso03>=0.1)                                                continue;
     countsTrackCriteria->Fill("TrackIsolationDeltaRLess0p1", weight);
@@ -850,7 +853,7 @@ void matchTrackToGenParticle(std::vector<Track_s>& inputCollection){
   
 }
 //--------------------------------------------------------------------------------------------------
-// Match Tracks to a generator particle in the GenCollection
+// Match Tracks to a SimTrack
 void matchTrackToSimTrack(std::vector<Track_s>& inputCollection){
 
   double dPhi    = 0.0;
