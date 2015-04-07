@@ -505,7 +505,7 @@ std::vector<evt::Track_s> trackCandidateCuts(std::vector<evt::Track_s> trackColl
     countsTrackCriteria->Fill("PtGreater10GeV", weight);
     //.................................................................................//
     if(std::abs(trackCollection[i].eta)>2.4)                                  continue;
-    countsTrackCriteria->Fill("EtaLess2p5", weight);
+    countsTrackCriteria->Fill("EtaLess2p4", weight);
     //.................................................................................//
     if(!trackCollection[i].trackHighPurity)                                   continue;
     countsTrackCriteria->Fill("highPurity", weight);
@@ -832,7 +832,7 @@ void matchTrackToGenParticle(std::vector<Track_s>& inputCollection){
 
     inputCollection[i].pdgId=0;
     inputCollection[i].beta=10;
-    double dRsaved = 0.05;
+    double dRsaved = 0.01;
 
     for(unsigned int j=0; j<GenParticle.size(); j++){
 
@@ -859,7 +859,7 @@ void matchTrackToSimTrack(std::vector<Track_s>& inputCollection){
   double dPhi    = 0.0;
   double dEta    = 0.0;
   double dR      = 0.0;
-  double dRsaved = 0.05;
+  double dRsaved = 0.01;
   int    idx     = -1;
 
   for(unsigned int i=0; i<inputCollection.size(); i++){
