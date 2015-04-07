@@ -540,7 +540,7 @@ int main(int argc, char** argv)
       
 
       //chiTracksnoSelection.Selection();
-      //chiTrackstriggerRequirements.Selection();
+      chiTrackstriggerRequirements.Selection();
       chiTrackspreselection.Selection();
       chiTracksfullSelection.Selection();
       chiTracksSMControlCalo.Selection();
