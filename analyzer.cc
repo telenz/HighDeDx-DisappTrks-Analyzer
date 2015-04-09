@@ -32,6 +32,14 @@ int main(int argc, char** argv)
   bool isSignal = false;
   vector<string> filenames = getFilenames(cmdline.filelist);
   if(filenames[0].find("pMSSM") != std::string::npos || filenames[0].find("RECO_RAW2DIGI_L1Reco_RECO") != std::string::npos) isSignal = true;
+  string outputfilename = cmdline.outputfilename;
+
+  double TargetLifetime  = 0;
+  double CurrentLifetime = 0;
+  if(isSignal){
+    TargetLifetime = getLifetime(outputfilename);
+    cout<<endl<<"TargetLifetime = "<<TargetLifetime<<endl<<endl;
+  }
   bool isData = false;
   if(filenames[0].find("MET_Run2012*_22Jan2013") != std::string::npos) isData = true;
   itreestream stream(filenames, "Events");
@@ -490,10 +498,52 @@ int main(int argc, char** argv)
        ******************************************************************************************************************************
        ******************************************************************************************************************************
        *****************************************************************************************************************************/
+      weight=1.;
+      findChiInGenParticleCollection();
+      findChiInSimTrackCollection();
+      findChiDecayVertex();
+      
+
+      // Chargino event reweighting:
+      
+      if(isSignal && TargetLifetime !=0){
+	CurrentLifetime = getLifetime(stream.filename());
+      	//cout<<"CurrentLifetime = "<<CurrentLifetime<<endl;
+
+	// 1.) Get both charginos from genParticle collection and their proper lifetime
+
+	if (ChiTrack.size() > 2) cout << "Too many charginos!: " << ChiTrack.size() << endl;
+	if (ChiTrack.size() < 2) cout << "Too few charginos!: " << ChiTrack.size() << endl;
+	for(unsigned int i=0; i<ChiTrack.size();i++){
+
+	 
+	  double beta  = ChiTrack[i].genp/ChiTrack[i].genenergy;
+	  double gamma = 1./std::sqrt(1.-pow(beta,2));
+ 
+	  double rho      = sqrt(pow(ChiTrack[i].SimVertexposition_x - Vertex[0].x,2)+pow(ChiTrack[i].SimVertexposition_y - Vertex[0].y,2));
+	  double z        = abs(ChiTrack[i].SimVertexposition_z - Vertex[0].z);
+	  double distance = sqrt( pow(rho,2) + pow(z,2) );
+	  double ProperLifetime = distance/(beta*gamma);
+
+	  double wtTarget       = (1. / TargetLifetime)  * TMath::Exp(-(ProperLifetime) /  TargetLifetime  );  
+	  double wtCurrent      = (1. / CurrentLifetime) * TMath::Exp(-(ProperLifetime) /  CurrentLifetime );
+	  double wt = wtTarget / wtCurrent;
+
+	  if(ProperLifetime<0){
+	    cout<<"Warning:  Found event with ctau<0."<<endl;
+	    wt=0.;
+	  }
+
+	  weight = weight*wt;
+	}
+      }
+      /******************************************************************************************************************************
+       ******************************************************************************************************************************
+       ******************************************************************************************************************************
+       *****************************************************************************************************************************/
 
       if(!edmEventHelper_isRealData){
-	weight=PUweights->GetBinContent(PUweights->FindBin(PileupSummaryInfo_getTrueNumInteractions[0]));
-	if(weight<0.0001) cout<<"weight = "<<weight<<endl;
+	weight*=PUweights->GetBinContent(PUweights->FindBin(PileupSummaryInfo_getTrueNumInteractions[0]));
       }
       //weight =1.;
       ofile.count("NoCuts", weight);
@@ -525,9 +575,7 @@ int main(int argc, char** argv)
       
       
       //-------------------------------------------------------------- Cuts ---------------------------------------------------------
-      findChiInGenParticleCollection();
-      findChiInSimTrackCollection();
-      findChiDecayVertex();
+      
       nVertices_0->Fill(nVertex);
       hTrueNumInteractions_0->Fill(PileupSummaryInfo[0].getTrueNumInteractions);
       hPU_NumInteractions_0->Fill(PileupSummaryInfo[0].getPU_NumInteractions);
@@ -538,7 +586,6 @@ int main(int argc, char** argv)
       //preselection.Selection();
       //fullSelection.Selection();
       
-
       //chiTracksnoSelection.Selection();
       chiTrackstriggerRequirements.Selection();
       chiTrackspreselection.Selection();
@@ -551,7 +598,7 @@ int main(int argc, char** argv)
       chiTrackspreselection1LostPlusIsoAndPtCut.Selection();
       chiTrackspreselection1LostPlusIsoAndDeDxCut.Selection();
       chiTrackspreselection1LostPlusPtAndDeDxCut.Selection();
-
+      
       /*
       if(!isData){
 	trackPt_DeDx.CR1.Selection();
