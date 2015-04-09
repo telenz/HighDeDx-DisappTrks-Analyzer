@@ -232,8 +232,8 @@ std::vector<Track_s> findChiInRecoTrackCollection(std::vector<Track_s>& trkColle
     double dRmin=10000.;
 
     for(unsigned int i=0; i<trkCollection.size(); i++){
-      dPhi = std::abs(TVector2::Phi_mpi_pi(trkCollection[i].phi - ChiTrack[j].SimTrackmomentum_phi));
-      dEta = std::abs(trkCollection[i].eta - ChiTrack[j].SimTrackmomentum_eta);
+      dPhi = std::abs(TVector2::Phi_mpi_pi(trkCollection[i].phi - ChiTrack[j].genphi));
+      dEta = std::abs(trkCollection[i].eta - ChiTrack[j].geneta);
       dR   = std::sqrt( dPhi*dPhi + dEta*dEta );
 
       if(dR<dRmin){
@@ -869,6 +869,7 @@ void matchTrackToSimTrack(std::vector<Track_s>& inputCollection){
       dEta = std::abs(inputCollection[i].eta - SimTrack[j].momentum_eta);
       dPhi = std::abs(TVector2::Phi_mpi_pi(inputCollection[i].phi - SimTrack[j].momentum_phi));
       dR   = std::sqrt( dPhi*dPhi + dEta*dEta );
+      
       if(dR<dRsaved){
 	// Match save index j
 	idx=j;
@@ -881,6 +882,7 @@ void matchTrackToSimTrack(std::vector<Track_s>& inputCollection){
       continue;
     }
     else inputCollection[i].pdgId = SimTrack[idx].type;
+
     // Find corresponding SimVertex where the track ends.
     double rho = -1;
     for(int j=0; j<nSimVertex; j++){
@@ -893,5 +895,16 @@ void matchTrackToSimTrack(std::vector<Track_s>& inputCollection){
   }
 }
 //--------------------------------------------------------------------------------------------------
+double getLifetime(string filename){
+
+  unsigned found         = filename.find("ctau");
+  string TargetLifetime  = filename.substr(found + 5);
+  found                  = TargetLifetime.find("cm");
+  TargetLifetime         = TargetLifetime.substr(0,found);
+  //cout<<"Lifetime  = "<<TargetLifetime<<endl;
+
+  return atoi(TargetLifetime.c_str());
+
+}
 #endif
 
