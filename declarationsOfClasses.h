@@ -200,6 +200,7 @@ class Hist
   TH1D *htrackEfficiency;
   TH1D *htrackDeltaRSimRecoTracks;
   TH1D *hSimTrackType;
+  TH1D *htrackProperLifetime;
   
   TH2D *hAllTracksZRho;
   TH2D *hFoundTracksZRho;
