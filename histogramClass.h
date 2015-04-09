@@ -178,6 +178,7 @@ Hist::Hist(TString histName, outputFile ofile_)
   htrackEfficiency          = iniTH1D("htrackEfficiency",2,0,2);
   hAllTracksZRho            = iniTH2D("hAllTracksZRho",700,0,1400,400,0,800.);
   hFoundTracksZRho          = iniTH2D("hFoundTracksZRho",700,0,1400,400,0,800.);
+  htrackProperLifetime      = iniTH1D("htrackProperLifetime",1000,0,1000);
      
 };
 
@@ -381,9 +382,15 @@ void Hist::FillCharginoHistograms(std::vector<ChiTrack_s> chitrkCollection, doub
       htrackPtoverGenPt ->Fill(chitrkCollection[i].genpt/chitrkCollection[i].pt, weight);
     }
 
-    double rho = sqrt(pow(ChiTrack[i].SimVertexposition_x,2)+pow(ChiTrack[i].SimVertexposition_y,2));
-    double z   = abs(ChiTrack[i].SimVertexposition_z);
-      
+    double rho = sqrt(pow(chitrkCollection[i].SimVertexposition_x - Vertex[0].x,2)+pow(chitrkCollection[i].SimVertexposition_y - Vertex[0].y,2));
+    double z   = abs(chitrkCollection[i].SimVertexposition_z - Vertex[0].z);
+
+    double distance = sqrt( pow(rho,2) + pow(z,2) );
+    double beta  = chitrkCollection[i].genp/chitrkCollection[i].genenergy;
+    double gamma = 1./sqrt(1.-pow(chitrkCollection[i].genp/chitrkCollection[i].genenergy,2));
+    double properlifetime = distance/(beta*gamma);
+    htrackProperLifetime -> Fill(properlifetime,weight);
+
     if(chitrkCollection[i].SimVertexFound){
       hAllTracksZRho->Fill(z,rho);
       if(chitrkCollection[i].matched) hFoundTracksZRho->Fill(z,rho);
