@@ -47,6 +47,7 @@ typedef struct {
   std::vector<Double_t>  trackDx3;
   std::vector<Double_t>  trackDx4;
   std::vector<Int_t>     trackMeasSize;
+  UInt_t                 event;
   UInt_t                 run;
   UInt_t                 lumiBlock;
   double                 met;
