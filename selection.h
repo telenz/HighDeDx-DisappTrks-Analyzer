@@ -57,7 +57,7 @@ int Event::Selection()
   if(edmEventHelper_isRealData){
    
     for(unsigned int i=0; i<TrackColl.size(); i++){
-      if(TrackColl[i].pt>=70 && TrackColl[i].ASmi>=0.4 /*&& trackCaloIsolation(&TrackColl[i])<10*/) return 0;
+      //if(TrackColl[i].pt>=70 && TrackColl[i].ASmi>=0.4 /*&& trackCaloIsolation(&TrackColl[i])<10*/) return 0;
     }
   }
   //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -114,27 +114,6 @@ int Event::Selection()
     if(!leadingJetRequirementsFullfilled(&JetColl[0], countsEventCuts)) return 0;
   }
   //.................................................................................//
-  //%%%%%%%%% Track Preselection %%%%%%%%%%%%%
-  if(trackPreselection){
-    // 4.)
-    if(TrackColl.size()==0) return 0;
-    countsEventCuts->Fill("NonEmptyTrkColl", weight);
-    TrackColl = trackCandidateCuts(TrackColl,countsTrackCriteria);
-    if(TrackColl.size()==0) return 0;
-    countsEventCuts->Fill("trackCandCut", weight);
-    
-    // 5.)
-    TrackColl = trackParticleMatchingCuts(TrackColl,subleadingJetColl,countsTrackCriteria);
-    if(TrackColl.size()==0) return 0;
-    countsEventCuts->Fill("trackParticleMatchingCut", weight);
-
-    // 6.)
-    TrackColl = trackCleaningCuts(TrackColl,countsTrackCriteria);
-    if(TrackColl.size()==0) return 0;
-    countsEventCuts->Fill("trackCleaningCut", weight);
-    
-  }
-  //.................................................................................//
   //%%%%%%%%% QCD supression %%%%%%%%%%%%%
   for(unsigned int i=0; i<subleadingJetColl.size(); i++){
 
@@ -158,6 +137,27 @@ int Event::Selection()
       if(isMetInJetDirection(subleadingJetColl,MET_phi)) return 0;
     }
   countsEventCuts->Fill("1MetwithDeltaPhiMin2Jetsgt0p5", weight);
+
+  //.................................................................................//
+  //%%%%%%%%% Track Preselection %%%%%%%%%%%%%
+  if(trackPreselection){
+    // 4.)
+    if(TrackColl.size()==0) return 0;
+    countsEventCuts->Fill("NonEmptyTrkColl", weight);
+    TrackColl = trackCandidateCuts(TrackColl,countsTrackCriteria);
+    if(TrackColl.size()==0) return 0;
+    countsEventCuts->Fill("trackCandCut", weight);
+    
+    // 5.)
+    TrackColl = trackCleaningCuts(TrackColl,countsTrackCriteria);
+    if(TrackColl.size()==0) return 0;
+    countsEventCuts->Fill("trackCleaningCut", weight);
+
+    // 6.)
+    TrackColl = trackParticleMatchingCuts(TrackColl,subleadingJetColl,countsTrackCriteria);
+    if(TrackColl.size()==0) return 0;
+    countsEventCuts->Fill("trackParticleMatchingCut", weight);
+  }
 
   //.................................................................................//
   //%%%%%%%%% Final track cuts  BEGIN %%%%%%%%%%%%%
