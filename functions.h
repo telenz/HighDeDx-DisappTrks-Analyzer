@@ -787,33 +787,38 @@ std::vector<Track_s> getFakeTracksInTrackCollection(const std::vector<Track_s>& 
 // Match Tracks to a generator particle in the GenCollection
 void matchTrackToGenParticle(std::vector<Track_s>& inputCollection){
 
-  double dPhi = 0;
-  double dEta = 0;
-  double dR   = 0;
+  double dPhi  = 0;
+  double dEta  = 0;
+  double dR    = 0;
+  
+
 
   for(unsigned int i=0; i<inputCollection.size(); i++){
 
     inputCollection[i].pdgId=0;
     inputCollection[i].beta=10;
-    double dRsaved = 0.01;
+    double dRmin = 0.01;
+    int    idx   = -1;
 
+    
     for(unsigned int j=0; j<GenParticle.size(); j++){
 
       dEta = std::abs(inputCollection[i].eta - GenParticle[j].eta);
-      if(dEta>dRsaved) continue;
       dPhi = std::abs(TVector2::Phi_mpi_pi(inputCollection[i].phi - GenParticle[j].phi));
       dR   = std::sqrt( dPhi*dPhi + dEta*dEta );
-      if(dR<dRsaved){
-	//inputCollection[i].pdgId = GenParticle[j].pdgId;
-	inputCollection[i].beta  = GenParticle[j].p/GenParticle[j].energy;
-	inputCollection[i].genPt = GenParticle[j].pt;
-	inputCollection[i].genE  = GenParticle[j].energy;
-	inputCollection[i].genEt = GenParticle[j].et;
-	dRsaved = dR;
+      if(dR<dRmin){
+	dRmin = dR;
+	idx = j;
       }
     }
+    if(dRmin<0.01){
+	inputCollection[i].pdgId = GenParticle[idx].pdgId;
+	inputCollection[i].beta  = GenParticle[idx].p/GenParticle[idx].energy;
+	inputCollection[i].genPt = GenParticle[idx].pt;
+	inputCollection[i].genE  = GenParticle[idx].energy;
+	inputCollection[i].genEt = GenParticle[idx].et;
+    }
   }
-  
 }
 //--------------------------------------------------------------------------------------------------
 // Match Tracks to a SimTrack
@@ -822,10 +827,12 @@ void matchTrackToSimTrack(std::vector<Track_s>& inputCollection){
   double dPhi    = 0.0;
   double dEta    = 0.0;
   double dR      = 0.0;
-  double dRsaved = 0.01;
-  int    idx     = -1;
+ 
 
   for(unsigned int i=0; i<inputCollection.size(); i++){
+
+    double dRmin = 0.01;
+    int    idx   = -1;
 
     for(int j=0; j<nSimTrack; j++){
 
@@ -833,18 +840,18 @@ void matchTrackToSimTrack(std::vector<Track_s>& inputCollection){
       dPhi = std::abs(TVector2::Phi_mpi_pi(inputCollection[i].phi - SimTrack[j].momentum_phi));
       dR   = std::sqrt( dPhi*dPhi + dEta*dEta );
       
-      if(dR<dRsaved){
+      if(dR<dRmin){
 	// Match save index j
 	idx=j;
-	dRsaved=dR;
+	dRmin=dR;
       }
     }
     if(idx==-1){
       inputCollection[i].simEndVertexRho=-1;
-      inputCollection[i].pdgId = 0;
+      //inputCollection[i].pdgId = 0;
       continue;
     }
-    else inputCollection[i].pdgId = SimTrack[idx].type;
+    //else inputCollection[i].pdgId = SimTrack[idx].type;
 
     // Find corresponding SimVertex where the track ends.
     double rho = -1;
