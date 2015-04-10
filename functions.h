@@ -78,6 +78,7 @@ bool isTrackReconstructedElectron(struct Track_s* track){
   for(unsigned int i=0; i<Electron.size(); i++){
 
     if(Electron[i].mvaNonTrigV0<0) continue;
+    if(Electron[i].pt<10)          continue;
     dPhi = std::abs(TVector2::Phi_mpi_pi(track->phi-Electron[i].phi));
     dEta = std::abs(track->eta - Electron[i].eta);
     dR   = std::sqrt(dPhi*dPhi + dEta*dEta); 
@@ -96,6 +97,7 @@ bool isTrackReconstructedMuon(struct Track_s* track){
 
   for(unsigned int i=0; i<Muon.size(); i++){
     
+    if(Muon[i].pt<10.)   continue;
     dPhi = std::abs(TVector2::Phi_mpi_pi(track->phi-Muon[i].phi));
     dEta = std::abs(track->eta - Muon[i].eta);
     dR   = std::sqrt(dPhi*dPhi + dEta*dEta); 
@@ -106,29 +108,15 @@ bool isTrackReconstructedMuon(struct Track_s* track){
   return false;
 }
 //--------------------------------------------------------------------------------------------------
-bool isTrackReconstructedLepton(struct Track_s* track){
+bool isTrackReconstructedJet(struct evt::Track_s track, std::vector<evt::Jet_s>& jetColl){
 
-  double dPhi = 0;
-  double dEta = 0;
-  double dR   = 0; 
-
-  for(unsigned int i=0; i<Electron.size(); i++){
-
-    if(Electron[i].mvaNonTrigV0<0) continue;
-    dPhi = std::abs(TVector2::Phi_mpi_pi(track->phi-Electron[i].phi));
-    dEta = std::abs(track->eta - Electron[i].eta);
-    dR   = std::sqrt(dPhi*dPhi + dEta*dEta); 
-
-    if(dR<0.15) return true;
-  }
-
-  for(unsigned int i=0; i<Muon.size(); i++){
+  for(unsigned int i=0; i<jetColl.size(); i++){
     
-    dPhi = std::abs(TVector2::Phi_mpi_pi(track->phi-Muon[i].phi));
-    dEta = std::abs(track->eta - Muon[i].eta);
-    dR   = std::sqrt(dPhi*dPhi + dEta*dEta); 
+    double dPhi = std::abs(TVector2::Phi_mpi_pi(track.phi-jetColl[i].phi));
+    double dEta = std::abs(track.eta - jetColl[i].eta);
+    double dR   = std::sqrt(pow(dPhi,2) + pow(dEta,2)); 
 
-    if(dR<0.15) return true;
+    if(dR<0.5) return true;
   }
 
   return false;
@@ -326,7 +314,6 @@ struct evt::GenParticle_s  findLeadingJetInGenParticleCollectionWithPtGt30(){
 }
 
 //--------------------------------------------------------------------------------------------------
-
 bool areTwoJetsBackToBack(std::vector<evt::Jet_s>& jetColl){
 
   for(unsigned int i=0; i<jetColl.size(); i++){
@@ -343,7 +330,6 @@ bool areTwoJetsBackToBack(std::vector<evt::Jet_s>& jetColl){
 }
 
 //--------------------------------------------------------------------------------------------------
-
 bool isMetInJetDirection(std::vector<evt::Jet_s> jetColl, double metPhi){
 
   for(unsigned int i=0; i<jetColl.size(); i++){
@@ -361,7 +347,6 @@ bool isMetInJetDirection(std::vector<evt::Jet_s> jetColl, double metPhi){
 
 
 //--------------------------------------------------------------------------------------------------
-
 bool leadingJetRequirementsFullfilled(struct evt::Jet_s* leadingJet, TH1D* countsEventCuts){
 
   // jetId: https://twiki.cern.ch/twiki/bin/viewauth/CMS/JetID
@@ -393,8 +378,8 @@ std::vector<evt::Jet_s>  getSubleadingJetCollection(){
 
     if(evt::Jet[i].pt<=30.)                          continue;
     if(std::abs(evt::Jet[i].eta)>=4.5)               continue;
-    if(evt::Jet[i].neutralHadronEnergyFraction>=0.7) continue;
-    if(evt::Jet[i].chargedEmEnergyFraction>=0.5)     continue;
+    //if(evt::Jet[i].neutralHadronEnergyFraction>=0.7) continue;
+    //if(evt::Jet[i].chargedEmEnergyFraction>=0.5)     continue;
 
     jetCollection.push_back(evt::Jet[i]);
   }
@@ -410,22 +395,6 @@ bool isGoodVertex(){
   if(evt::Vertex[0].ndof < 4)                                                    return false;
   return true;
 }
-//--------------------------------------------------------------------------------------------------
-
-bool isTrackReconstructedJet(struct evt::Track_s track, std::vector<evt::Jet_s>& jetColl){
-
-  for(unsigned int i=0; i<jetColl.size(); i++){
-    
-    double dPhi = std::abs(TVector2::Phi_mpi_pi(track.phi-jetColl[i].phi));
-    double dEta = std::abs(track.eta - jetColl[i].eta);
-    double dR   = std::sqrt(pow(dPhi,2) + pow(dEta,2)); 
-
-    if(dR<0.5) return true;
-  }
-
-  return false;
-}
-
 //--------------------------------------------------------------------------------------------------
 bool getTrkIsMatchedDeadEcal(struct evt::Track_s *track){
 
@@ -509,9 +478,6 @@ std::vector<evt::Track_s> trackCandidateCuts(std::vector<evt::Track_s> trackColl
     //.................................................................................//
     if(!trackCollection[i].trackHighPurity)                                   continue;
     countsTrackCriteria->Fill("highPurity", weight);
-    //.................................................................................//    
-    //if(trackCaloIsolation(&trackCollection[i])>50)                            continue;
-    countsTrackCriteria->Fill("CaloIsoLess50", weight);
     //.................................................................................//
     outputColl.push_back(trackCollection[i]);
   }
@@ -539,7 +505,7 @@ std::vector<evt::Track_s> trackCleaningCuts(std::vector<evt::Track_s> trackColle
     if(getTrkIsMatchedDeadEcal(&trackCollection[i]))                                          continue;
     countsTrackCriteria->Fill("isMatchedDeadEcal", weight);
     //.................................................................................//
-    if(isWithinIntermoduleGapsOfECAL(&trackCollection[i]))                                     continue;
+    if(isWithinIntermoduleGapsOfECAL(&trackCollection[i]))                                    continue;
     countsTrackCriteria->Fill("notWithinECALGap", weight);
     //.................................................................................//
     if(getTrkIsMatchedBadCSC(&trackCollection[i]))                                            continue;
@@ -548,13 +514,16 @@ std::vector<evt::Track_s> trackCleaningCuts(std::vector<evt::Track_s> trackColle
     double _dvx = trackCollection[i].vx - Vertex[0].x;
     double _dvy = trackCollection[i].vy - Vertex[0].y;
     double d0 = abs( - _dvx*trackCollection[i].py + _dvy*trackCollection[i].px)/trackCollection[i].pt;
-    if(abs(d0)>0.02)                                                                         continue;
+    if(abs(d0)>0.02)                                                                          continue;
     countsTrackCriteria->Fill("d0Less0p2mm", weight);
     //.................................................................................//
     double _dvz = trackCollection[i].vz - Vertex[0].z;
     double dZ = _dvz - ( _dvx*trackCollection[i].px + _dvy*trackCollection[i].py)/trackCollection[i].pt * (trackCollection[i].pz/trackCollection[i].pt);
-    if(abs(dZ)>0.5)                                                                            continue;
+    if(abs(dZ)>0.5)                                                                           continue;
     countsTrackCriteria->Fill("dZLess5mm", weight);
+    //.................................................................................//
+    //if(trackCollection[i].numberOfValidHits<7)                                                continue;
+    countsTrackCriteria->Fill("NOfValidHitsGreater7", weight);
     //.................................................................................//
     if(trackCollection[i].hitPattern_trackerLayersWithoutMeasurement>0)                       continue;
     countsTrackCriteria->Fill("NOfLostHitsMiddleEq0", weight);
@@ -565,14 +534,8 @@ std::vector<evt::Track_s> trackCleaningCuts(std::vector<evt::Track_s> trackColle
     //if(trackCollection[i].hitPattern_trackerLayersWithoutMeasurement==0 && trackCollection[i].trackerExpectedHitsInner_numberOfLostHits==0)            continue;
     //countsTrackCriteria->Fill("missingMiddleAndInnerHits", weight);
     //.................................................................................//
-    if(trackCollection[i].trackRelIso03>=0.1)                                                continue;
-    countsTrackCriteria->Fill("TrackIsolationDeltaRLess0p1", weight);
-    //.................................................................................//
-    if(trackCollection[i].numberOfValidHits<3)                                                continue;
-    countsTrackCriteria->Fill("NOfValidHitsGreater3", weight);
-    //.................................................................................//
-    //if(trackCollection[i].dEdxHarm2<3)                                                        continue;
-    //countsTrackCriteria->Fill("DeDxHarm2Ge3", weight);
+    if(trackCollection[i].trackRelIso03>=0.1)                                                 continue;
+    countsTrackCriteria->Fill("TrackIsolationDeltaRLess0p05", weight);
     //.................................................................................//
 
     outputColl.push_back(trackCollection[i]);
