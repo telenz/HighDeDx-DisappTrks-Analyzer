@@ -170,9 +170,9 @@ int Event::Selection()
   countsEventCuts->Fill("finalTrackCuts", weight);
   //%%%%%%%%% Final track cuts  END %%%%%%%%%%%%%%%
   //.................................................................................//
-       
+  matchTrackToSimTrack(TrackColl);     
   matchTrackToGenParticle(TrackColl);
-  matchTrackToSimTrack(TrackColl);
+  
   hist.FillTrackVariables(TrackColl,weight);
   hist.FillCharginoHistograms(ChiTrack,weight);
   hist.hMet->Fill(evt::MET_pt,weight);
