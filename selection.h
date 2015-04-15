@@ -1,7 +1,6 @@
 #ifndef SELECTION_H
 #define SELECTION_H
 //-----------------------------------------------------------------------------
-#include "analyzer.h"
 #include "histogramClass.h"
 #include "functions.h"
 #include "triggerFunctions.h"
