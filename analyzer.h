@@ -3,7 +3,7 @@
 //-----------------------------------------------------------------------------
 // File:        analyzer.h
 // Description: Analyzer header for ntuples created by TheNtupleMaker
-// Created:     Fri Dec 12 10:36:59 2014 by mkanalyzer.py
+// Created:     Mon Apr 13 14:50:42 2015 by mkanalyzer.py
 // Author:      Teresa Lenz
 //-----------------------------------------------------------------------------
 // -- System
@@ -38,6 +38,13 @@ namespace evt {
 //-----------------------------------------------------------------------------
 // --- Declare variables
 //-----------------------------------------------------------------------------
+std::vector<double>	ElectronPFlow_energy(200,0);
+std::vector<double>	ElectronPFlow_et(200,0);
+std::vector<double>	ElectronPFlow_eta(200,0);
+std::vector<float>	ElectronPFlow_mvaNonTrigV0(200,0);
+std::vector<double>	ElectronPFlow_phi(200,0);
+std::vector<double>	ElectronPFlow_pt(200,0);
+std::vector<double>	ElectronPFlow_pz(200,0);
 std::vector<double>	Electron_energy(200,0);
 std::vector<double>	Electron_et(200,0);
 std::vector<double>	Electron_eta(200,0);
@@ -55,6 +62,7 @@ std::vector<int>	GenParticle_pdgId(2000,0);
 std::vector<double>	GenParticle_phi(2000,0);
 std::vector<double>	GenParticle_pt(2000,0);
 std::vector<double>	GenParticle_pz(2000,0);
+std::vector<int>	GenParticle_status(2000,0);
 std::vector<float>	Jet_chargedEmEnergyFraction(200,0);
 std::vector<float>	Jet_chargedHadronEnergyFraction(200,0);
 std::vector<double>	Jet_energy(200,0);
@@ -71,16 +79,26 @@ double	MET_eta;
 double	MET_phi;
 double	MET_pt;
 double	MET_pz;
+std::vector<double>	MuonPFlow_energy(200,0);
+std::vector<double>	MuonPFlow_et(200,0);
+std::vector<double>	MuonPFlow_eta(200,0);
+std::vector<int>	MuonPFlow_isGlobalMuon(200,0);
+std::vector<int>	MuonPFlow_isPFMuon(200,0);
+std::vector<int>	MuonPFlow_isStandAloneMuon(200,0);
+std::vector<int>	MuonPFlow_isTrackerMuon(200,0);
+std::vector<double>	MuonPFlow_phi(200,0);
+std::vector<double>	MuonPFlow_pt(200,0);
+std::vector<double>	MuonPFlow_pz(200,0);
 std::vector<double>	Muon_energy(200,0);
 std::vector<double>	Muon_et(200,0);
 std::vector<double>	Muon_eta(200,0);
-std::vector<double>	Muon_phi(200,0);
-std::vector<double>	Muon_pt(200,0);
-std::vector<double>	Muon_pz(200,0);
 std::vector<int>	Muon_isGlobalMuon(200,0);
 std::vector<int>	Muon_isPFMuon(200,0);
 std::vector<int>	Muon_isStandAloneMuon(200,0);
 std::vector<int>	Muon_isTrackerMuon(200,0);
+std::vector<double>	Muon_phi(200,0);
+std::vector<double>	Muon_pt(200,0);
+std::vector<double>	Muon_pz(200,0);
 std::vector<int>	PileupSummaryInfo_getBunchCrossing(10,0);
 std::vector<int>	PileupSummaryInfo_getPU_NumInteractions(10,0);
 std::vector<float>	PileupSummaryInfo_getTrueNumInteractions(10,0);
@@ -173,35 +191,7 @@ int	edmEventHelper_isRealData;
 int	edmEventHelper_luminosityBlock;
 int	edmEventHelper_orbitNumber;
 int	edmEventHelper_run;
-int	edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v1;
-int	edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v2;
-int	edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v3;
-int	edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v4;
-int	edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v5;
-int	edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v6;
-int	edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v7;
-int	edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v8;
-int	edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v9;
-int	edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v10;
-int	edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v11;
-int	edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v12;
-int	edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v13;
-int	edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v14;
-int	edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v15;
-int	edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v16;
-int	edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v17;
-int	edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v18;
-int	edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v19;
-int	edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v20;
 int	edmTriggerResultsHelper_prescale_HLT_MET120_HBHENoiseCleaned_v1;
-int	edmTriggerResultsHelper_prescale_HLT_MET120_HBHENoiseCleaned_v2;
-int	edmTriggerResultsHelper_prescale_HLT_MET120_HBHENoiseCleaned_v3;
-int	edmTriggerResultsHelper_prescale_HLT_MET120_HBHENoiseCleaned_v4;
-int	edmTriggerResultsHelper_prescale_HLT_MET120_HBHENoiseCleaned_v5;
-int	edmTriggerResultsHelper_prescale_HLT_MET120_HBHENoiseCleaned_v6;
-int	edmTriggerResultsHelper_prescale_HLT_MET120_HBHENoiseCleaned_v7;
-int	edmTriggerResultsHelper_prescale_HLT_MET120_HBHENoiseCleaned_v8;
-int	edmTriggerResultsHelper_prescale_HLT_MET120_HBHENoiseCleaned_v9;
 int	edmTriggerResultsHelper_prescale_HLT_MET120_HBHENoiseCleaned_v10;
 int	edmTriggerResultsHelper_prescale_HLT_MET120_HBHENoiseCleaned_v11;
 int	edmTriggerResultsHelper_prescale_HLT_MET120_HBHENoiseCleaned_v12;
@@ -212,76 +202,16 @@ int	edmTriggerResultsHelper_prescale_HLT_MET120_HBHENoiseCleaned_v16;
 int	edmTriggerResultsHelper_prescale_HLT_MET120_HBHENoiseCleaned_v17;
 int	edmTriggerResultsHelper_prescale_HLT_MET120_HBHENoiseCleaned_v18;
 int	edmTriggerResultsHelper_prescale_HLT_MET120_HBHENoiseCleaned_v19;
+int	edmTriggerResultsHelper_prescale_HLT_MET120_HBHENoiseCleaned_v2;
 int	edmTriggerResultsHelper_prescale_HLT_MET120_HBHENoiseCleaned_v20;
-int	edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v1;
-int	edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v2;
-int	edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v3;
-int	edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v4;
-int	edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v5;
-int	edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v6;
-int	edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v7;
-int	edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v8;
-int	edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v9;
-int	edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v10;
-int	edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v11;
-int	edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v12;
-int	edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v13;
-int	edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v14;
-int	edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v15;
-int	edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v16;
-int	edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v17;
-int	edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v18;
-int	edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v19;
-int	edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v20;
-int	edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v1;
-int	edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v2;
-int	edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v3;
-int	edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v4;
-int	edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v5;
-int	edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v6;
-int	edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v7;
-int	edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v8;
-int	edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v9;
-int	edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v10;
-int	edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v11;
-int	edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v12;
-int	edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v13;
-int	edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v14;
-int	edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v15;
-int	edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v16;
-int	edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v17;
-int	edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v18;
-int	edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v19;
-int	edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v20;
-int	edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v1;
-int	edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v2;
-int	edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v3;
-int	edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v4;
-int	edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v5;
-int	edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v6;
-int	edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v7;
-int	edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v8;
-int	edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v9;
-int	edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v10;
-int	edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v11;
-int	edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v12;
-int	edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v13;
-int	edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v14;
-int	edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v15;
-int	edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v16;
-int	edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v17;
-int	edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v18;
-int	edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v19;
-int	edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v20;
+int	edmTriggerResultsHelper_prescale_HLT_MET120_HBHENoiseCleaned_v3;
+int	edmTriggerResultsHelper_prescale_HLT_MET120_HBHENoiseCleaned_v4;
+int	edmTriggerResultsHelper_prescale_HLT_MET120_HBHENoiseCleaned_v5;
+int	edmTriggerResultsHelper_prescale_HLT_MET120_HBHENoiseCleaned_v6;
+int	edmTriggerResultsHelper_prescale_HLT_MET120_HBHENoiseCleaned_v7;
+int	edmTriggerResultsHelper_prescale_HLT_MET120_HBHENoiseCleaned_v8;
+int	edmTriggerResultsHelper_prescale_HLT_MET120_HBHENoiseCleaned_v9;
 int	edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v1;
-int	edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v2;
-int	edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v3;
-int	edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v4;
-int	edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v5;
-int	edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v6;
-int	edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v7;
-int	edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v8;
-int	edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v9;
 int	edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v10;
 int	edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v11;
 int	edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v12;
@@ -292,11 +222,101 @@ int	edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p9
 int	edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v17;
 int	edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v18;
 int	edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v19;
+int	edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v2;
 int	edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v20;
+int	edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v3;
+int	edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v4;
+int	edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v5;
+int	edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v6;
+int	edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v7;
+int	edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v8;
+int	edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v9;
+int	edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v1;
+int	edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v10;
+int	edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v11;
+int	edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v12;
+int	edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v13;
+int	edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v14;
+int	edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v15;
+int	edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v16;
+int	edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v17;
+int	edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v18;
+int	edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v19;
+int	edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v2;
+int	edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v20;
+int	edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v3;
+int	edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v4;
+int	edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v5;
+int	edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v6;
+int	edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v7;
+int	edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v8;
+int	edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v9;
+int	edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v1;
+int	edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v10;
+int	edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v11;
+int	edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v12;
+int	edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v13;
+int	edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v14;
+int	edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v15;
+int	edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v16;
+int	edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v17;
+int	edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v18;
+int	edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v19;
+int	edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v2;
+int	edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v20;
+int	edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v3;
+int	edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v4;
+int	edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v5;
+int	edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v6;
+int	edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v7;
+int	edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v8;
+int	edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v9;
+int	edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v1;
+int	edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v10;
+int	edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v11;
+int	edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v12;
+int	edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v13;
+int	edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v14;
+int	edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v15;
+int	edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v16;
+int	edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v17;
+int	edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v18;
+int	edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v19;
+int	edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v2;
+int	edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v20;
+int	edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v3;
+int	edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v4;
+int	edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v5;
+int	edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v6;
+int	edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v7;
+int	edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v8;
+int	edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v9;
+int	edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v1;
+int	edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v10;
+int	edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v11;
+int	edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v12;
+int	edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v13;
+int	edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v14;
+int	edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v15;
+int	edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v16;
+int	edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v17;
+int	edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v18;
+int	edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v19;
+int	edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v2;
+int	edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v20;
+int	edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v3;
+int	edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v4;
+int	edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v5;
+int	edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v6;
+int	edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v7;
+int	edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v8;
+int	edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v9;
 int	nElectron;
+int	nElectronPFlow;
 int	nGenParticle;
 int	nJet;
 int	nMuon;
+int	nMuonPFlow;
 int	nPileupSummaryInfo;
 int	nSimTrack;
 int	nSimVertex;
@@ -368,6 +388,32 @@ std::ostream& operator<<(std::ostream& os, const Electron_s& o)
   return os;
 }
 //-----------------------------------------------------------------------------
+struct ElectronPFlow_s
+{
+  double	energy;
+  double	et;
+  double	pz;
+  double	pt;
+  double	phi;
+  double	eta;
+  float	mvaNonTrigV0;
+};
+std::vector<ElectronPFlow_s> ElectronPFlow(200);
+
+std::ostream& operator<<(std::ostream& os, const ElectronPFlow_s& o)
+{
+  char r[1024];
+  os << "ElectronPFlow" << std::endl;
+  sprintf(r, "  %-32s: %f\n", "energy", (double)o.energy); os << r;
+  sprintf(r, "  %-32s: %f\n", "et", (double)o.et); os << r;
+  sprintf(r, "  %-32s: %f\n", "pz", (double)o.pz); os << r;
+  sprintf(r, "  %-32s: %f\n", "pt", (double)o.pt); os << r;
+  sprintf(r, "  %-32s: %f\n", "phi", (double)o.phi); os << r;
+  sprintf(r, "  %-32s: %f\n", "eta", (double)o.eta); os << r;
+  sprintf(r, "  %-32s: %f\n", "mvaNonTrigV0", (double)o.mvaNonTrigV0); os << r;
+  return os;
+}
+//-----------------------------------------------------------------------------
 struct GenParticle_s
 {
   int	charge;
@@ -380,6 +426,7 @@ struct GenParticle_s
   double	eta;
   double	mass;
   int	pdgId;
+  int	status;
 };
 std::vector<GenParticle_s> GenParticle(2000);
 
@@ -397,6 +444,7 @@ std::ostream& operator<<(std::ostream& os, const GenParticle_s& o)
   sprintf(r, "  %-32s: %f\n", "eta", (double)o.eta); os << r;
   sprintf(r, "  %-32s: %f\n", "mass", (double)o.mass); os << r;
   sprintf(r, "  %-32s: %f\n", "pdgId", (double)o.pdgId); os << r;
+  sprintf(r, "  %-32s: %f\n", "status", (double)o.status); os << r;
   return os;
 }
 //-----------------------------------------------------------------------------
@@ -451,6 +499,38 @@ std::ostream& operator<<(std::ostream& os, const Muon_s& o)
 {
   char r[1024];
   os << "Muon" << std::endl;
+  sprintf(r, "  %-32s: %f\n", "energy", (double)o.energy); os << r;
+  sprintf(r, "  %-32s: %f\n", "et", (double)o.et); os << r;
+  sprintf(r, "  %-32s: %f\n", "pz", (double)o.pz); os << r;
+  sprintf(r, "  %-32s: %f\n", "pt", (double)o.pt); os << r;
+  sprintf(r, "  %-32s: %f\n", "phi", (double)o.phi); os << r;
+  sprintf(r, "  %-32s: %f\n", "eta", (double)o.eta); os << r;
+  sprintf(r, "  %-32s: %f\n", "isPFMuon", (double)o.isPFMuon); os << r;
+  sprintf(r, "  %-32s: %f\n", "isGlobalMuon", (double)o.isGlobalMuon); os << r;
+  sprintf(r, "  %-32s: %f\n", "isTrackerMuon", (double)o.isTrackerMuon); os << r;
+  sprintf(r, "  %-32s: %f\n", "isStandAloneMuon", (double)o.isStandAloneMuon); os << r;
+  return os;
+}
+//-----------------------------------------------------------------------------
+struct MuonPFlow_s
+{
+  double	energy;
+  double	et;
+  double	pz;
+  double	pt;
+  double	phi;
+  double	eta;
+  int	isPFMuon;
+  int	isGlobalMuon;
+  int	isTrackerMuon;
+  int	isStandAloneMuon;
+};
+std::vector<MuonPFlow_s> MuonPFlow(200);
+
+std::ostream& operator<<(std::ostream& os, const MuonPFlow_s& o)
+{
+  char r[1024];
+  os << "MuonPFlow" << std::endl;
   sprintf(r, "  %-32s: %f\n", "energy", (double)o.energy); os << r;
   sprintf(r, "  %-32s: %f\n", "et", (double)o.et); os << r;
   sprintf(r, "  %-32s: %f\n", "pz", (double)o.pz); os << r;
@@ -746,6 +826,21 @@ inline void fillElectron()
     }
 }
 
+inline void fillElectronPFlow()
+{
+  ElectronPFlow.resize(ElectronPFlow_energy.size());
+  for(unsigned int i=0; i < ElectronPFlow.size(); ++i)
+    {
+      ElectronPFlow[i].energy	= ElectronPFlow_energy[i];
+      ElectronPFlow[i].et	= ElectronPFlow_et[i];
+      ElectronPFlow[i].pz	= ElectronPFlow_pz[i];
+      ElectronPFlow[i].pt	= ElectronPFlow_pt[i];
+      ElectronPFlow[i].phi	= ElectronPFlow_phi[i];
+      ElectronPFlow[i].eta	= ElectronPFlow_eta[i];
+      ElectronPFlow[i].mvaNonTrigV0	= ElectronPFlow_mvaNonTrigV0[i];
+    }
+}
+
 inline void fillGenParticle()
 {
   GenParticle.resize(GenParticle_charge.size());
@@ -761,6 +856,7 @@ inline void fillGenParticle()
       GenParticle[i].eta	= GenParticle_eta[i];
       GenParticle[i].mass	= GenParticle_mass[i];
       GenParticle[i].pdgId	= GenParticle_pdgId[i];
+      GenParticle[i].status	= GenParticle_status[i];
     }
 }
 
@@ -797,6 +893,24 @@ inline void fillMuon()
       Muon[i].isGlobalMuon	= Muon_isGlobalMuon[i];
       Muon[i].isTrackerMuon	= Muon_isTrackerMuon[i];
       Muon[i].isStandAloneMuon	= Muon_isStandAloneMuon[i];
+    }
+}
+
+inline void fillMuonPFlow()
+{
+  MuonPFlow.resize(MuonPFlow_energy.size());
+  for(unsigned int i=0; i < MuonPFlow.size(); ++i)
+    {
+      MuonPFlow[i].energy	= MuonPFlow_energy[i];
+      MuonPFlow[i].et	= MuonPFlow_et[i];
+      MuonPFlow[i].pz	= MuonPFlow_pz[i];
+      MuonPFlow[i].pt	= MuonPFlow_pt[i];
+      MuonPFlow[i].phi	= MuonPFlow_phi[i];
+      MuonPFlow[i].eta	= MuonPFlow_eta[i];
+      MuonPFlow[i].isPFMuon	= MuonPFlow_isPFMuon[i];
+      MuonPFlow[i].isGlobalMuon	= MuonPFlow_isGlobalMuon[i];
+      MuonPFlow[i].isTrackerMuon	= MuonPFlow_isTrackerMuon[i];
+      MuonPFlow[i].isStandAloneMuon	= MuonPFlow_isStandAloneMuon[i];
     }
 }
 
@@ -918,30 +1032,6 @@ inline void fillTrack()
       Track[i].dEdxHitsMedian_3	= Track_dEdxHitsMedian_3[i];
       Track[i].dEdxHitsMedian_2	= Track_dEdxHitsMedian_2[i];
       Track[i].dEdxHitsMedian_1	= Track_dEdxHitsMedian_1[i];
-
-
-      Track[i].pdgId           = -1;
-      Track[i].genPt           = -1;
-      Track[i].genE            = -1;
-      Track[i].genEt           = -1;
-      Track[i].simEndVertexRho = -1;
-      Track[i].beta            = -1;
-      Track[i].ASmi            = -1;
-      Track[i].ASmiNP          = -1;
-      Track[i].ASmi_3          = -1;
-      Track[i].ASmiNP_3        = -1;
-      Track[i].ASmi_7          = -1;
-      Track[i].ASmiNP_7        = -1;
-      Track[i].ASmi_woLastHit  = -1;
-      Track[i].DeDx1           = -1;
-      Track[i].DeDx2           = -1;
-      Track[i].DeDx3           = -1;
-      Track[i].DeDx4           = -1;
-      Track[i].Dx1             = -1;
-      Track[i].Dx2             = -1;
-      Track[i].Dx3             = -1;
-      Track[i].Dx4             = -1;
-      Track[i].MeasSize        = -1;
     }
 }
 
@@ -962,9 +1052,11 @@ inline void fillVertex()
 void fillObjects()
 {
   fillElectron();
+  fillElectronPFlow();
   fillGenParticle();
   fillJet();
   fillMuon();
+  fillMuonPFlow();
   fillPileupSummaryInfo();
   fillSimTrack();
   fillSimVertex();
@@ -1009,6 +1101,30 @@ void saveSelectedObjects()
   n = 0;
   try
     {
+       n = indexmap["ElectronPFlow"].size();
+    }
+  catch (...)
+    {}
+  if ( n > 0 )
+    {
+      std::vector<int>& index = indexmap["ElectronPFlow"];
+      for(int i=0; i < n; ++i)
+        {
+          int j = index[i];
+          ElectronPFlow_energy[i]	= ElectronPFlow_energy[j];
+          ElectronPFlow_et[i]	= ElectronPFlow_et[j];
+          ElectronPFlow_pz[i]	= ElectronPFlow_pz[j];
+          ElectronPFlow_pt[i]	= ElectronPFlow_pt[j];
+          ElectronPFlow_phi[i]	= ElectronPFlow_phi[j];
+          ElectronPFlow_eta[i]	= ElectronPFlow_eta[j];
+          ElectronPFlow_mvaNonTrigV0[i]	= ElectronPFlow_mvaNonTrigV0[j];
+        }
+      nElectronPFlow = n;
+    }
+
+  n = 0;
+  try
+    {
        n = indexmap["GenParticle"].size();
     }
   catch (...)
@@ -1029,6 +1145,7 @@ void saveSelectedObjects()
           GenParticle_eta[i]	= GenParticle_eta[j];
           GenParticle_mass[i]	= GenParticle_mass[j];
           GenParticle_pdgId[i]	= GenParticle_pdgId[j];
+          GenParticle_status[i]	= GenParticle_status[j];
         }
       nGenParticle = n;
     }
@@ -1085,6 +1202,33 @@ void saveSelectedObjects()
           Muon_isStandAloneMuon[i]	= Muon_isStandAloneMuon[j];
         }
       nMuon = n;
+    }
+
+  n = 0;
+  try
+    {
+       n = indexmap["MuonPFlow"].size();
+    }
+  catch (...)
+    {}
+  if ( n > 0 )
+    {
+      std::vector<int>& index = indexmap["MuonPFlow"];
+      for(int i=0; i < n; ++i)
+        {
+          int j = index[i];
+          MuonPFlow_energy[i]	= MuonPFlow_energy[j];
+          MuonPFlow_et[i]	= MuonPFlow_et[j];
+          MuonPFlow_pz[i]	= MuonPFlow_pz[j];
+          MuonPFlow_pt[i]	= MuonPFlow_pt[j];
+          MuonPFlow_phi[i]	= MuonPFlow_phi[j];
+          MuonPFlow_eta[i]	= MuonPFlow_eta[j];
+          MuonPFlow_isPFMuon[i]	= MuonPFlow_isPFMuon[j];
+          MuonPFlow_isGlobalMuon[i]	= MuonPFlow_isGlobalMuon[j];
+          MuonPFlow_isTrackerMuon[i]	= MuonPFlow_isTrackerMuon[j];
+          MuonPFlow_isStandAloneMuon[i]	= MuonPFlow_isStandAloneMuon[j];
+        }
+      nMuonPFlow = n;
     }
 
   n = 0;
@@ -1281,13 +1425,20 @@ void saveSelectedObjects()
 //-----------------------------------------------------------------------------
 void selectVariables(itreestream& stream)
 {
-  stream.select("patElectron_patElectronsLoosePFlow.energy", Electron_energy);
-  stream.select("patElectron_patElectronsLoosePFlow.et", Electron_et);
-  stream.select("patElectron_patElectronsLoosePFlow.eta", Electron_eta);
-  stream.select("patElectron_patElectronsLoosePFlow.mvaNonTrigV0", Electron_mvaNonTrigV0);
-  stream.select("patElectron_patElectronsLoosePFlow.phi", Electron_phi);
-  stream.select("patElectron_patElectronsLoosePFlow.pt", Electron_pt);
-  stream.select("patElectron_patElectronsLoosePFlow.pz", Electron_pz);
+  stream.select("patElectron_patElectronsLoosePFlow.energy", ElectronPFlow_energy);
+  stream.select("patElectron_patElectronsLoosePFlow.et", ElectronPFlow_et);
+  stream.select("patElectron_patElectronsLoosePFlow.eta", ElectronPFlow_eta);
+  stream.select("patElectron_patElectronsLoosePFlow.mvaNonTrigV0", ElectronPFlow_mvaNonTrigV0);
+  stream.select("patElectron_patElectronsLoosePFlow.phi", ElectronPFlow_phi);
+  stream.select("patElectron_patElectronsLoosePFlow.pt", ElectronPFlow_pt);
+  stream.select("patElectron_patElectronsLoosePFlow.pz", ElectronPFlow_pz);
+  stream.select("patElectron_selectedPatElectrons.energy", Electron_energy);
+  stream.select("patElectron_selectedPatElectrons.et", Electron_et);
+  stream.select("patElectron_selectedPatElectrons.eta", Electron_eta);
+  stream.select("patElectron_selectedPatElectrons.mvaNonTrigV0", Electron_mvaNonTrigV0);
+  stream.select("patElectron_selectedPatElectrons.phi", Electron_phi);
+  stream.select("patElectron_selectedPatElectrons.pt", Electron_pt);
+  stream.select("patElectron_selectedPatElectrons.pz", Electron_pz);
   stream.select("recoGenParticle_genParticles.charge", GenParticle_charge);
   stream.select("recoGenParticle_genParticles.energy", GenParticle_energy);
   stream.select("recoGenParticle_genParticles.et", GenParticle_et);
@@ -1298,6 +1449,7 @@ void selectVariables(itreestream& stream)
   stream.select("recoGenParticle_genParticles.phi", GenParticle_phi);
   stream.select("recoGenParticle_genParticles.pt", GenParticle_pt);
   stream.select("recoGenParticle_genParticles.pz", GenParticle_pz);
+  stream.select("recoGenParticle_genParticles.status", GenParticle_status);
   stream.select("patJet_selectedPatJetsPFlow.chargedEmEnergyFraction", Jet_chargedEmEnergyFraction);
   stream.select("patJet_selectedPatJetsPFlow.chargedHadronEnergyFraction", Jet_chargedHadronEnergyFraction);
   stream.select("patJet_selectedPatJetsPFlow.energy", Jet_energy);
@@ -1314,16 +1466,26 @@ void selectVariables(itreestream& stream)
   stream.select("patMET_patMETsPFlow.phi", MET_phi);
   stream.select("patMET_patMETsPFlow.pt", MET_pt);
   stream.select("patMET_patMETsPFlow.pz", MET_pz);
-  stream.select("patMuon_selectedPatMuonsLoosePFlow.energy", Muon_energy);
-  stream.select("patMuon_selectedPatMuonsLoosePFlow.et", Muon_et);
-  stream.select("patMuon_selectedPatMuonsLoosePFlow.eta", Muon_eta);
-  stream.select("patMuon_selectedPatMuonsLoosePFlow.phi", Muon_phi);
-  stream.select("patMuon_selectedPatMuonsLoosePFlow.pt", Muon_pt);
-  stream.select("patMuon_selectedPatMuonsLoosePFlow.pz", Muon_pz);
-  stream.select("patMuon_selectedPatMuonsLoosePFlow.isGlobalMuon", Muon_isGlobalMuon);
-  stream.select("patMuon_selectedPatMuonsLoosePFlow.isPFMuon", Muon_isPFMuon);
-  stream.select("patMuon_selectedPatMuonsLoosePFlow.isStandAloneMuon", Muon_isStandAloneMuon);
-  stream.select("patMuon_selectedPatMuonsLoosePFlow.isTrackerMuon", Muon_isTrackerMuon);
+  stream.select("patMuon_selectedPatMuonsLoosePFlow.energy", MuonPFlow_energy);
+  stream.select("patMuon_selectedPatMuonsLoosePFlow.et", MuonPFlow_et);
+  stream.select("patMuon_selectedPatMuonsLoosePFlow.eta", MuonPFlow_eta);
+  stream.select("patMuon_selectedPatMuonsLoosePFlow.isGlobalMuon", MuonPFlow_isGlobalMuon);
+  stream.select("patMuon_selectedPatMuonsLoosePFlow.isPFMuon", MuonPFlow_isPFMuon);
+  stream.select("patMuon_selectedPatMuonsLoosePFlow.isStandAloneMuon", MuonPFlow_isStandAloneMuon);
+  stream.select("patMuon_selectedPatMuonsLoosePFlow.isTrackerMuon", MuonPFlow_isTrackerMuon);
+  stream.select("patMuon_selectedPatMuonsLoosePFlow.phi", MuonPFlow_phi);
+  stream.select("patMuon_selectedPatMuonsLoosePFlow.pt", MuonPFlow_pt);
+  stream.select("patMuon_selectedPatMuonsLoosePFlow.pz", MuonPFlow_pz);
+  stream.select("patMuon_selectedPatMuonsLoose.energy", Muon_energy);
+  stream.select("patMuon_selectedPatMuonsLoose.et", Muon_et);
+  stream.select("patMuon_selectedPatMuonsLoose.eta", Muon_eta);
+  stream.select("patMuon_selectedPatMuonsLoose.isGlobalMuon", Muon_isGlobalMuon);
+  stream.select("patMuon_selectedPatMuonsLoose.isPFMuon", Muon_isPFMuon);
+  stream.select("patMuon_selectedPatMuonsLoose.isStandAloneMuon", Muon_isStandAloneMuon);
+  stream.select("patMuon_selectedPatMuonsLoose.isTrackerMuon", Muon_isTrackerMuon);
+  stream.select("patMuon_selectedPatMuonsLoose.phi", Muon_phi);
+  stream.select("patMuon_selectedPatMuonsLoose.pt", Muon_pt);
+  stream.select("patMuon_selectedPatMuonsLoose.pz", Muon_pz);
   stream.select("PileupSummaryInfo_addPileupInfo.getBunchCrossing", PileupSummaryInfo_getBunchCrossing);
   stream.select("PileupSummaryInfo_addPileupInfo.getPU_NumInteractions", PileupSummaryInfo_getPU_NumInteractions);
   stream.select("PileupSummaryInfo_addPileupInfo.getTrueNumInteractions", PileupSummaryInfo_getTrueNumInteractions);
@@ -1416,35 +1578,7 @@ void selectVariables(itreestream& stream)
   stream.select("edmEventHelper_info.luminosityBlock", edmEventHelper_luminosityBlock);
   stream.select("edmEventHelper_info.orbitNumber", edmEventHelper_orbitNumber);
   stream.select("edmEventHelper_info.run", edmEventHelper_run);
-  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MET120_HBHENoiseCleaned_v1", edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v1);
-  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MET120_HBHENoiseCleaned_v2", edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v2);
-  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MET120_HBHENoiseCleaned_v3", edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v3);
-  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MET120_HBHENoiseCleaned_v4", edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v4);
-  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MET120_HBHENoiseCleaned_v5", edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v5);
-  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MET120_HBHENoiseCleaned_v6", edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v6);
-  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MET120_HBHENoiseCleaned_v7", edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v7);
-  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MET120_HBHENoiseCleaned_v8", edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v8);
-  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MET120_HBHENoiseCleaned_v9", edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v9);
-  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MET120_HBHENoiseCleaned_v10", edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v10);
-  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MET120_HBHENoiseCleaned_v11", edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v11);
-  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MET120_HBHENoiseCleaned_v12", edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v12);
-  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MET120_HBHENoiseCleaned_v13", edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v13);
-  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MET120_HBHENoiseCleaned_v14", edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v14);
-  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MET120_HBHENoiseCleaned_v15", edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v15);
-  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MET120_HBHENoiseCleaned_v16", edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v16);
-  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MET120_HBHENoiseCleaned_v17", edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v17);
-  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MET120_HBHENoiseCleaned_v18", edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v18);
-  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MET120_HBHENoiseCleaned_v19", edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v19);
-  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MET120_HBHENoiseCleaned_v20", edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v20);
   stream.select("edmTriggerResultsHelper_TriggerResults_HLT.prescale_HLT_MET120_HBHENoiseCleaned_v1", edmTriggerResultsHelper_prescale_HLT_MET120_HBHENoiseCleaned_v1);
-  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.prescale_HLT_MET120_HBHENoiseCleaned_v2", edmTriggerResultsHelper_prescale_HLT_MET120_HBHENoiseCleaned_v2);
-  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.prescale_HLT_MET120_HBHENoiseCleaned_v3", edmTriggerResultsHelper_prescale_HLT_MET120_HBHENoiseCleaned_v3);
-  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.prescale_HLT_MET120_HBHENoiseCleaned_v4", edmTriggerResultsHelper_prescale_HLT_MET120_HBHENoiseCleaned_v4);
-  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.prescale_HLT_MET120_HBHENoiseCleaned_v5", edmTriggerResultsHelper_prescale_HLT_MET120_HBHENoiseCleaned_v5);
-  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.prescale_HLT_MET120_HBHENoiseCleaned_v6", edmTriggerResultsHelper_prescale_HLT_MET120_HBHENoiseCleaned_v6);
-  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.prescale_HLT_MET120_HBHENoiseCleaned_v7", edmTriggerResultsHelper_prescale_HLT_MET120_HBHENoiseCleaned_v7);
-  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.prescale_HLT_MET120_HBHENoiseCleaned_v8", edmTriggerResultsHelper_prescale_HLT_MET120_HBHENoiseCleaned_v8);
-  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.prescale_HLT_MET120_HBHENoiseCleaned_v9", edmTriggerResultsHelper_prescale_HLT_MET120_HBHENoiseCleaned_v9);
   stream.select("edmTriggerResultsHelper_TriggerResults_HLT.prescale_HLT_MET120_HBHENoiseCleaned_v10", edmTriggerResultsHelper_prescale_HLT_MET120_HBHENoiseCleaned_v10);
   stream.select("edmTriggerResultsHelper_TriggerResults_HLT.prescale_HLT_MET120_HBHENoiseCleaned_v11", edmTriggerResultsHelper_prescale_HLT_MET120_HBHENoiseCleaned_v11);
   stream.select("edmTriggerResultsHelper_TriggerResults_HLT.prescale_HLT_MET120_HBHENoiseCleaned_v12", edmTriggerResultsHelper_prescale_HLT_MET120_HBHENoiseCleaned_v12);
@@ -1455,76 +1589,16 @@ void selectVariables(itreestream& stream)
   stream.select("edmTriggerResultsHelper_TriggerResults_HLT.prescale_HLT_MET120_HBHENoiseCleaned_v17", edmTriggerResultsHelper_prescale_HLT_MET120_HBHENoiseCleaned_v17);
   stream.select("edmTriggerResultsHelper_TriggerResults_HLT.prescale_HLT_MET120_HBHENoiseCleaned_v18", edmTriggerResultsHelper_prescale_HLT_MET120_HBHENoiseCleaned_v18);
   stream.select("edmTriggerResultsHelper_TriggerResults_HLT.prescale_HLT_MET120_HBHENoiseCleaned_v19", edmTriggerResultsHelper_prescale_HLT_MET120_HBHENoiseCleaned_v19);
+  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.prescale_HLT_MET120_HBHENoiseCleaned_v2", edmTriggerResultsHelper_prescale_HLT_MET120_HBHENoiseCleaned_v2);
   stream.select("edmTriggerResultsHelper_TriggerResults_HLT.prescale_HLT_MET120_HBHENoiseCleaned_v20", edmTriggerResultsHelper_prescale_HLT_MET120_HBHENoiseCleaned_v20);
-  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v1", edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v1);
-  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v2", edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v2);
-  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v3", edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v3);
-  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v4", edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v4);
-  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v5", edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v5);
-  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v6", edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v6);
-  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v7", edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v7);
-  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v8", edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v8);
-  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v9", edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v9);
-  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v10", edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v10);
-  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v11", edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v11);
-  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v12", edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v12);
-  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v13", edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v13);
-  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v14", edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v14);
-  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v15", edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v15);
-  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v16", edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v16);
-  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v17", edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v17);
-  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v18", edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v18);
-  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v19", edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v19);
-  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v20", edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v20);
-  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.presclae_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v1", edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v1);
-  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.presclae_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v2", edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v2);
-  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.presclae_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v3", edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v3);
-  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.presclae_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v4", edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v4);
-  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.presclae_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v5", edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v5);
-  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.presclae_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v6", edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v6);
-  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.presclae_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v7", edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v7);
-  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.presclae_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v8", edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v8);
-  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.presclae_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v9", edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v9);
-  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.presclae_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v10", edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v10);
-  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.presclae_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v11", edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v11);
-  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.presclae_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v12", edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v12);
-  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.presclae_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v13", edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v13);
-  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.presclae_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v14", edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v14);
-  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.presclae_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v15", edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v15);
-  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.presclae_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v16", edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v16);
-  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.presclae_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v17", edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v17);
-  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.presclae_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v18", edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v18);
-  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.presclae_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v19", edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v19);
-  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.presclae_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v20", edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v20);
-  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v1", edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v1);
-  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v2", edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v2);
-  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v3", edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v3);
-  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v4", edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v4);
-  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v5", edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v5);
-  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v6", edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v6);
-  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v7", edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v7);
-  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v8", edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v8);
-  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v9", edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v9);
-  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v10", edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v10);
-  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v11", edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v11);
-  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v12", edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v12);
-  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v13", edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v13);
-  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v14", edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v14);
-  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v15", edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v15);
-  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v16", edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v16);
-  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v17", edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v17);
-  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v18", edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v18);
-  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v19", edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v19);
-  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v20", edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v20);
+  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.prescale_HLT_MET120_HBHENoiseCleaned_v3", edmTriggerResultsHelper_prescale_HLT_MET120_HBHENoiseCleaned_v3);
+  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.prescale_HLT_MET120_HBHENoiseCleaned_v4", edmTriggerResultsHelper_prescale_HLT_MET120_HBHENoiseCleaned_v4);
+  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.prescale_HLT_MET120_HBHENoiseCleaned_v5", edmTriggerResultsHelper_prescale_HLT_MET120_HBHENoiseCleaned_v5);
+  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.prescale_HLT_MET120_HBHENoiseCleaned_v6", edmTriggerResultsHelper_prescale_HLT_MET120_HBHENoiseCleaned_v6);
+  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.prescale_HLT_MET120_HBHENoiseCleaned_v7", edmTriggerResultsHelper_prescale_HLT_MET120_HBHENoiseCleaned_v7);
+  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.prescale_HLT_MET120_HBHENoiseCleaned_v8", edmTriggerResultsHelper_prescale_HLT_MET120_HBHENoiseCleaned_v8);
+  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.prescale_HLT_MET120_HBHENoiseCleaned_v9", edmTriggerResultsHelper_prescale_HLT_MET120_HBHENoiseCleaned_v9);
   stream.select("edmTriggerResultsHelper_TriggerResults_HLT.prescale_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v1", edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v1);
-  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.prescale_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v2", edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v2);
-  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.prescale_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v3", edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v3);
-  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.prescale_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v4", edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v4);
-  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.prescale_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v5", edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v5);
-  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.prescale_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v6", edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v6);
-  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.prescale_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v7", edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v7);
-  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.prescale_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v8", edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v8);
-  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.prescale_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v9", edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v9);
   stream.select("edmTriggerResultsHelper_TriggerResults_HLT.prescale_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v10", edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v10);
   stream.select("edmTriggerResultsHelper_TriggerResults_HLT.prescale_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v11", edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v11);
   stream.select("edmTriggerResultsHelper_TriggerResults_HLT.prescale_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v12", edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v12);
@@ -1535,11 +1609,101 @@ void selectVariables(itreestream& stream)
   stream.select("edmTriggerResultsHelper_TriggerResults_HLT.prescale_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v17", edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v17);
   stream.select("edmTriggerResultsHelper_TriggerResults_HLT.prescale_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v18", edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v18);
   stream.select("edmTriggerResultsHelper_TriggerResults_HLT.prescale_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v19", edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v19);
+  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.prescale_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v2", edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v2);
   stream.select("edmTriggerResultsHelper_TriggerResults_HLT.prescale_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v20", edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v20);
-  stream.select("npatElectron_patElectronsLoosePFlow", nElectron);
+  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.prescale_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v3", edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v3);
+  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.prescale_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v4", edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v4);
+  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.prescale_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v5", edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v5);
+  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.prescale_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v6", edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v6);
+  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.prescale_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v7", edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v7);
+  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.prescale_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v8", edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v8);
+  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.prescale_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v9", edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v9);
+  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.prescale_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v1", edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v1);
+  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.prescale_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v10", edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v10);
+  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.prescale_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v11", edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v11);
+  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.prescale_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v12", edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v12);
+  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.prescale_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v13", edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v13);
+  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.prescale_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v14", edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v14);
+  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.prescale_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v15", edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v15);
+  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.prescale_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v16", edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v16);
+  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.prescale_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v17", edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v17);
+  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.prescale_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v18", edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v18);
+  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.prescale_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v19", edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v19);
+  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.prescale_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v2", edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v2);
+  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.prescale_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v20", edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v20);
+  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.prescale_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v3", edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v3);
+  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.prescale_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v4", edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v4);
+  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.prescale_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v5", edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v5);
+  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.prescale_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v6", edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v6);
+  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.prescale_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v7", edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v7);
+  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.prescale_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v8", edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v8);
+  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.prescale_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v9", edmTriggerResultsHelper_prescale_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v9);
+  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MET120_HBHENoiseCleaned_v1", edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v1);
+  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MET120_HBHENoiseCleaned_v10", edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v10);
+  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MET120_HBHENoiseCleaned_v11", edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v11);
+  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MET120_HBHENoiseCleaned_v12", edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v12);
+  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MET120_HBHENoiseCleaned_v13", edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v13);
+  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MET120_HBHENoiseCleaned_v14", edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v14);
+  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MET120_HBHENoiseCleaned_v15", edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v15);
+  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MET120_HBHENoiseCleaned_v16", edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v16);
+  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MET120_HBHENoiseCleaned_v17", edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v17);
+  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MET120_HBHENoiseCleaned_v18", edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v18);
+  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MET120_HBHENoiseCleaned_v19", edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v19);
+  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MET120_HBHENoiseCleaned_v2", edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v2);
+  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MET120_HBHENoiseCleaned_v20", edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v20);
+  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MET120_HBHENoiseCleaned_v3", edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v3);
+  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MET120_HBHENoiseCleaned_v4", edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v4);
+  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MET120_HBHENoiseCleaned_v5", edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v5);
+  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MET120_HBHENoiseCleaned_v6", edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v6);
+  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MET120_HBHENoiseCleaned_v7", edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v7);
+  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MET120_HBHENoiseCleaned_v8", edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v8);
+  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MET120_HBHENoiseCleaned_v9", edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v9);
+  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v1", edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v1);
+  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v10", edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v10);
+  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v11", edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v11);
+  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v12", edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v12);
+  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v13", edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v13);
+  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v14", edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v14);
+  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v15", edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v15);
+  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v16", edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v16);
+  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v17", edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v17);
+  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v18", edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v18);
+  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v19", edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v19);
+  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v2", edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v2);
+  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v20", edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v20);
+  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v3", edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v3);
+  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v4", edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v4);
+  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v5", edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v5);
+  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v6", edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v6);
+  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v7", edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v7);
+  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v8", edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v8);
+  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v9", edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v9);
+  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v1", edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v1);
+  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v10", edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v10);
+  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v11", edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v11);
+  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v12", edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v12);
+  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v13", edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v13);
+  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v14", edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v14);
+  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v15", edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v15);
+  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v16", edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v16);
+  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v17", edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v17);
+  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v18", edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v18);
+  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v19", edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v19);
+  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v2", edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v2);
+  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v20", edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v20);
+  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v3", edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v3);
+  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v4", edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v4);
+  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v5", edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v5);
+  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v6", edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v6);
+  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v7", edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v7);
+  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v8", edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v8);
+  stream.select("edmTriggerResultsHelper_TriggerResults_HLT.value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v9", edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v9);
+  stream.select("npatElectron_selectedPatElectrons", nElectron);
+  stream.select("npatElectron_patElectronsLoosePFlow", nElectronPFlow);
   stream.select("nrecoGenParticle_genParticles", nGenParticle);
   stream.select("npatJet_selectedPatJetsPFlow", nJet);
-  stream.select("npatMuon_selectedPatMuonsLoosePFlow", nMuon);
+  stream.select("npatMuon_selectedPatMuonsLoose", nMuon);
+  stream.select("npatMuon_selectedPatMuonsLoosePFlow", nMuonPFlow);
   stream.select("nPileupSummaryInfo_addPileupInfo", nPileupSummaryInfo);
   stream.select("nSimTrack_g4SimHits", nSimTrack);
   stream.select("nSimVertex_g4SimHits", nSimVertex);
