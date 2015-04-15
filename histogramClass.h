@@ -1,7 +1,6 @@
 #ifndef HISTOGRAMCLASS_H
 #define HISTOGRAMCLASS_H
 
-#include "analyzer.h"
 #include "functions.h"
 #include "hitInformation.h"
 #include "declarationsOfClasses.h"
