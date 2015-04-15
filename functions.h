@@ -515,6 +515,7 @@ std::vector<evt::Track_s> trackCleaningCuts(std::vector<evt::Track_s> trackColle
   bool firstTrack9  = true;
   bool firstTrack10 = true;
   bool firstTrack11 = true;
+  bool firstTrack12 = true;
 
 
   for(unsigned int i=0; i<trackCollection.size(); i++){
@@ -592,12 +593,15 @@ std::vector<evt::Track_s> trackCleaningCuts(std::vector<evt::Track_s> trackColle
     }
     //.................................................................................//
     //if(trackCollection[i].hitPattern_trackerLayersWithoutMeasurement==0 && trackCollection[i].trackerExpectedHitsInner_numberOfLostHits==0)            continue;
-    //countsTrackCriteria->Fill("missingMiddleAndInnerHits", weight);
+    if(firstTrack11){
+      countsTrackCriteria->Fill("missingMiddleAndInnerHits", weight);
+      firstTrack11 = false;
+    }
     //.................................................................................//
     if(trackCollection[i].trackRelIso03>=0.1)                                                 continue;
-    if(firstTrack11){
+    if(firstTrack12){
       countsTrackCriteria->Fill("TrackIsolationDeltaR0p3Less0p1", weight);
-      firstTrack11 = false;
+      firstTrack12 = false;
     }
     //.................................................................................//
 
