@@ -2,7 +2,6 @@
 #define DECLARATIONSOFCLASSES_H
 //--------------------------------------------------------------------------------------------------
 
-#include "analyzer.h"
 #include "TTree.h"
 #include <vector>
 using namespace std;
