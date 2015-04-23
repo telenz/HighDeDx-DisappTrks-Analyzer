@@ -166,6 +166,13 @@ int main(int argc, char** argv)
   chiTrackspreselection.trackPreselection   = true;
   chiTrackspreselection.qcdSupression       = true;
 
+  class Event chiTrackspreselectionWjets("chiTrackspreselectionWjets",ofile);
+  if(isSignal) chiTrackspreselectionWjets.onlyChi= true;
+  chiTrackspreselectionWjets.triggerRequirements = true;
+  chiTrackspreselectionWjets.trackPreselection   = true;
+  chiTrackspreselectionWjets.qcdSupression       = true;
+  chiTrackspreselectionWjets.isolatedLeptonCut   = true;
+
   class Event chiTrackspreselectionPlusNLostGt1("chiTrackspreselectionPlusNLostGt1",ofile);
   if(isSignal) chiTrackspreselectionPlusNLostGt1.onlyChi      = true;
   chiTrackspreselectionPlusNLostGt1.triggerRequirements       = true;
@@ -589,6 +596,7 @@ int main(int argc, char** argv)
       //chiTracksnoSelection.Selection();
       chiTrackstriggerRequirements.Selection();
       chiTrackspreselection.Selection();
+      chiTrackspreselectionWjets.Selection();
       chiTracksfullSelection.Selection();
       chiTracksSMControlCalo.Selection();
 
