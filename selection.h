@@ -28,6 +28,8 @@ hist(histName, ofile_)
   qcdSupression          = false;
   trackCandidateCutFinal = false;
 
+  isolatedLeptonCut      = false;  
+
   TrackPtRequirement         = false;
   NumOfLostOuterRequirement  = false;
   CaloIsolationRequirement   = false;
@@ -49,6 +51,8 @@ int Event::Selection()
     
   TrackColl=evt::Track;
   JetColl=evt::Jet;
+  MuonColl=evt::MuonPFlow;
+  ElectronColl=evt::ElectronPFlow;
 
   double dPhiMax=0;
   //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -138,6 +142,15 @@ int Event::Selection()
   countsEventCuts->Fill("1MetwithDeltaPhiMin2Jetsgt0p5", weight);
 
   //.................................................................................//
+  //%%%%%%%%% Isolated Lepton selection %%%%%%%%%%%%%
+  if(isolatedLeptonCut){
+    
+    //MuonColl     = getTightMuonsInEvent();
+    //ElectronColl = getTightElectronsInEvent();
+    if(evt::ElectronPFlow.size() + evt::MuonPFlow.size() != 1) return 0;
+
+  }
+  //.................................................................................//
   //%%%%%%%%% Track Preselection %%%%%%%%%%%%%
   if(trackPreselection){
     // 4.)
@@ -181,6 +194,7 @@ int Event::Selection()
     hist.variables.LeadingJetPt = JetColl[0].pt;
   }
   hist.variables.met       = MET_pt;
+  hist.variables.nJets     = subleadingJetColl.size();
   hist.hnPFJetsub->Fill(subleadingJetColl.size(),weight);
 
   for(unsigned int i=0; i<TrackColl.size(); i++){
