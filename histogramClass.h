@@ -25,11 +25,13 @@ Hist::Hist(TString histName, outputFile ofile_)
   tree->Branch("run",&variables.run);
   tree->Branch("lumiBlock",&variables.lumiBlock);
   tree->Branch("MET",&variables.met);
+  tree->Branch("njets",&variables.nJets);
   tree->Branch("LeadingJetPt",&variables.LeadingJetPt);
   tree->Branch("trackDeDxASmi",&variables.trackDeDxASmi);
   tree->Branch("trackDeDxASmi_woLastHit",&variables.trackDeDxASmi_woLastHit);
   tree->Branch("trackDeDxHarm2",&variables.trackDeDxHarm2);
   tree->Branch("trackPt",&variables.trackPt);
+  tree->Branch("trackPtError",&variables.trackPtError);
   tree->Branch("trackP",&variables.trackP);
   tree->Branch("trackGenPt",&variables.trackGenPt);
   tree->Branch("trackGenE",&variables.trackGenE);
@@ -40,6 +42,7 @@ Hist::Hist(TString histName, outputFile ofile_)
   tree->Branch("trackNLostMiddle",&variables.trackNLostMiddle);
   tree->Branch("trackNValid",&variables.trackNValid);
   tree->Branch("trackPdgId",&variables.trackPdgId);
+  tree->Branch("trackStatus",&variables.trackStatus);
   tree->Branch("trackCaloIsolation",&variables.trackCaloIsolation);
   tree->Branch("trackHCALRp5Isolation",&variables.trackHCALRp5Isolation);
   tree->Branch("trackECALRp5Isolation",&variables.trackECALRp5Isolation);
@@ -315,6 +318,7 @@ void Hist::FillTrackVariables(std::vector<evt::Track_s> trkCollection,double wei
     variables.trackDeDxASmi_woLastHit.push_back(trkCollection[i].ASmi_woLastHit);
     variables.trackDeDxHarm2.push_back(trkCollection[i].dEdxHarm2);
     variables.trackPt.push_back(trkCollection[i].pt);
+    variables.trackPtError.push_back(trkCollection[i].ptError);
     variables.trackP.push_back(p);
     variables.trackGenPt.push_back(trkCollection[i].genPt);
     variables.trackGenE.push_back(trkCollection[i].genE);
@@ -325,6 +329,7 @@ void Hist::FillTrackVariables(std::vector<evt::Track_s> trkCollection,double wei
     variables.trackNLostMiddle.push_back(trkCollection[i].hitPattern_trackerLayersWithoutMeasurement);
     variables.trackNValid.push_back(trkCollection[i].numberOfValidHits);
     variables.trackPdgId.push_back(trkCollection[i].pdgId);
+    variables.trackStatus.push_back(trkCollection[i].status);
     variables.trackCaloIsolation.push_back(trackCaloIsolation(&trkCollection[i]));
     variables.trackHCALRp5Isolation.push_back(trkCollection[i].caloHadDeltaRp5);
     variables.trackECALRp5Isolation.push_back(trkCollection[i].caloEMDeltaRp5);
