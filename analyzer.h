@@ -707,6 +707,7 @@ struct Track_s
   double	dEdxHitsMedian_2;
   double	dEdxHitsMedian_1;
   int pdgId;
+  int status;
   double genPt;
   double genE;
   double genEt;
