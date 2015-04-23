@@ -3,6 +3,7 @@
 //-----------------------------------------------------------------------------
 #include <iostream>
 #include "TVector2.h"
+#include "TLorentzVector.h"
 #include "chiClass.h"
 #include "declarationsOfClasses.h"
 #include "TH3.h"
@@ -880,6 +881,7 @@ void matchTrackToGenParticle(std::vector<Track_s>& inputCollection){
   for(unsigned int i=0; i<inputCollection.size(); i++){
 
     inputCollection[i].pdgId=0;
+    inputCollection[i].status=-1;
     inputCollection[i].beta=10;
     double dRmin = 0.01;
     int    idx   = -1;
@@ -897,6 +899,7 @@ void matchTrackToGenParticle(std::vector<Track_s>& inputCollection){
     }
     if(dRmin<0.01){
 	inputCollection[i].pdgId = GenParticle[idx].pdgId;
+	inputCollection[i].status= GenParticle[idx].status;
 	inputCollection[i].beta  = GenParticle[idx].p/GenParticle[idx].energy;
 	inputCollection[i].genPt = GenParticle[idx].pt;
 	inputCollection[i].genE  = GenParticle[idx].energy;
@@ -960,5 +963,135 @@ double getLifetime(string filename){
   return atoi(TargetLifetime.c_str());
 
 }
+/*
+//--------------------------------------------------------------------------------------------------
+bool isMuonTight(struct evt::MuonPFlow_s* muon){
+  
+  if( !muon->isGlobalMuon )                                          return false;
+  if( !muon->isPFMuon )                                              return false;
+  if( muon->globalTrack_chi2/muon->globalTrack_ndof>10 )             return false;
+  if( muon->globalTrack_hitPattern_numberOfValidMuonHits<1 )         return false;
+  if( muon->numberOfMatchedStations<2 )                              return false;
+  if( muon->innerTrack_hitPattern_trackerLayersWithMeasurement<6 )   return false;
+  if( muon->innerTrack_hitPattern_numberOfValidPixelHits<1 )         return false;
+  if( muon->dB>=0.2 )                                                return false;
+  if( std::abs( muon->vertex_z - evt::Vertex[0].z ) >= 0.5 )         return false;
+
+  return true;
+}
+//--------------------------------------------------------------------------------------------------
+float relPFIso(struct evt::MuonPFlow_s* muon){
+
+  float relIso = 
+    ( muon->chargedHadronIso + 
+      std::max( 0.0, muon->neutralHadronIso + muon->photonIso - 0.5*muon->puChargedHadronIso ) ) / muon->pt; 
+
+  return relIso;
+}
+//--------------------------------------------------------------------------------------------------
+std::vector<evt::MuonPFlow_s>  getTightMuonsInEvent(){
+
+  std::vector<evt::MuonPFlow_s> muonCollection;
+  muonCollection.clear();
+  
+  for(unsigned int i=0; i<evt::MuonPFlow.size(); i++){
+
+    if( evt::MuonPFlow[i].pt<=25 )                     continue;
+    if( std::abs(evt::MuonPFlow[i].eta)>2.5 )          continue;
+    if( !isMuonTight(&evt::MuonPFlow[i]) )             continue;
+    if( relPFIso(&MuonPFlow[i])>0.12 )                   continue;
+
+    muonCollection.push_back(evt::MuonPFlow[i]);
+  }
+
+  return muonCollection;
+}
+//--------------------------------------------------------------------------------------------------
+float isGoodMVAElectron(struct evt::ElectronPFlow_s* electron){
+
+  double sceta = fabs(electron->superCluster_eta);
+
+  if(electron->pt >= 20.0) {
+
+    if((0.0 <= sceta) && (sceta <= 0.8)) {
+      if(electron->mvaTrigV0 > 0.94) {
+	return true;
+      }
+    } else if((0.8 < sceta) && (sceta <= 1.479)) {
+      if(electron->mvaTrigV0 > 0.85) {
+	return true;
+      }
+    } else if((1.479 < sceta) && (sceta <= 2.5) ) {
+      if(electron->mvaTrigV0 > 0.92) {
+	return true;
+      }
+    }
+	  
+  }else if(electron->pt > 10.0) {
+    if((0.0 <= sceta) && (sceta <= 0.8)) {
+      if(electron->mvaTrigV0 > 0.00) {
+	return true;
+      }
+    } else if((0.8 < sceta) && (sceta <= 1.479)) {
+      if(electron->mvaTrigV0 > 0.10) {
+	return true;
+      }
+    } else if((1.479 < sceta) && (sceta <= 2.5) ) {
+      if(electron->mvaTrigV0 > 0.62) {
+	return true;
+      }
+    } 
+  }
+	
+
+  return false;
+}
+//--------------------------------------------------------------------------------------------------
+bool isElectronTight(struct evt::ElectronPFlow_s* electron){
+  
+  if( !electron->passConversionVeto )                                          return false;
+  if( electron->gsfTrack_trackerExpectedHitsInner_numberOfLostHits >0 )        return false;
+  if( !isGoodMVAElectron(electron) )                                           return false;
+
+  return true;
+}
+//--------------------------------------------------------------------------------------------------
+float relPFIsoRho(struct evt::ElectronPFlow_s* electron){
+
+  float relIsoRho =
+    ( electron->chargedHadronIso + 
+      std::max( 0.0, electron->neutralHadronIso + electron->photonIso - sdoublePF_value*electron->Aeff04 ) ) 
+    / electron->pt; 
+
+  return relIsoRho;
+}
+//--------------------------------------------------------------------------------------------------
+std::vector<evt::ElectronPFlow_s>  getTightElectronsInEvent(){
+
+  std::vector<evt::ElectronPFlow_s> electronCollection;
+  electronCollection.clear();
+  
+  for(unsigned int i=0; i<evt::ElectronPFlow.size(); i++){
+
+    if( evt::ElectronPFlow[i].pt<=25 )                     continue;
+    if( std::abs(evt::ElectronPFlow[i].eta)>2.5 )          continue;
+    if( !isElectronTight(&evt::ElectronPFlow[i]) )         continue;
+    if( relPFIsoRho(&ElectronPFlow[i])>0.15 )              continue;
+
+    electronCollection.push_back(evt::ElectronPFlow[i]);
+  }
+
+  return electronCollection;
+}
+*/
+//--------------------------------------------------------------------------------------------------
+TLorentzVector lorentzVector(float pt, float eta, float phi, float energy){
+  
+  TLorentzVector v4;
+  v4.SetPtEtaPhiE(pt,eta,phi,energy);
+  
+  return v4;
+};
+//--------------------------------------------------------------------------------------------------
 #endif
 
