@@ -15,6 +15,7 @@ typedef struct {
   std::vector<Double_t>  trackDeDxASmi_woLastHit;
   std::vector<Double_t>  trackDeDxHarm2;
   std::vector<Double_t>  trackPt;
+  std::vector<Double_t>  trackPtError;
   std::vector<Double_t>  trackP;
   std::vector<Double_t>  trackGenPt;
   std::vector<Double_t>  trackGenE;
@@ -25,6 +26,7 @@ typedef struct {
   std::vector<Int_t>     trackNLostMiddle;
   std::vector<Int_t>     trackNValid;
   std::vector<Int_t>     trackPdgId;
+  std::vector<Int_t>     trackStatus;
   std::vector<Double_t>  trackCaloIsolation;
   std::vector<Double_t>  trackHCALRp5Isolation;
   std::vector<Double_t>  trackECALRp5Isolation;
@@ -51,6 +53,7 @@ typedef struct {
   UInt_t                 lumiBlock;
   double                 met;
   double                 LeadingJetPt;
+  int                    nJets;
 
 
   void clearVectors(){
@@ -59,6 +62,7 @@ typedef struct {
     trackDeDxASmi_woLastHit.clear();
     trackDeDxHarm2.clear();
     trackPt.clear();
+    trackPtError.clear();
     trackP.clear();
     trackGenPt.clear();
     trackGenE.clear();
@@ -69,6 +73,7 @@ typedef struct {
     trackNLostMiddle.clear();
     trackNValid.clear();
     trackPdgId.clear();
+    trackStatus.clear();
     trackCaloIsolation.clear();
     trackHCALRp5Isolation.clear();
     trackECALRp5Isolation.clear();
@@ -225,6 +230,8 @@ class Event
   std::vector<Track_s> TrackColl;
   std::vector<Jet_s> JetColl;
   std::vector<Jet_s> subleadingJetColl;
+  std::vector<MuonPFlow_s> MuonColl;
+  std::vector<ElectronPFlow_s> ElectronColl;
     
   struct GenParticle_s leadJetGenParticle;
   TH1D *countsTrackCriteria;
@@ -235,6 +242,8 @@ class Event
   bool trackCandidateCutFinal;
   bool onlyChi;
   bool noChi;
+
+  bool isolatedLeptonCut;
 
   bool TrackPtRequirement;
   bool NumOfLostOuterRequirement;
