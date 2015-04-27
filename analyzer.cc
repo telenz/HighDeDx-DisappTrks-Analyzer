@@ -160,6 +160,11 @@ int main(int argc, char** argv)
   if(isSignal) chiTrackstriggerRequirements.onlyChi = true;
   chiTrackstriggerRequirements.triggerRequirements  = true;
 
+  class Event chiTracksQCDsupression("chiTracksQCDsupression",ofile);
+  if(isSignal) chiTracksQCDsupression.onlyChi = true;
+  chiTracksQCDsupression.triggerRequirements  = true;
+  chiTracksQCDsupression.qcdSupression        = true;
+
   class Event chiTrackspreselection("chiTrackspreselection",ofile);
   if(isSignal) chiTrackspreselection.onlyChi= true;
   chiTrackspreselection.triggerRequirements = true;
@@ -595,6 +600,7 @@ int main(int argc, char** argv)
       
       //chiTracksnoSelection.Selection();
       chiTrackstriggerRequirements.Selection();
+      chiTracksQCDsupression.Selection();
       chiTrackspreselection.Selection();
       chiTrackspreselectionWjets.Selection();
       chiTracksfullSelection.Selection();
