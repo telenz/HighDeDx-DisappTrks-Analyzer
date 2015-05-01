@@ -24,6 +24,7 @@ hist(histName, ofile_)
   onlyChi                = false;
   noChi                  = false;
   triggerRequirements    = false;
+  trigger                = false;
   trackPreselection      = false;
   qcdSupression          = false;
   trackCandidateCutFinal = false;
@@ -83,7 +84,7 @@ int Event::Selection()
   if(triggerRequirements){
     // 1.) Trigger Cut
 
-    if(edmEventHelper_isRealData){
+    if(trigger){
       int edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v           = getTriggerResult("edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v");
       int edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v          = getTriggerResult("edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v");
       int edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v                           = getTriggerResult("edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v");
@@ -96,16 +97,15 @@ int Event::Selection()
       hist.hMonoCentralPFJet80_PFMETnoMu95_prescale   -> Fill(Prescale_edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v,weight);
       hist.hMonoCentralPFJet80_PFMETnoMu105_prescale  -> Fill(Prescale_edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v,weight);
       hist.hMET120_HBHENoiseCleaned_prescale          -> Fill(Prescale_edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v,weight);
-
-      
       
       if(edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v  == 1 ||
-	 edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v == 1 ||
-	 edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v                  == 1)
-	{}
+	   edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v == 1 ||
+	   edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v                  == 1)
+	  {}
       else{ 
-	cout<<"something wrong with triggers!"<<endl;
-	return 0; }
+	if(edmEventHelper_isRealData) cout<<"something wrong with triggers!"<<endl;
+	return 0; 
+      }
     }
     countsEventCuts->Fill("triggerCut_OnlyData", weight);
 	     
