@@ -134,9 +134,13 @@ int main(int argc, char** argv)
   //-------------------------------------------------------------------------------------
   cout<<endl<<endl<<"------------ Is it signal : "<<isSignal<<" --------------"<<endl<<endl;
   cout<<endl<<endl<<"------------ Is it data   : "<<isData<<" --------------"<<endl<<endl;
+  /*
   class Event noSelection("noSelection",ofile);
   class Event triggerRequirements("triggerRequirements",ofile);
   triggerRequirements.triggerRequirements = true;
+  class Event triggerRequirementsTrigger("triggerRequirementsTrigger",ofile);
+  triggerRequirementsTrigger.triggerRequirements = true;
+  triggerRequirementsTrigger.trigger             = true;
   class Event preselection("preselection",ofile);
   preselection.triggerRequirements        = true;
   preselection.trackPreselection          = true;
@@ -150,7 +154,7 @@ int main(int argc, char** argv)
   fullSelection.NumOfLostOuterRequirement = true;
   fullSelection.CaloIsolationRequirement  = true;
   fullSelection.DeDxRequirement           = true;
-
+  */
   //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   // Only Chi
   class Event chiTracksnoSelection("chiTracksnoSelection",ofile);
@@ -160,16 +164,34 @@ int main(int argc, char** argv)
   if(isSignal) chiTrackstriggerRequirements.onlyChi = true;
   chiTrackstriggerRequirements.triggerRequirements  = true;
 
+  class Event chiTrackstriggerRequirementsTrigger("chiTrackstriggerRequirementsTrigger",ofile);
+  if(isSignal) chiTrackstriggerRequirementsTrigger.onlyChi = true;
+  chiTrackstriggerRequirementsTrigger.triggerRequirements  = true;
+  chiTrackstriggerRequirementsTrigger.trigger              = true;
+
   class Event chiTracksQCDsupression("chiTracksQCDsupression",ofile);
   if(isSignal) chiTracksQCDsupression.onlyChi = true;
   chiTracksQCDsupression.triggerRequirements  = true;
   chiTracksQCDsupression.qcdSupression        = true;
+
+  class Event chiTracksQCDsupressionTrigger("chiTracksQCDsupressionTrigger",ofile);
+  if(isSignal) chiTracksQCDsupressionTrigger.onlyChi = true;
+  chiTracksQCDsupressionTrigger.triggerRequirements  = true;
+  chiTracksQCDsupressionTrigger.trigger              = true;
+  chiTracksQCDsupressionTrigger.qcdSupression        = true;
 
   class Event chiTrackspreselection("chiTrackspreselection",ofile);
   if(isSignal) chiTrackspreselection.onlyChi= true;
   chiTrackspreselection.triggerRequirements = true;
   chiTrackspreselection.trackPreselection   = true;
   chiTrackspreselection.qcdSupression       = true;
+
+  class Event chiTrackspreselectionTrigger("chiTrackspreselectionTrigger",ofile);
+  if(isSignal) chiTrackspreselectionTrigger.onlyChi= true;
+  chiTrackspreselectionTrigger.triggerRequirements = true;
+  chiTrackspreselectionTrigger.trigger             = true;
+  chiTrackspreselectionTrigger.trackPreselection   = true;
+  chiTrackspreselectionTrigger.qcdSupression       = true;
 
   class Event chiTrackspreselectionWjets("chiTrackspreselectionWjets",ofile);
   if(isSignal) chiTrackspreselectionWjets.onlyChi= true;
@@ -601,18 +623,21 @@ int main(int argc, char** argv)
       //chiTracksnoSelection.Selection();
       chiTrackstriggerRequirements.Selection();
       chiTracksQCDsupression.Selection();
+      //chiTracksQCDsupressionTrigger.Selection();
       chiTrackspreselection.Selection();
-      chiTrackspreselectionWjets.Selection();
-      chiTracksfullSelection.Selection();
-      chiTracksSMControlCalo.Selection();
+      chiTrackspreselectionTrigger.Selection();
+      //chiTrackspreselectionWjets.Selection();
+      //chiTracksfullSelection.Selection();
+      //chiTracksSMControlCalo.Selection();
 
+      /*
       chiTrackspreselectionPlusNLostGt1.Selection();
       chiTrackspreselection1LostPlusIsoCut.Selection();
       chiTrackspreselection1LostPlusPtCut.Selection();
       chiTrackspreselection1LostPlusIsoAndPtCut.Selection();
       chiTrackspreselection1LostPlusIsoAndDeDxCut.Selection();
       chiTrackspreselection1LostPlusPtAndDeDxCut.Selection();
-      
+      */
       /*
       if(!isData){
 	trackPt_DeDx.CR1.Selection();
