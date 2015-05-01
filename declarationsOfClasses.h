@@ -237,6 +237,7 @@ class Event
   TH1D *countsTrackCriteria;
   TH1D *countsEventCuts;
   bool triggerRequirements;
+  bool trigger;
   bool trackPreselection;
   bool qcdSupression;
   bool trackCandidateCutFinal;
