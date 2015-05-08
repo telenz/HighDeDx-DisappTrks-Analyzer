@@ -53,7 +53,7 @@ bool isTrackReconstructedTau(struct Track_s* track){
     double dEta = 0;
     double dR   = 0; 
 
-    if(Tau[i].pt<30)                                    continue;
+    if(Tau[i].pt<20)                                    continue;
     if(abs(Tau[i].eta)>2.3)                             continue;
     if(Tau[i].byLooseCombinedIsolationDeltaBetaCorr<=0) continue;
     if(Tau[i].decayModeFinding<=0)                      continue;
@@ -378,7 +378,7 @@ std::vector<evt::Jet_s>  getSubleadingJetCollection(){
 
     //bool isCharginoCandidate = false;
 
-    if(evt::Jet[i].pt<=30.)                          continue;
+    if(evt::Jet[i].pt<=20.)                          continue;
     if(std::abs(evt::Jet[i].eta)>=4.5)               continue;
     //if(evt::Jet[i].neutralHadronEnergyFraction>=0.7) continue;
     //if(evt::Jet[i].chargedEmEnergyFraction>=0.5)     continue;
@@ -888,6 +888,8 @@ void matchTrackToGenParticle(std::vector<Track_s>& inputCollection){
 
     
     for(unsigned int j=0; j<GenParticle.size(); j++){
+
+      if(GenParticle[j].status==2) continue;
 
       dEta = std::abs(inputCollection[i].eta - GenParticle[j].eta);
       dPhi = std::abs(TVector2::Phi_mpi_pi(inputCollection[i].phi - GenParticle[j].phi));
