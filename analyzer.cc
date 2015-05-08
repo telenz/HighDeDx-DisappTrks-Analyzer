@@ -193,6 +193,26 @@ int main(int argc, char** argv)
   chiTrackspreselectionTrigger.trackPreselection   = true;
   chiTrackspreselectionTrigger.qcdSupression       = true;
 
+  class Event chiTrackspreselectionNoTrigger("chiTrackspreselectionNoTrigger",ofile);
+  if(isSignal) chiTrackspreselectionNoTrigger.onlyChi= true;
+  chiTrackspreselectionNoTrigger.trackPreselection   = true;
+  chiTrackspreselectionNoTrigger.qcdSupression       = true;
+
+  class Event chiTrackspreselectionNoQCDCuts("chiTrackspreselectionNoQCDCuts",ofile);
+  if(isSignal) chiTrackspreselectionNoQCDCuts.onlyChi= true;
+  chiTrackspreselectionNoQCDCuts.triggerRequirements = true;
+  chiTrackspreselectionNoQCDCuts.trackPreselection   = true;
+
+  class Event chiTrackspreselectionTriggerNoQCDCuts("chiTrackspreselectionTriggerNoQCDCuts",ofile);
+  if(isSignal) chiTrackspreselectionTriggerNoQCDCuts.onlyChi= true;
+  chiTrackspreselectionTriggerNoQCDCuts.triggerRequirements = true;
+  chiTrackspreselectionTriggerNoQCDCuts.trigger             = true;
+  chiTrackspreselectionTriggerNoQCDCuts.trackPreselection   = true;
+
+   class Event chiTrackspreselectionNoQCDCutsNoTrigger("chiTrackspreselectionNoQCDCutsNoTrigger",ofile);
+  if(isSignal) chiTrackspreselectionNoQCDCutsNoTrigger.onlyChi= true;
+  chiTrackspreselectionNoQCDCutsNoTrigger.trackPreselection   = true;
+
   class Event chiTrackspreselectionWjets("chiTrackspreselectionWjets",ofile);
   if(isSignal) chiTrackspreselectionWjets.onlyChi= true;
   chiTrackspreselectionWjets.triggerRequirements = true;
@@ -626,6 +646,10 @@ int main(int argc, char** argv)
       //chiTracksQCDsupressionTrigger.Selection();
       chiTrackspreselection.Selection();
       chiTrackspreselectionTrigger.Selection();
+      chiTrackspreselectionNoQCDCuts.Selection();
+      chiTrackspreselectionTriggerNoQCDCuts.Selection();
+      chiTrackspreselectionNoTrigger.Selection();
+      chiTrackspreselectionNoQCDCutsNoTrigger.Selection();
       //chiTrackspreselectionWjets.Selection();
       //chiTracksfullSelection.Selection();
       //chiTracksSMControlCalo.Selection();
