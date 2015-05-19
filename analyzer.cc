@@ -561,7 +561,7 @@ int main(int argc, char** argv)
       // Chargino event reweighting:
       
       if(isSignal && TargetLifetime !=0){
-	CurrentLifetime = getLifetime(stream.filename());
+	CurrentLifetime = getCurrentLifetime(stream.filename());
       	//cout<<"CurrentLifetime = "<<CurrentLifetime<<endl;
 
 	// 1.) Get both charginos from genParticle collection and their proper lifetime
