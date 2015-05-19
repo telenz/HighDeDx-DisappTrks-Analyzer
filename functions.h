@@ -965,6 +965,20 @@ double getLifetime(string filename){
   return atoi(TargetLifetime.c_str());
 
 }
+//--------------------------------------------------------------------------------------------------
+double getCurrentLifetime(string filename){
+
+  unsigned found         = filename.find("RECO_RAW2DIGI_L1Reco_RECO_PU_MG_mass_");
+  string TargetLifetime  = filename.substr(found);
+  found                  = TargetLifetime.find("ctau");
+  TargetLifetime         = TargetLifetime.substr(found + 5);
+  found                  = TargetLifetime.find("cm");
+  TargetLifetime         = TargetLifetime.substr(0,found);
+  //cout<<"Lifetime  = "<<TargetLifetime<<endl;
+
+  return atoi(TargetLifetime.c_str());
+
+}
 /*
 //--------------------------------------------------------------------------------------------------
 bool isMuonTight(struct evt::MuonPFlow_s* muon){
