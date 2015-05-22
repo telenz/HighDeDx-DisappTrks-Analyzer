@@ -392,7 +392,7 @@ std::vector<evt::Jet_s>  getSubleadingJetCollection(){
   
 bool isGoodVertex(){
     
-  if(evt::Vertex[0].z > 24.)                                                     return false;
+  if(abs(evt::Vertex[0].z) > 24.)                                                     return false;
   if(std::sqrt(std::pow(evt::Vertex[0].x,2) + std::pow(evt::Vertex[0].y,2)) > 2) return false;
   if(evt::Vertex[0].ndof < 4)                                                    return false;
   return true;
