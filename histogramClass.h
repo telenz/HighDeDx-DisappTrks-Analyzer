@@ -388,12 +388,13 @@ void Hist::FillCharginoHistograms(std::vector<ChiTrack_s> chitrkCollection, doub
       htrackPtoverGenPt ->Fill(chitrkCollection[i].genpt/chitrkCollection[i].pt, weight);
     }
 
-    double rho = sqrt(pow(chitrkCollection[i].SimVertexposition_x - Vertex[0].x,2)+pow(chitrkCollection[i].SimVertexposition_y - Vertex[0].y,2));
-    double z   = abs(chitrkCollection[i].SimVertexposition_z - Vertex[0].z);
-
-    double distance = sqrt( pow(rho,2) + pow(z,2) );
     double beta  = chitrkCollection[i].genp/chitrkCollection[i].genenergy;
-    double gamma = 1./sqrt(1.-pow(chitrkCollection[i].genp/chitrkCollection[i].genenergy,2));
+    double gamma = 1./TMath::Sqrt(1. - TMath::Power(beta,2));
+
+    double rho = TMath::Sqrt( TMath::Power( chitrkCollection[i].SimVertexposition_x - Vertex[0].x , 2) + TMath::Power(chitrkCollection[i].SimVertexposition_y - Vertex[0].y , 2) );
+    double z   = TMath::Abs(chitrkCollection[i].SimVertexposition_z - Vertex[0].z);
+
+    double distance = TMath::Sqrt( TMath::Power(rho,2) + TMath::Power(z,2) );
     double properlifetime = distance/(beta*gamma);
     htrackProperLifetime -> Fill(properlifetime,weight);
 
