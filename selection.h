@@ -78,7 +78,10 @@ int Event::Selection()
       TrackColl = getFakeTracksInTrackCollection(TrackColl);
     }
   
+  //%%%%%%%%% Vertex Requirements - (are already done on ntuple level) %%%%%%%%%%%%%
+  //if(!isGoodVertex())  return 0;
   //.................................................................................//
+
   //%%%%%%%%% Trigger Requirements %%%%%%%%%%%%%
   if(triggerRequirements){
     // 1.) Trigger Cut
