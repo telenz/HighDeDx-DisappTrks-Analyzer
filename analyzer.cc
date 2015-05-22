@@ -562,7 +562,7 @@ int main(int argc, char** argv)
       
       if(isSignal && TargetLifetime !=0){
 	CurrentLifetime = getCurrentLifetime(stream.filename());
-      	//cout<<"CurrentLifetime = "<<CurrentLifetime<<endl;
+	//cout<<"CurrentLifetime = "<<CurrentLifetime<<endl;
 
 	// 1.) Get both charginos from genParticle collection and their proper lifetime
 
@@ -574,9 +574,9 @@ int main(int argc, char** argv)
 	  double beta  = ChiTrack[i].genp/ChiTrack[i].genenergy;
 	  double gamma = 1./std::sqrt(1.-pow(beta,2));
  
-	  double rho      = sqrt(pow(ChiTrack[i].SimVertexposition_x - Vertex[0].x,2)+pow(ChiTrack[i].SimVertexposition_y - Vertex[0].y,2));
-	  double z        = abs(ChiTrack[i].SimVertexposition_z - Vertex[0].z);
-	  double distance = sqrt( pow(rho,2) + pow(z,2) );
+	  double rho      = TMath::Sqrt( TMath::Power(ChiTrack[i].SimVertexposition_x - Vertex[0].x,2) + TMath::Power(ChiTrack[i].SimVertexposition_y - Vertex[0].y,2));
+	  double z        = TMath::Abs(ChiTrack[i].SimVertexposition_z - Vertex[0].z);
+	  double distance = TMath::Sqrt( TMath::Power(rho,2) + TMath::Power(z,2) );
 	  double ProperLifetime = distance/(beta*gamma);
 
 	  double wtTarget       = (1. / TargetLifetime)  * TMath::Exp(-(ProperLifetime) /  TargetLifetime  );  
