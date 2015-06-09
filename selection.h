@@ -44,7 +44,9 @@ hist(histName, ofile_)
 
 int Event::Selection()
 {
-    
+  countsEventCuts      -> LabelsDeflate("X");
+  countsTrackCriteria  -> LabelsDeflate("X");
+
   hist.variables.clearVectors();
 
   TrackColl.clear();
