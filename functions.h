@@ -475,9 +475,9 @@ std::vector<evt::Track_s> trackCandidateCuts(std::vector<evt::Track_s> trackColl
       firstTrack1 = false;
     }
     //.................................................................................//
-    if(trackCollection[i].pt<=10.)                                            continue;
+    if(trackCollection[i].pt<=20.)                                            continue;
     if(firstTrack2){
-      countsTrackCriteria->Fill("PtGreater10GeV", weight);  
+      countsTrackCriteria->Fill("PtGreater20GeV", weight);  
       firstTrack2 = false;
     }
     //.................................................................................//
