@@ -643,7 +643,7 @@ int main(int argc, char** argv)
       //chiTracksnoSelection.Selection();
       chiTrackstriggerRequirements.Selection();
       chiTracksQCDsupression.Selection();
-      //chiTracksQCDsupressionTrigger.Selection();
+      chiTracksQCDsupressionTrigger.Selection();
       chiTrackspreselection.Selection();
       chiTrackspreselectionTrigger.Selection();
       chiTrackspreselectionNoQCDCuts.Selection();
