@@ -57,6 +57,7 @@ int main(int argc, char** argv)
   bool central  = true;
   // *************************************************************************************************************************************************************
   bool ISRunc = false;
+  bool PUunc  = false;
 
 
 
@@ -520,21 +521,26 @@ int main(int argc, char** argv)
   assert((start = clock())!=-1);
   // ***********************************************************************************************************************
   // ----------  Stuff for PU reweighing -----------------------------------------------------------------------------------
-  TFile file_PUdata("/nfs/dust/cms/user/rathjd/VBF-LS-tau/PU/DataPUFile_22Jan2013ReReco_Run2012.root", "read");
-  TFile file_PUmc("/afs/desy.de/user/t/tlenz/HSCPworkdir/PUhistos/TrueNumInteractions_0.root", "read");
-  //TFile file_PUmc("/nfs/dust/cms/user/rathjd/VBF-LS-tau/PU/S10MC_PUFile.root", "read");
- 
-  //TH1F *PUweights = (TH1F*)file_PU.Get("ratio");
-  TH1F *PUweights = (TH1F*)file_PUdata.Get("analyzeHiMassTau/NVertices_0");
-  PUweights->Scale(1/PUweights->Integral());
-  //cout<<"PUweights = "<<PUweights->Integral()<<endl;
-  //  TH1F *PUmc = (TH1F*)file_PUmc.Get("analyzeHiMassTau/NVertices_0");
-  TH1F *PUmc = (TH1F*)file_PUmc.Get("hTrueNumInteractions_0");
-  PUmc->Scale(1/PUmc->Integral());
-  //cout<<"PUmc = "<<PUmc->Integral()<<endl;
+  //TFile file_PUdata("/nfs/dust/cms/user/rathjd/VBF-LS-tau/PU/DataPUFile_22Jan2013ReReco_Run2012.root", "read");
+  //TFile file_PUmc("/afs/desy.de/user/t/tlenz/HSCPworkdir/PUhistos/TrueNumInteractions_0.root", "read");
+  TFile file_PUdata("/afs/desy.de/user/t/tlenz/HighDeDx-DisappTrks-Analyzer/pileup/MyDataPileupHistogram.root", "read");
+  TFile file_PUmc("/afs/desy.de/user/t/tlenz/HighDeDx-DisappTrks-Analyzer/pileup/PileUpHistoCycle.MC.WJets.root", "read");
+
+  if(PUunc){
+    file_PUdata.Close();
+    if(up)    file_PUdata.Open("/afs/desy.de/user/t/tlenz/HighDeDx-DisappTrks-Analyzer/pileup/MyDataPileupHistogram_729.root", "read");
+    if(down)  file_PUdata.Open("/afs/desy.de/user/t/tlenz/HighDeDx-DisappTrks-Analyzer/pileup/MyDataPileupHistogram_659.root", "read");
+  }
+
+
+  //TH1F *PUweights    =   (TH1F*)file_PUdata.Get("analyzeHiMassTau/NVertices_0");
+  TH1F *PUweights    =   (TH1F*)file_PUdata.Get("pileup");
+  PUweights          ->  Scale(1/PUweights->Integral());
+  //TH1F *PUmc         =   (TH1F*)file_PUmc.Get("hTrueNumInteractions_0");
+  TH1F *PUmc         =   (TH1F*)file_PUmc.Get("N_pileup_hist");
+  PUmc               ->  Scale(1/PUmc->Integral());
   
   PUweights->Divide(PUmc);
-  //cout<<"PUweights = "<<PUweights->Integral()<<endl;
  
   weight = 1.;
   // -----------------------------------------------------------------------------------------------------------------------
@@ -625,7 +631,6 @@ int main(int argc, char** argv)
 	  else if(ptSystem>250)                    weight *= 0.60;
 	}
 	else if(up)                                weight *= 1.00;
-	
       }
       /******************************************************************************************************************************
        ******************************************************************************************************************************
