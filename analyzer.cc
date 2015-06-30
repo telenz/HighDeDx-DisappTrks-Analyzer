@@ -50,10 +50,20 @@ int main(int argc, char** argv)
   int nevents = stream.size();
   //cout << "Number of events: " << nevents << endl;
 
+  // *************************************************************************************************************************************************************
+  // ************************************************************** Systematic uncertainties *********************************************************************
+  bool up       = false;
+  bool down     = false;
+  bool central  = true;
+  // *************************************************************************************************************************************************************
+  bool ISRunc = false;
+
+
+
+  // ************************************************************** Systematic uncertainties *********************************************************************
+  // *************************************************************************************************************************************************************
   // Select variables to be read
-
   selectVariables(stream);
-
 
   // The root application is needed to make canvases visible during
   // program execution. If this is not needed, just comment out the
@@ -591,6 +601,32 @@ int main(int argc, char** argv)
 	  weight = weight*wt;
 	}
       }
+      /******************************************************************************************************************************/
+      if(isSignal && ISRunc){
+
+	if (ChiTrack.size() != 2){
+	  cout << "Too many/few charginos!: " << ChiTrack.size() << endl;
+	  return 1;
+	}
+	TLorentzVector chi1 = lorentzVector(ChiTrack[0].genpt, ChiTrack[0].geneta, ChiTrack[0].genphi, ChiTrack[0].genenergy);
+	TLorentzVector chi2 = lorentzVector(ChiTrack[1].genpt, ChiTrack[1].geneta, ChiTrack[1].genphi, ChiTrack[1].genenergy);
+	double ptSystem = (chi1+chi2).Pt();
+	
+	if(central){
+	  if(ptSystem>=0 && ptSystem<=120.)        weight *= 1.00;
+	  else if(ptSystem>120 && ptSystem<=150.)  weight *= 0.95;
+	  else if(ptSystem>150 && ptSystem<=250.)  weight *= 0.90;
+	  else if(ptSystem>250)                    weight *= 0.85;
+	}
+	else if(down){
+	  if(ptSystem>=0 && ptSystem<=120.)        weight *= 1.00;
+	  else if(ptSystem>120 && ptSystem<=150.)  weight *= 0.90;
+	  else if(ptSystem>150 && ptSystem<=250.)  weight *= 0.80;
+	  else if(ptSystem>250)                    weight *= 0.60;
+	}
+	else if(up)                                weight *= 1.00;
+	
+      }
       /******************************************************************************************************************************
        ******************************************************************************************************************************
        ******************************************************************************************************************************
@@ -640,7 +676,7 @@ int main(int argc, char** argv)
       //preselection.Selection();
       //fullSelection.Selection();
       
-      //chiTracksnoSelection.Selection();
+      chiTracksnoSelection.Selection();
       chiTrackstriggerRequirements.Selection();
       chiTracksQCDsupression.Selection();
       chiTracksQCDsupressionTrigger.Selection();
@@ -654,42 +690,6 @@ int main(int argc, char** argv)
       //chiTracksfullSelection.Selection();
       //chiTracksSMControlCalo.Selection();
 
-      /*
-      chiTrackspreselectionPlusNLostGt1.Selection();
-      chiTrackspreselection1LostPlusIsoCut.Selection();
-      chiTrackspreselection1LostPlusPtCut.Selection();
-      chiTrackspreselection1LostPlusIsoAndPtCut.Selection();
-      chiTrackspreselection1LostPlusIsoAndDeDxCut.Selection();
-      chiTrackspreselection1LostPlusPtAndDeDxCut.Selection();
-      */
-      /*
-      if(!isData){
-	trackPt_DeDx.CR1.Selection();
-	trackPt_DeDx.CR2.Selection();
-	trackPt_DeDx.CR3.Selection();
-	trackPt_DeDx.SR.Selection();
-	trackPt_CaloIso.CR1.Selection();
-	trackPt_CaloIso.CR2.Selection();
-	trackPt_CaloIso.CR3.Selection();
-	trackPt_CaloIso.SR.Selection();
-	DeDx_CaloIso.CR1.Selection();
-	DeDx_CaloIso.CR2.Selection();
-	DeDx_CaloIso.CR3.Selection();
-	DeDx_CaloIso.SR.Selection();
-	trackPt_lostOuterHits.CR1.Selection();
-	trackPt_lostOuterHits.CR2.Selection();
-	trackPt_lostOuterHits.CR3.Selection();
-	trackPt_lostOuterHits.SR.Selection();
-	DeDx_lostOuterHits.CR1.Selection();
-	DeDx_lostOuterHits.CR2.Selection();
-	DeDx_lostOuterHits.CR3.Selection();
-	DeDx_lostOuterHits.SR.Selection();
-	CaloIso_lostOuterHits.CR1.Selection();
-	CaloIso_lostOuterHits.CR2.Selection();
-	CaloIso_lostOuterHits.CR3.Selection();
-	CaloIso_lostOuterHits.SR.Selection();
-      }
-      */
       
     }//end of loop over events
  
