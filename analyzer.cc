@@ -523,21 +523,22 @@ int main(int argc, char** argv)
   // ----------  Stuff for PU reweighing -----------------------------------------------------------------------------------
   //TFile file_PUdata("/nfs/dust/cms/user/rathjd/VBF-LS-tau/PU/DataPUFile_22Jan2013ReReco_Run2012.root", "read");
   //TFile file_PUmc("/afs/desy.de/user/t/tlenz/HSCPworkdir/PUhistos/TrueNumInteractions_0.root", "read");
-  TFile file_PUdata("/afs/desy.de/user/t/tlenz/HighDeDx-DisappTrks-Analyzer/pileup/MyDataPileupHistogram.root", "read");
-  TFile file_PUmc("/afs/desy.de/user/t/tlenz/HighDeDx-DisappTrks-Analyzer/pileup/PileUpHistoCycle.MC.WJets.root", "read");
+  TFile *file_PUdata = new TFile("/afs/desy.de/user/t/tlenz/HighDeDx-DisappTrks-Analyzer/pileup/MyDataPileupHistogram.root", "read");
+  TFile *file_PUmc   = new TFile("/afs/desy.de/user/t/tlenz/HighDeDx-DisappTrks-Analyzer/pileup/PileUpHistoCycle.MC.WJets.root", "read");
 
   if(PUunc){
-    file_PUdata.Close();
-    if(up)    file_PUdata.Open("/afs/desy.de/user/t/tlenz/HighDeDx-DisappTrks-Analyzer/pileup/MyDataPileupHistogram_729.root", "read");
-    if(down)  file_PUdata.Open("/afs/desy.de/user/t/tlenz/HighDeDx-DisappTrks-Analyzer/pileup/MyDataPileupHistogram_659.root", "read");
+    delete file_PUdata;
+    if(up)   file_PUdata = new TFile("/afs/desy.de/user/t/tlenz/HighDeDx-DisappTrks-Analyzer/pileup/MyDataPileupHistogram_729.root", "read");
+    if(down) file_PUdata = new TFile("/afs/desy.de/user/t/tlenz/HighDeDx-DisappTrks-Analyzer/pileup/MyDataPileupHistogram_659.root", "read");
   }
 
 
   //TH1F *PUweights    =   (TH1F*)file_PUdata.Get("analyzeHiMassTau/NVertices_0");
-  TH1F *PUweights    =   (TH1F*)file_PUdata.Get("pileup");
+  cout<<"filename = "<<file_PUdata->GetName()<<endl;
+  TH1F *PUweights    =   (TH1F*)file_PUdata->Get("pileup");
   PUweights          ->  Scale(1/PUweights->Integral());
   //TH1F *PUmc         =   (TH1F*)file_PUmc.Get("hTrueNumInteractions_0");
-  TH1F *PUmc         =   (TH1F*)file_PUmc.Get("N_pileup_hist");
+  TH1F *PUmc         =   (TH1F*)file_PUmc->Get("N_pileup_hist");
   PUmc               ->  Scale(1/PUmc->Integral());
   
   PUweights->Divide(PUmc);
