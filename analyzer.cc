@@ -617,10 +617,12 @@ int main(int argc, char** argv)
 	TLorentzVector chi2 = lorentzVector(ChiTrack[1].genpt, ChiTrack[1].geneta, ChiTrack[1].genphi, ChiTrack[1].genenergy);
 	double ptSystem = (chi1+chi2).Pt();
    
-	if(ptSystem>=0 && ptSystem<=120.)        weight *= 1.00;
-	else if(ptSystem>120 && ptSystem<=150.)  weight *= 0.95;
-	else if(ptSystem>150 && ptSystem<=250.)  weight *= 0.90;
-	else if(ptSystem>250)                    weight *= 0.85;
+	if(!ISRunc){
+	  if(ptSystem>=0 && ptSystem<=120.)        weight *= 1.00;
+	  else if(ptSystem>120 && ptSystem<=150.)  weight *= 0.95;
+	  else if(ptSystem>150 && ptSystem<=250.)  weight *= 0.90;
+	  else if(ptSystem>250)                    weight *= 0.85;
+	}
 	
 	if(ISRunc){
 	  if(down){
