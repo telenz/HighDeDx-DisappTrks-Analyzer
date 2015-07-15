@@ -5,7 +5,7 @@
 // Author:      Teresa Lenz
 //-----------------------------------------------------------------------------
 #include "config.h"
-#include "analyzer.h"
+#include "analyzerPDF.h"
 #include "functions.h"
 #include "selection.h"
 #include "hitInformation.h"
@@ -510,7 +510,7 @@ int main(int argc, char** argv)
   stream._chain->SetBranchAddress("recoTrackHelper_TrackRefitter_HitsEta",&HitsEta);
   stream._chain->SetBranchAddress("recoTrackHelper_TrackRefitter_HitsPhi",&HitsPhi);
   stream._chain->SetBranchAddress("recoTrackHelper_TrackRefitter_HitsTransverse",&HitsTransverse);
-    
+  
   //-------------------------------------------------------------------------------------
   // Loop over events
   //-------------------------------------------------------------------------------------
@@ -578,34 +578,52 @@ int main(int argc, char** argv)
       // Chargino event reweighting:
       
       if(isSignal && TargetLifetime !=0){
+	bool reweighted = true;
 	CurrentLifetime = getCurrentLifetime(stream.filename());
 	//cout<<"CurrentLifetime = "<<CurrentLifetime<<endl;
 
 	// 1.) Get both charginos from genParticle collection and their proper lifetime
 
-	if (ChiTrack.size() > 2) cout << "Too many charginos!: " << ChiTrack.size() << endl;
-	if (ChiTrack.size() < 2) cout << "Too few charginos!: " << ChiTrack.size() << endl;
-	for(unsigned int i=0; i<ChiTrack.size();i++){
+	if(CurrentLifetime != TargetLifetime){
 
+	  if (ChiTrack.size() > 2){
+	    cout << "Too many charginos!: " << ChiTrack.size() << endl;
+	    continue;
+	  }
+	  if (ChiTrack.size() < 2){
+	    cout << "Too few charginos!: " << ChiTrack.size() << endl;
+	    continue;
+	  }
+	  for(unsigned int i=0; i<ChiTrack.size();i++){
+
+	    if(ChiTrack[i].genenergy == 0){
+	      cout<<"no matched genParticle found = skip event!"<<endl;
+	      reweighted=false;
+	      break;
+	    }
 	 
-	  double beta  = ChiTrack[i].genp/ChiTrack[i].genenergy;
-	  double gamma = 1./std::sqrt(1.-pow(beta,2));
+	    double beta  = ChiTrack[i].genp/ChiTrack[i].genenergy;
+	    double gamma = 1./std::sqrt(1.-pow(beta,2));
  
-	  double rho      = TMath::Sqrt( TMath::Power(ChiTrack[i].SimVertexposition_x - Vertex[0].x,2) + TMath::Power(ChiTrack[i].SimVertexposition_y - Vertex[0].y,2));
-	  double z        = TMath::Abs(ChiTrack[i].SimVertexposition_z - Vertex[0].z);
-	  double distance = TMath::Sqrt( TMath::Power(rho,2) + TMath::Power(z,2) );
-	  double ProperLifetime = distance/(beta*gamma);
+	    double rho      = TMath::Sqrt( TMath::Power(ChiTrack[i].SimVertexposition_x - Vertex[0].x,2) + TMath::Power(ChiTrack[i].SimVertexposition_y - Vertex[0].y,2));
+	    double z        = TMath::Abs(ChiTrack[i].SimVertexposition_z - Vertex[0].z);
+	    double distance = TMath::Sqrt( TMath::Power(rho,2) + TMath::Power(z,2) );
+	    double ProperLifetime = distance/(beta*gamma);
 
-	  double wtTarget       = (1. / TargetLifetime)  * TMath::Exp(-(ProperLifetime) /  TargetLifetime  );  
-	  double wtCurrent      = (1. / CurrentLifetime) * TMath::Exp(-(ProperLifetime) /  CurrentLifetime );
-	  double wt = wtTarget / wtCurrent;
+	    double wtTarget       = (1. / TargetLifetime)  * TMath::Exp(-(ProperLifetime) /  TargetLifetime  );  
+	    double wtCurrent      = (1. / CurrentLifetime) * TMath::Exp(-(ProperLifetime) /  CurrentLifetime );
+	    double wt = wtTarget / wtCurrent;
 
-	  if(ProperLifetime<0){
-	    cout<<"Warning:  Found event with ctau<0."<<endl;
-	    wt=0.;
+
+	    if(ProperLifetime<0){
+	      cout<<"Warning:  Found event with ctau<0."<<endl;
+	      wt=0.;
+	    }
+	  
+	    weight = weight*wt;
 	  }
 
-	  weight = weight*wt;
+	  if(!reweighted) continue;
 	}
       }
       /******************************************************************************************************************************/
@@ -636,18 +654,18 @@ int main(int argc, char** argv)
 	}
       }
       /******************************************************************************************************************************/
-      /*
-	if(isSignal && JECunc){
+
+      if(isSignal && JECunc){
 
 	for(unsigned int i=0; i<evt::Jet.size(); i++){
 
-	// correct jetPt
-	if(up)           Jet[i].pt = Jet[i].pt*(1 + Jet[i].jecUnc);
-	else if(down)    Jet[i].pt = Jet[i].pt*(1 - Jet[i].jecUnc);
+	  // correct jetPt
+	  if(up)           Jet[i].pt = Jet[i].pt*(1 + Jet[i].jecUnc);
+	  else if(down)    Jet[i].pt = Jet[i].pt*(1 - Jet[i].jecUnc);
 	}
-	}
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if(isSignal){
+      }
+      //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+      if(isSignal){
 
 	double jerCentral[7]     = {1.079, 1.099, 1.121, 1.208, 1.254, 1.395, 1.056};
 	double jerDown[7]        = {1.053, 1.071, 1.092, 1.162, 1.192, 1.332, 0.865};
@@ -657,38 +675,37 @@ int main(int argc, char** argv)
 
 	if(JERunc){
 
-	if(up)        jer = jerUp;
-	else if(down) jer = jerDown;
+	  if(up)        jer = jerUp;
+	  else if(down) jer = jerDown;
 
 	}
 
 	// 1.) Do matching to genJets
 	for(unsigned int i=0; i<evt::Jet.size(); i++){
 
-	int c = 0;
-	if(abs(Jet[i].eta) >= 0.0 && abs(Jet[i].eta) < 0.5)          c = 0;
-	else if(abs(Jet[i].eta) >= 0.5 && abs(Jet[i].eta) < 1.1)     c = 1;
-	else if(abs(Jet[i].eta) >= 1.1 && abs(Jet[i].eta) < 1.7)     c = 2;
-	else if(abs(Jet[i].eta) >= 1.7 && abs(Jet[i].eta) < 2.3)     c = 3;
-	else if(abs(Jet[i].eta) >= 2.3 && abs(Jet[i].eta) < 2.8)     c = 4;
-	else if(abs(Jet[i].eta) >= 2.8 && abs(Jet[i].eta) < 3.2)     c = 5;
-	else if(abs(Jet[i].eta) >= 3.2 && abs(Jet[i].eta) < 5.0)     c = 6;
-	else c = 1;
+	  int c = 0;
+	  if(abs(Jet[i].eta) >= 0.0 && abs(Jet[i].eta) < 0.5)          c = 0;
+	  else if(abs(Jet[i].eta) >= 0.5 && abs(Jet[i].eta) < 1.1)     c = 1;
+	  else if(abs(Jet[i].eta) >= 1.1 && abs(Jet[i].eta) < 1.7)     c = 2;
+	  else if(abs(Jet[i].eta) >= 1.7 && abs(Jet[i].eta) < 2.3)     c = 3;
+	  else if(abs(Jet[i].eta) >= 2.3 && abs(Jet[i].eta) < 2.8)     c = 4;
+	  else if(abs(Jet[i].eta) >= 2.8 && abs(Jet[i].eta) < 3.2)     c = 5;
+	  else if(abs(Jet[i].eta) >= 3.2 && abs(Jet[i].eta) < 5.0)     c = 6;
+	  else c = 1;
 
-	for(unsigned int j=0; j<evt::GenJet.size(); j++){
+	  for(unsigned int j=0; j<evt::GenJet.size(); j++){
 
-	double dPhi = std::abs(TVector2::Phi_mpi_pi(Jet[i].phi - GenJet[j].phi));
-	double dEta = std::abs(Jet[i].eta - GenJet[j].eta);
-	double dR   = std::sqrt(dPhi*dPhi + dEta*dEta);
+	    double dPhi = std::abs(TVector2::Phi_mpi_pi(Jet[i].phi - GenJet[j].phi));
+	    double dEta = std::abs(Jet[i].eta - GenJet[j].eta);
+	    double dR   = std::sqrt(dPhi*dPhi + dEta*dEta);
 
-	if(dR<0.15){
-	Jet[i].pt = max(0.0, GenJet[j].pt + jer[c]*(Jet[i].pt - GenJet[j].pt) );
+	    if(dR<0.15){
+	      Jet[i].pt = max(0.0, GenJet[j].pt + jer[c]*(Jet[i].pt - GenJet[j].pt) );
+	    }
+	  }
 	}
-	}
-	}
-	}
-      */
-	/******************************************************************************************************************************
+      }
+      /******************************************************************************************************************************
        ******************************************************************************************************************************
        ******************************************************************************************************************************
        *****************************************************************************************************************************/
