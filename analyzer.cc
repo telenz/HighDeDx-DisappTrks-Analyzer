@@ -5,7 +5,7 @@
 // Author:      Teresa Lenz
 //-----------------------------------------------------------------------------
 #include "config.h"
-#include "analyzerPDF.h"
+#include "analyzer.h"
 #include "functions.h"
 #include "selection.h"
 #include "hitInformation.h"
@@ -41,7 +41,7 @@ int main(int argc, char** argv)
     cout<<endl<<"TargetLifetime = "<<TargetLifetime<<endl<<endl;
   }
   bool isData = false;
-  if(filenames[0].find("MET_Run2012*_22Jan2013") != std::string::npos) isData = true;
+  if(filenames[0].find("MET_Run2012") != std::string::npos) isData = true;
   itreestream stream(filenames, "Events");
   if ( !stream.good() ) error("unable to open ntuple file(s)");
 
@@ -56,10 +56,11 @@ int main(int argc, char** argv)
   bool down     = false;
   bool central  = true;
   // *************************************************************************************************************************************************************
-  bool ISRunc = false;
-  bool PUunc  = false;
-  bool JECunc = false;
-  bool JERunc = false;
+  bool ISRunc     = false;
+  bool PUunc      = false;
+  bool JECunc     = false;
+  bool JERunc     = false;
+  bool TrigEffunc = false;
 
   // ************************************************************** Systematic uncertainties *********************************************************************
   // *************************************************************************************************************************************************************
@@ -545,6 +546,13 @@ int main(int argc, char** argv)
  
   weight = 1.;
   // -----------------------------------------------------------------------------------------------------------------------
+  // For Trigger Efficiency Uncertainty
+  TH1D* hTrigger = 0;
+  if(TrigEffunc){
+    TFile* fileTrigger = new TFile("/afs/desy.de/user/t/tlenz/HighDeDx-DisappTrks-Analyzer/data/TriggerMetSF.root", "read");
+    fileTrigger -> GetObject("effDiff",hTrigger);
+  }
+  // -----------------------------------------------------------------------------------------------------------------------
   // ***********************************************************************************************************************
 
   cout<<endl<<"Number Of Events = "<<nevents<<endl<<endl;
@@ -563,8 +571,7 @@ int main(int argc, char** argv)
       // structs. See the header file analyzer.h to find out what structs
       // are available. Alternatively, you can call individual fill functions.
       fillObjects();
-
-     
+      
       /******************************************************************************************************************************
        ******************************************************************************************************************************
        ******************************************************************************************************************************
@@ -574,9 +581,8 @@ int main(int argc, char** argv)
       findChiInSimTrackCollection();
       findChiDecayVertex();
       
-
-      // Chargino event reweighting:
       
+      // Chargino event reweighting:
       if(isSignal && TargetLifetime !=0){
 	bool reweighted = true;
 	CurrentLifetime = getCurrentLifetime(stream.filename());
@@ -654,7 +660,6 @@ int main(int argc, char** argv)
 	}
       }
       /******************************************************************************************************************************/
-
       if(isSignal && JECunc){
 
 	for(unsigned int i=0; i<evt::Jet.size(); i++){
@@ -663,6 +668,15 @@ int main(int argc, char** argv)
 	  if(up)           Jet[i].pt = Jet[i].pt*(1 + Jet[i].jecUnc);
 	  else if(down)    Jet[i].pt = Jet[i].pt*(1 - Jet[i].jecUnc);
 	}
+      }
+      /******************************************************************************************************************************/
+      if(isSignal && TrigEffunc){
+
+	// 1.) Calculate MET
+	double met = sqrt(pow(MET_pt,2) + pow(MET_pz,2));
+	int bin = hTrigger->FindBin(met);
+	weight *= (hTrigger->GetBinContent(bin) + 1) ;
+
       }
       //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
       if(isSignal){
@@ -720,9 +734,8 @@ int main(int argc, char** argv)
       //------------- Calculate track dependent variables from hits and save them in trk coll ----
       for(unsigned int i=0; i<evt::Track.size();i++){
 	
-	
-	double ASmiOnTheFly            = dEdxOnTheFly(&(*HitsDeDx)[i], &(*HitsShapetest)[i], &(*HitsPathlength)[i], &(*HitsSubdetid)[i], &(*HitsTransverse)[i], 1, template_strip, template_pixel,1,0); 
-	double ASmiNPOnTheFly          = dEdxOnTheFly(&(*HitsDeDx)[i], &(*HitsShapetest)[i], &(*HitsPathlength)[i], &(*HitsSubdetid)[i], &(*HitsTransverse)[i], 1, template_strip, template_pixel,0); 
+	double ASmiOnTheFly            = dEdxOnTheFly(&(*HitsDeDx)[i], &(*HitsShapetest)[i], &(*HitsPathlength)[i], &(*HitsSubdetid)[i], &(*HitsTransverse)[i], edmEventHelper_isRealData, template_strip, template_pixel,1,0); 
+	double ASmiNPOnTheFly          = dEdxOnTheFly(&(*HitsDeDx)[i], &(*HitsShapetest)[i], &(*HitsPathlength)[i], &(*HitsSubdetid)[i], &(*HitsTransverse)[i], edmEventHelper_isRealData, template_strip, template_pixel,0); 
 	double ASmiOnTheFly_3          = -1;//dEdxOnTheFly(&(*HitsDeDx)[i], &(*HitsShapetest)[i], &(*HitsPathlength)[i], &(*HitsSubdetid)[i], &(*HitsTransverse)[i], 1, template_strip, template_pixel,1,3);
 	double ASmiNPOnTheFly_3        = -1;//dEdxOnTheFly(&(*HitsDeDx)[i], &(*HitsShapetest)[i], &(*HitsPathlength)[i], &(*HitsSubdetid)[i], &(*HitsTransverse)[i], 1, template_strip, template_pixel,0,3);
 	double ASmiOnTheFly_7          = -1;//dEdxOnTheFly(&(*HitsDeDx)[i], &(*HitsShapetest)[i], &(*HitsPathlength)[i], &(*HitsSubdetid)[i], &(*HitsTransverse)[i], 1, template_strip, template_pixel,1,7);
@@ -737,23 +750,18 @@ int main(int argc, char** argv)
        	Track[i].ASmiNP_7       = ASmiNPOnTheFly_7;
 	Track[i].ASmi_woLastHit = ASmiOnTheFly_woLastHit;
 
-	double test           = dEdxOnTheFly(&(*HitsDeDx)[i], &(*HitsShapetest)[i], &(*HitsPathlength)[i], &(*HitsSubdetid)[i], &(*HitsTransverse)[i], 1, template_strip, template_pixel,1,0,&Track[i].DeDx1,&Track[i].DeDx2,&Track[i].DeDx3,&Track[i].DeDx4,&Track[i].Dx1,&Track[i].Dx2,&Track[i].Dx3,&Track[i].Dx4,&Track[i].MeasSize);
-
       }
       
       
       //-------------------------------------------------------------- Cuts ---------------------------------------------------------
-      
       nVertices_0->Fill(nVertex);
       hTrueNumInteractions_0->Fill(PileupSummaryInfo[0].getTrueNumInteractions);
       hPU_NumInteractions_0->Fill(PileupSummaryInfo[0].getPU_NumInteractions);
-
 
       //noSelection.Selection();
       //triggerRequirements.Selection();
       //preselection.Selection();
       //fullSelection.Selection();
-      
       chiTracksnoSelection.Selection();
       chiTrackstriggerRequirements.Selection();
       chiTracksQCDsupression.Selection();
