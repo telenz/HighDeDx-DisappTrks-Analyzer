@@ -767,7 +767,7 @@ double dEdxOnTheFly(std::vector<double> *HitsDeDx, std::vector<int> *HitsShapete
   scaleFactorPixel = scaleFactorPixel/265.;
   
   for(unsigned int j=0;j<(*HitsDeDx).size();j++){
-  
+    
     if((*HitsSubdetid)[j]>2 && !(*HitsShapetest)[j]){continue;}
 
     if(!usePixel && (*HitsSubdetid)[j]<=2) continue;
@@ -785,7 +785,6 @@ double dEdxOnTheFly(std::vector<double> *HitsDeDx, std::vector<int> *HitsShapete
 	int    BinZ   = templateHistoStrip->GetZaxis()->FindBin(scaleFactorStrip*(*HitsDeDx)[j]/(*HitsPathlength)[j]);
 	ProbStrip     = templateHistoStrip->GetBinContent(BinX,BinY,BinZ);
       }
-  
       vect_probs_strip.push_back(ProbStrip);
       vect_probs.push_back(ProbStrip);
       vect_R.push_back((*HitsTransverse)[j]);
