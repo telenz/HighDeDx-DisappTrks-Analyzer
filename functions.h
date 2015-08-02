@@ -475,13 +475,13 @@ std::vector<evt::Track_s> trackCandidateCuts(std::vector<evt::Track_s> trackColl
       firstTrack1 = false;
     }
     //.................................................................................//
-    if(trackCollection[i].pt<=15.)                                            continue;
+    if(trackCollection[i].pt<=10.)                                            continue;
     if(firstTrack2){
       countsTrackCriteria->Fill("PtGreater15GeV", weight);  
       firstTrack2 = false;
     }
     //.................................................................................//
-    if(std::abs(trackCollection[i].eta)>2.4)                                  continue;
+    if(std::abs(trackCollection[i].eta)>2.1)                                  continue;
     if(firstTrack3){
       countsTrackCriteria->Fill("EtaLess2p4", weight);
       firstTrack3 = false;
@@ -522,7 +522,7 @@ std::vector<evt::Track_s> trackCleaningCuts(std::vector<evt::Track_s> trackColle
   for(unsigned int i=0; i<trackCollection.size(); i++){
 
     //.................................................................................//
-    //if(std::abs(trackCollection[i].eta)>1.42 && std::abs(trackCollection[i].eta)<1.65)        continue;
+    if(std::abs(trackCollection[i].eta)>1.42 && std::abs(trackCollection[i].eta)<1.65)        continue;
     if(firstTrack1){
       countsTrackCriteria->Fill("EtaLess1p42Gt1p65", weight);
       firstTrack1 = false;
