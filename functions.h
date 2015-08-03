@@ -322,7 +322,7 @@ bool areTwoJetsBackToBack(std::vector<evt::Jet_s>& jetColl){
     for(unsigned int j=i+1; j<jetColl.size(); j++){
 
       double dPhi = std::abs(TVector2::Phi_mpi_pi(jetColl[i].phi-jetColl[j].phi));
-      if(abs(dPhi)>=2.5) return true;     
+      if(abs(dPhi)>=2.5) return true;
       
     }
   }
@@ -376,12 +376,8 @@ std::vector<evt::Jet_s>  getSubleadingJetCollection(){
   jetCollection.clear();
   for(unsigned int i=0; i<evt::Jet.size(); i++){
 
-    //bool isCharginoCandidate = false;
-
-    if(evt::Jet[i].pt<=20.)                          continue;
-    if(std::abs(evt::Jet[i].eta)>=4.5)               continue;
-    //if(evt::Jet[i].neutralHadronEnergyFraction>=0.7) continue;
-    //if(evt::Jet[i].chargedEmEnergyFraction>=0.5)     continue;
+    if(evt::Jet[i].pt<=20.)                           continue;
+    if(std::abs(evt::Jet[i].eta)>=4.5)                continue;
 
     jetCollection.push_back(evt::Jet[i]);
   }
