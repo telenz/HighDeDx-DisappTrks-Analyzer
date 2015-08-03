@@ -353,7 +353,7 @@ bool leadingJetRequirementsFullfilled(struct evt::Jet_s* leadingJet, TH1D* count
 
   // jetId: https://twiki.cern.ch/twiki/bin/viewauth/CMS/JetID
   if(leadingJet==0)                                return false;
-  if(leadingJet->pt<=110.)                         return false;
+  if(leadingJet->pt<=70.)                         return false;
   countsEventCuts->Fill("leadingJetPtGt110GeV", evt::weight);
   if(std::abs(leadingJet->eta)>=2.4)               return false;
   countsEventCuts->Fill("absLeadJetEtaLt2p4", evt::weight);
@@ -573,7 +573,7 @@ std::vector<evt::Track_s> trackCleaningCuts(std::vector<evt::Track_s> trackColle
     //.................................................................................//
     //if(trackCollection[i].numberOfValidHits<7)                                                continue;
     if(firstTrack8){
-      countsTrackCriteria->Fill("NOfValidHitsGreater7", weight);
+      //countsTrackCriteria->Fill("NOfValidHitsGreater7", weight);
       firstTrack8 = false;
     }
     //.................................................................................//
