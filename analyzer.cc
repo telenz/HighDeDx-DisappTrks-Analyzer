@@ -762,8 +762,10 @@ int main(int argc, char** argv)
       //triggerRequirements.Selection();
       //preselection.Selection();
       //fullSelection.Selection();
-      chiTracksnoSelection.Selection();
+      //chiTracksnoSelection.Selection();
+      
       chiTrackstriggerRequirements.Selection();
+      chiTrackstriggerRequirementsTrigger.Selection();
       chiTracksQCDsupression.Selection();
       chiTracksQCDsupressionTrigger.Selection();
       chiTrackspreselection.Selection();
@@ -772,6 +774,7 @@ int main(int argc, char** argv)
       chiTrackspreselectionTriggerNoQCDCuts.Selection();
       chiTrackspreselectionNoTrigger.Selection();
       chiTrackspreselectionNoQCDCutsNoTrigger.Selection();
+
       //chiTrackspreselectionWjets.Selection();
       //chiTracksfullSelection.Selection();
       //chiTracksSMControlCalo.Selection();
