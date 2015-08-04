@@ -298,6 +298,18 @@ int main(int argc, char** argv)
   chiTrackspreselection1LostPlusPtAndDeDxCut.CaloIsolationRequirement  = false;
   chiTrackspreselection1LostPlusPtAndDeDxCut.DeDxRequirement           = true;
 
+  class Event chiTracksfullSelectionTrigger("chiTracksfullSelectionTrigger",ofile);
+  if(isSignal) chiTracksfullSelectionTrigger.onlyChi   = true;
+  chiTracksfullSelectionTrigger.triggerRequirements    = true;
+  chiTracksfullSelectionTrigger.trigger             = true;
+  chiTracksfullSelectionTrigger.trackPreselection      = true;
+  chiTracksfullSelectionTrigger.qcdSupression          = true;
+  chiTracksfullSelectionTrigger.trackCandidateCutFinal = true;
+  chiTracksfullSelectionTrigger.TrackPtRequirement        = true;
+  chiTracksfullSelectionTrigger.NumOfLostOuterRequirement = false;
+  chiTracksfullSelectionTrigger.CaloIsolationRequirement  = true;
+  chiTracksfullSelectionTrigger.DeDxRequirement           = true;
+
   class Event chiTracksfullSelection("chiTracksfullSelection",ofile);
   if(isSignal) chiTracksfullSelection.onlyChi   = true;
   chiTracksfullSelection.triggerRequirements    = true;
@@ -305,7 +317,7 @@ int main(int argc, char** argv)
   chiTracksfullSelection.qcdSupression          = true;
   chiTracksfullSelection.trackCandidateCutFinal = true;
   chiTracksfullSelection.TrackPtRequirement        = true;
-  chiTracksfullSelection.NumOfLostOuterRequirement = true;
+  chiTracksfullSelection.NumOfLostOuterRequirement = false;
   chiTracksfullSelection.CaloIsolationRequirement  = true;
   chiTracksfullSelection.DeDxRequirement           = true;
   
@@ -774,9 +786,12 @@ int main(int argc, char** argv)
       chiTrackspreselectionTriggerNoQCDCuts.Selection();
       chiTrackspreselectionNoTrigger.Selection();
       chiTrackspreselectionNoQCDCutsNoTrigger.Selection();
+      chiTrackspreselectionNoQCDCutsNoTrigger.Selection();
+      chiTracksfullSelection.Selection();
+      chiTracksfullSelectionTrigger.Selection();
+            
 
       //chiTrackspreselectionWjets.Selection();
-      //chiTracksfullSelection.Selection();
       //chiTracksSMControlCalo.Selection();
 
       
