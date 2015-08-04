@@ -231,6 +231,11 @@ std::vector<Track_s> Event::finalTrackCuts(std::vector<Track_s> trackCollection,
 
   TrackColl.clear();
 
+  bool firstTrack1  = true;
+  bool firstTrack2  = true;
+  bool firstTrack3  = true;
+  bool firstTrack4  = true;
+
   for(unsigned int i=0; i<trackCollection.size(); i++){
 
     //.................................................................................//
@@ -242,9 +247,11 @@ std::vector<Track_s> Event::finalTrackCuts(std::vector<Track_s> trackCollection,
 	if(trackCollection[i].pt<=50.)                                            continue;
       }
     }
-    countsTrackCriteria->Fill("PtGreater50GeV", weight);
+    if(firstTrack1){
+      countsTrackCriteria->Fill("PtGreater50GeV", weight);
+      firstTrack1 = false;
+    }
     //.................................................................................//
-
     if(CaloIsolationRequirement){
       if(invertCaloIsolationRequirement){
 	if(trackCaloIsolation(&trackCollection[i])<=5)                           continue;
@@ -253,7 +260,10 @@ std::vector<Track_s> Event::finalTrackCuts(std::vector<Track_s> trackCollection,
 	if(trackCaloIsolation(&trackCollection[i])>5)                            continue;
       }
     }
-    countsTrackCriteria->Fill("CaloIsolation0p5", weight);
+    if(firstTrack2){
+      countsTrackCriteria->Fill("CaloIsolation0p5", weight);
+      firstTrack2 = false;
+    }
     //.................................................................................//
     if(NumOfLostOuterRequirement){
       if(invertNumOfLostOuterRequirement){
@@ -263,7 +273,10 @@ std::vector<Track_s> Event::finalTrackCuts(std::vector<Track_s> trackCollection,
 	if(trackCollection[i].trackerExpectedHitsOuter_numberOfHits<1)            continue;
       }
     }
-    countsTrackCriteria->Fill("NOfLostHitsOuterGe1", weight);
+    if(firstTrack3){
+      countsTrackCriteria->Fill("NOfLostHitsOuterGe1", weight);
+      firstTrack3 = false;
+    }
     //.................................................................................//
     if(DeDxRequirement){
       if(invertDeDxRequirement){
@@ -275,7 +288,10 @@ std::vector<Track_s> Event::finalTrackCuts(std::vector<Track_s> trackCollection,
 	if(trackCollection[i].ASmi<0.3)                                                              continue;
       }
     }
-    countsTrackCriteria->Fill("DeDxASmiGe0p2", weight);
+    if(firstTrack4){
+      countsTrackCriteria->Fill("DeDxASmiGe0p2", weight);
+      firstTrack4 = false;
+    }
     //.................................................................................//
 
     outputCollection.push_back(trackCollection[i]);
