@@ -231,19 +231,20 @@ std::vector<Track_s> Event::finalTrackCuts(std::vector<Track_s> trackCollection,
 
   TrackColl.clear();
 
-  for(unsigned int i=0; i<1; i++){
+  for(unsigned int i=0; i<trackCollection.size(); i++){
 
     //.................................................................................//
     if(TrackPtRequirement){
       if(invertTrackPtRequirement){
-	if(trackCollection[i].pt>35.)                                             continue;
+	if(trackCollection[i].pt>50.)                                             continue;
       }
       else{
-	if(trackCollection[i].pt<=35.)                                            continue;
+	if(trackCollection[i].pt<=50.)                                            continue;
       }
     }
-    countsTrackCriteria->Fill("PtGreater70GeV", weight);
+    countsTrackCriteria->Fill("PtGreater50GeV", weight);
     //.................................................................................//
+
     if(CaloIsolationRequirement){
       if(invertCaloIsolationRequirement){
 	if(trackCaloIsolation(&trackCollection[i])<=5)                           continue;
@@ -266,12 +267,12 @@ std::vector<Track_s> Event::finalTrackCuts(std::vector<Track_s> trackCollection,
     //.................................................................................//
     if(DeDxRequirement){
       if(invertDeDxRequirement){
-	if(trackCollection[i].ASmi>=0.2){
+	if(trackCollection[i].ASmi>=0.3){
 	  continue;
 	}
       }
       else{
-	if(trackCollection[i].ASmi<0.2)                                                              continue;
+	if(trackCollection[i].ASmi<0.3)                                                              continue;
       }
     }
     countsTrackCriteria->Fill("DeDxASmiGe0p2", weight);
