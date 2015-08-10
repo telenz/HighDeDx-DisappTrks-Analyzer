@@ -54,14 +54,13 @@ int main(int argc, char** argv)
   // ************************************************************** Systematic uncertainties *********************************************************************
   bool up       = false;
   bool down     = false;
-  bool central  = true;
   // *************************************************************************************************************************************************************
   bool ISRunc     = false;
   bool PUunc      = false;
   bool JECunc     = false;
   bool JERunc     = false;
   bool TrigEffunc = false;
-
+  bool PDFunc     = false;
   // ************************************************************** Systematic uncertainties *********************************************************************
   // *************************************************************************************************************************************************************
   // Select variables to be read
@@ -140,6 +139,39 @@ int main(int argc, char** argv)
   TH1D *nVertices_0            = new TH1D("nVertices_0","nVertices_0",100,0,100);
   TH1D *hPU_NumInteractions_0  = new TH1D("hPU_NumInteractions_0","hPU_NumInteractions_0",100,0,100);
   TH1D *hTrueNumInteractions_0 = new TH1D("hTrueNumInteractions_0","hTrueNumInteractions_0",100,0,100);
+  //-------------------------------------------------------------------------------------
+  // PDF stuff
+  //-------------------------------------------------------------------------------------
+  unsigned int  nbins_pdfweight = 0;
+  vector<double> pdf_weight_sum(50);
+  Event PDFselection[45] = {Event("chiTrackspreselectionTriggerPDF_0",ofile ), Event("chiTrackspreselectionTriggerPDF_1",ofile ), Event("chiTrackspreselectionTriggerPDF_2",ofile ), Event("chiTrackspreselectionTriggerPDF_3",ofile ), Event("chiTrackspreselectionTriggerPDF_4",ofile ), Event("chiTrackspreselectionTriggerPDF_5",ofile ), Event("chiTrackspreselectionTriggerPDF_6",ofile ), Event("chiTrackspreselectionTriggerPDF_7",ofile ), Event("chiTrackspreselectionTriggerPDF_8",ofile ), Event("chiTrackspreselectionTriggerPDF_9",ofile ), Event("chiTrackspreselectionTriggerPDF_10",ofile ), Event("chiTrackspreselectionTriggerPDF_11",ofile ), Event("chiTrackspreselectionTriggerPDF_12",ofile ), Event("chiTrackspreselectionTriggerPDF_13",ofile ), Event("chiTrackspreselectionTriggerPDF_14",ofile ), Event("chiTrackspreselectionTriggerPDF_15",ofile ), Event("chiTrackspreselectionTriggerPDF_16",ofile ), Event("chiTrackspreselectionTriggerPDF_17",ofile ), Event("chiTrackspreselectionTriggerPDF_18",ofile ), Event("chiTrackspreselectionTriggerPDF_19",ofile ), Event("chiTrackspreselectionTriggerPDF_20",ofile ), Event("chiTrackspreselectionTriggerPDF_21",ofile ), Event("chiTrackspreselectionTriggerPDF_22",ofile ), Event("chiTrackspreselectionTriggerPDF_23",ofile ), Event("chiTrackspreselectionTriggerPDF_24",ofile ), Event("chiTrackspreselectionTriggerPDF_25",ofile ), Event("chiTrackspreselectionTriggerPDF_26",ofile ), Event("chiTrackspreselectionTriggerPDF_27",ofile ), Event("chiTrackspreselectionTriggerPDF_28",ofile ), Event("chiTrackspreselectionTriggerPDF_29",ofile ), Event("chiTrackspreselectionTriggerPDF_30",ofile ), Event("chiTrackspreselectionTriggerPDF_31",ofile ), Event("chiTrackspreselectionTriggerPDF_32",ofile ), Event("chiTrackspreselectionTriggerPDF_33",ofile ), Event("chiTrackspreselectionTriggerPDF_34",ofile ), Event("chiTrackspreselectionTriggerPDF_35",ofile ), Event("chiTrackspreselectionTriggerPDF_36",ofile ), Event("chiTrackspreselectionTriggerPDF_37",ofile ), Event("chiTrackspreselectionTriggerPDF_38",ofile ), Event("chiTrackspreselectionTriggerPDF_39",ofile ), Event("chiTrackspreselectionTriggerPDF_40",ofile ), Event("chiTrackspreselectionTriggerPDF_41",ofile ), Event("chiTrackspreselectionTriggerPDF_42",ofile ), Event("chiTrackspreselectionTriggerPDF_43",ofile ), Event("chiTrackspreselectionTriggerPDF_44",ofile )} ;
+  if(PDFunc && isSignal){
+
+    nbins_pdfweight = 45;        //pdfWeights_cteq66.size();
+    
+    for (unsigned int i = 0; i < nbins_pdfweight; i++){ 
+    
+      if(isSignal) PDFselection[i].onlyChi= true;
+      PDFselection[i].triggerRequirements = true;
+      PDFselection[i].trigger             = true;
+      PDFselection[i].trackPreselection   = true;
+      PDFselection[i].qcdSupression       = true;
+    }
+
+    // 1) Run over all events to get the sum of pdf weights (no overall xsection uncertainty needed)
+    for(int entry=0; entry <nevents; ++entry)
+      {
+	// Read event into memory
+	stream.read(entry);
+	stream._chain->GetEntry(entry);
+	initialize();
+	fillObjects();
+
+	for (unsigned int i = 0; i < nbins_pdfweight; i++){ 
+	  pdf_weight_sum[i] += (pdfWeights_cteq66[i]/pdfWeights_cteq66[0]);
+	}
+      }
+  }
 
   //-------------------------------------------------------------------------------------
   // Declaration of Variables
@@ -776,6 +808,15 @@ int main(int argc, char** argv)
       //fullSelection.Selection();
       //chiTracksnoSelection.Selection();
       
+      if(PDFunc && isSignal){
+	// 2.) Run over the preselection and store pdf weights
+	for (unsigned int i = 0; i < nbins_pdfweight; i++){ 
+	  double PDFweight = (pdfWeights_cteq66[i]/pdfWeights_cteq66[0]) / pdf_weight_sum[i] * nevents;
+	  weight *= PDFweight;
+	  PDFselection[i].Selection();
+	}
+      } 
+       
       chiTrackstriggerRequirements.Selection();
       //chiTrackstriggerRequirementsTrigger.Selection();  //Not Needed
       chiTracksQCDsupression.Selection();
@@ -789,7 +830,7 @@ int main(int argc, char** argv)
       chiTrackspreselectionNoQCDCutsNoTrigger.Selection();
       chiTracksfullSelection.Selection();
       chiTracksfullSelectionTrigger.Selection();
-            
+     
 
       //chiTrackspreselectionWjets.Selection();
       //chiTracksSMControlCalo.Selection();
