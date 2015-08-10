@@ -35,6 +35,7 @@
 #include "TH2F.h"
 
 namespace evt {
+std::vector<double> pdfWeights_cteq66(100,0); 
 //-----------------------------------------------------------------------------
 // --- Declare variables
 //-----------------------------------------------------------------------------
@@ -387,6 +388,7 @@ int	nVertex;
 double	sdoublePF_value;
 float	sdouble_value;
 double  weight;
+double  weightPDF;
 
 //-----------------------------------------------------------------------------
 // --- indexmap keeps track of which objects have been flagged for selection
@@ -1762,7 +1764,10 @@ void saveSelectedObjects()
 // --- Select variables to be read
 //-----------------------------------------------------------------------------
 void selectVariables(itreestream& stream)
-{ if(stream.present("npatElectronHelper_patElectronsLoosePFlow")){
+{ if(stream.present("doubles_pdfWeights_cteq66_PATuple")){
+    stream.select("doubles_pdfWeights_cteq66_PATuple", pdfWeights_cteq66);
+  }
+  if(stream.present("npatElectronHelper_patElectronsLoosePFlow")){
     stream.select("patElectronHelper_patElectronsLoosePFlow.Aeff04", ElectronPFlow_Aeff04);
     stream.select("patElectronHelper_patElectronsLoosePFlow.charge", ElectronPFlow_charge);
     stream.select("patElectronHelper_patElectronsLoosePFlow.chargedHadronIso", ElectronPFlow_chargedHadronIso);
