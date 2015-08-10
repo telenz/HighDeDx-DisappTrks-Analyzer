@@ -601,6 +601,14 @@ std::vector<evt::Track_s> trackCleaningCuts(std::vector<evt::Track_s> trackColle
       firstTrack12 = false;
     }
     //.................................................................................//
+    //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    // Blinding!!!!!
+    if(edmEventHelper_isRealData){
+      for(unsigned int i=0; i<trackCollection.size(); i++){
+	if(trackCollection[i].pt>=30 && trackCollection[i].ASmi>=0.1 && trackCaloIsolation(&trackCollection[i])<5) continue;
+      }
+    }
+    //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
     outputColl.push_back(trackCollection[i]);
     //.................................................................................//
