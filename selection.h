@@ -207,16 +207,6 @@ int Event::Selection()
   //-----------------------------------------------
 
   if(chipmGenParticle.size()>0) hist.FillGenParticleHistograms(chipmGenParticle,weight);
-
-  //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  // Blinding!!!!!
-  if(edmEventHelper_isRealData){
-    for(unsigned int i=0; i<TrackColl.size(); i++){
-      if(TrackColl[i].pt>=35 && TrackColl[i].ASmi>=0.3 && trackCaloIsolation(&TrackColl[i])<5) return 0;
-    }
-  }
-  //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
   hist.tree->Fill();
 
   return 0;
