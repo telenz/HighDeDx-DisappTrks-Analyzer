@@ -827,7 +827,6 @@ int main(int argc, char** argv)
       chiTrackspreselectionTriggerNoQCDCuts.Selection();
       chiTrackspreselectionNoTrigger.Selection();
       chiTrackspreselectionNoQCDCutsNoTrigger.Selection();
-      chiTrackspreselectionNoQCDCutsNoTrigger.Selection();
       chiTracksfullSelection.Selection();
       chiTracksfullSelectionTrigger.Selection();
      
