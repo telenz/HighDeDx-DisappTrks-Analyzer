@@ -588,7 +588,8 @@ int main(int argc, char** argv)
   
   PUweights->Divide(PUmc);
  
-  weight = 1.;
+  weight            = 1.;
+  weightReweighting = 1.;
   // -----------------------------------------------------------------------------------------------------------------------
   // For Trigger Efficiency Uncertainty
   TH1D* hTrigger = 0;
@@ -621,6 +622,7 @@ int main(int argc, char** argv)
        ******************************************************************************************************************************
        *****************************************************************************************************************************/
       weight=1.;
+      weightReweighting=1;
       findChiInGenParticleCollection();
       findChiInSimTrackCollection();
       findChiDecayVertex();
@@ -670,7 +672,7 @@ int main(int argc, char** argv)
 	      wt=0.;
 	    }
 	  
-	    weight = weight*wt;
+	    weightReweighting = wt;
 	  }
 
 	  if(!reweighted) continue;
