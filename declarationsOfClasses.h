@@ -11,6 +11,7 @@ using namespace evt;
 typedef struct { 
 
   double                 weight;
+  double                 weightReweighting;
   std::vector<Double_t>  trackDeDxASmi;
   std::vector<Double_t>  trackDeDxASmi_woLastHit;
   std::vector<Double_t>  trackDeDxHarm2;
