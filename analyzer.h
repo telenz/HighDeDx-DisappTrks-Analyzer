@@ -388,6 +388,7 @@ int	nVertex;
 double	sdoublePF_value;
 float	sdouble_value;
 double  weight;
+double  weightReweighting;
 double  weightPDF;
 
 //-----------------------------------------------------------------------------
