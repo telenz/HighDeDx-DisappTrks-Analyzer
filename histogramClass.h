@@ -21,6 +21,7 @@ Hist::Hist(TString histName, outputFile ofile_)
   ofile_.file_->cd(histName);
   tree=new TTree("Variables","a Tree with all relevant variables after selection");
   tree->Branch("weight",&variables.weight);
+  tree->Branch("weightReweighting",&variables.weightReweighting);
   tree->Branch("event",&variables.event);
   tree->Branch("run",&variables.run);
   tree->Branch("lumiBlock",&variables.lumiBlock);
@@ -354,10 +355,11 @@ void Hist::FillTrackVariables(std::vector<evt::Track_s> trkCollection,double wei
 
   }
 
-  variables.weight    = weight;
-  variables.event     = edmEventHelper_event;
-  variables.run       = edmEventHelper_run;
-  variables.lumiBlock = edmEventHelper_luminosityBlock;
+  variables.weight            = weight;
+  variables.weightReweighting = weightReweighting;
+  variables.event             = edmEventHelper_event;
+  variables.run               = edmEventHelper_run;
+  variables.lumiBlock         = edmEventHelper_luminosityBlock;
   
 };
 
