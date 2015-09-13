@@ -15,12 +15,14 @@ struct evt::GenParticle_s chipGenParticle;
 struct evt::GenParticle_s chimGenParticle;
 
 std::vector<evt::GenParticle_s> chipmGenParticle;
+std::vector<evt::GenParticle_s> chi0GenParticle;
 
 
 std::vector<double> etaCSC, phiCSC, etaEcal, phiEcal;  
 
 bool zeroChip = true;
 bool zeroChim = true;
+bool zeroChi0 = true;
 bool zeroJet  = true;
 
 int nChi0 = 0;
@@ -134,7 +136,8 @@ void findChiInGenParticleCollection(){
 
   chipmGenParticle.clear();
   ChiTrack.clear();
-  ChiTrack.resize(2);
+  if(isSignalC1N1) ChiTrack.resize(1);
+  else             ChiTrack.resize(2);
 
   int idx=0;
 
@@ -163,6 +166,20 @@ void findChiInGenParticleCollection(){
   }
 
   //if(zeroChip || zeroChim) cout<<"To few charginos in GenParticle collection!"<<endl;
+}
+//--------------------------------------------------------------------------------------------------
+void findChi0InGenParticleCollection(){
+
+  zeroChi0 = true;
+
+  chi0GenParticle.clear();
+  for(int i=0; i<evt::nGenParticle; i++){
+    if(abs(evt::GenParticle[i].pdgId)==1000022){
+      chi0GenParticle.push_back(evt::GenParticle[i]);
+      zeroChi0 = false;
+    }
+    if(!zeroChi0) break;
+  }
 }
 //--------------------------------------------------------------------------------------------------
 /*
@@ -603,11 +620,11 @@ std::vector<evt::Track_s> trackCleaningCuts(std::vector<evt::Track_s> trackColle
     //.................................................................................//
     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     // Blinding!!!!!
-    if(edmEventHelper_isRealData){
-      for(unsigned int i=0; i<trackCollection.size(); i++){
-	if(trackCollection[i].pt>=30 && trackCollection[i].ASmi>=0.1 && trackCaloIsolation(&trackCollection[i])<5) continue;
-      }
-    }
+    //if(edmEventHelper_isRealData){
+    //  for(unsigned int i=0; i<trackCollection.size(); i++){
+    //if(trackCollection[i].pt>=30 && trackCollection[i].ASmi>=0.1 && trackCaloIsolation(&trackCollection[i])<5) continue;
+    //}
+    //}
     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
     outputColl.push_back(trackCollection[i]);
