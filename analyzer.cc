@@ -30,8 +30,10 @@ int main(int argc, char** argv)
 
   // Get names of ntuple files to be processed and open chain of ntuples
   bool isSignal = false;
+  isSignalC1N1  = false;
   vector<string> filenames = getFilenames(cmdline.filelist);
   if(filenames[0].find("pMSSM") != std::string::npos || filenames[0].find("RECO_RAW2DIGI_L1Reco_RECO") != std::string::npos) isSignal = true;
+  if(filenames[0].find("signal_C1N1") != std::string::npos && filenames[0].find("RECO_RAW2DIGI_L1Reco_RECO") != std::string::npos) isSignalC1N1 = true;
   string outputfilename = cmdline.outputfilename;
 
   double TargetLifetime  = 0;
@@ -177,6 +179,7 @@ int main(int argc, char** argv)
   // Declaration of Variables
   //-------------------------------------------------------------------------------------
   cout<<endl<<endl<<"------------ Is it signal : "<<isSignal<<" --------------"<<endl<<endl;
+  cout<<endl<<endl<<"------------ Is it C1N1   : "<<isSignalC1N1<<" --------------"<<endl<<endl;
   cout<<endl<<endl<<"------------ Is it data   : "<<isData<<" --------------"<<endl<<endl;
   /*
   class Event noSelection("noSelection",ofile);
@@ -624,6 +627,7 @@ int main(int argc, char** argv)
       weight=1.;
       weightReweighting=1;
       findChiInGenParticleCollection();
+      findChi0InGenParticleCollection();
       findChiInSimTrackCollection();
       findChiDecayVertex();
       
@@ -642,13 +646,18 @@ int main(int argc, char** argv)
 	    cout << "Too many charginos!: " << ChiTrack.size() << endl;
 	    continue;
 	  }
-	  if (ChiTrack.size() < 2){
+	  if (ChiTrack.size() < 2 && !isSignalC1N1){
 	    cout << "Too few charginos!: " << ChiTrack.size() << endl;
 	    continue;
 	  }
+	  if (ChiTrack.size() < 1 && isSignalC1N1){
+	    cout << "Too few charginos!: " << ChiTrack.size() << endl;
+	    continue;
+	  }
+
 	  for(unsigned int i=0; i<ChiTrack.size();i++){
 
-	    if(ChiTrack[i].genenergy == 0){
+ 	    if(ChiTrack[i].genenergy == 0){
 	      cout<<"no matched genParticle found = skip event!"<<endl;
 	      reweighted=false;
 	      break;
@@ -680,12 +689,19 @@ int main(int argc, char** argv)
       }
       /******************************************************************************************************************************/
       if(isSignal){
-	if (ChiTrack.size() != 2){
+	if (ChiTrack.size() != 2 && !isSignalC1N1){
 	  cout << "Too many/few charginos!: " << ChiTrack.size() << endl;
 	  return 1;
 	}
+	if (ChiTrack.size() != 1 && isSignalC1N1){
+	  cout << "Too many/few charginos!: " << ChiTrack.size() << endl;
+	  return 1;
+	}
+
 	TLorentzVector chi1 = lorentzVector(ChiTrack[0].genpt, ChiTrack[0].geneta, ChiTrack[0].genphi, ChiTrack[0].genenergy);
-	TLorentzVector chi2 = lorentzVector(ChiTrack[1].genpt, ChiTrack[1].geneta, ChiTrack[1].genphi, ChiTrack[1].genenergy);
+	TLorentzVector chi2;
+	if(isSignalC1N1) chi2 = lorentzVector(chi0GenParticle[0].pt, chi0GenParticle[0].eta, chi0GenParticle[0].phi, chi0GenParticle[0].energy);
+	else             chi2 = lorentzVector(ChiTrack[1].genpt, ChiTrack[1].geneta, ChiTrack[1].genphi, ChiTrack[1].genenergy);
 	double ptSystem = (chi1+chi2).Pt();
    
 	if(!ISRunc){
