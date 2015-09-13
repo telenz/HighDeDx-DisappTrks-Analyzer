@@ -7,6 +7,7 @@
 using namespace std;
 using namespace evt;
 
+bool isSignalC1N1;
 //----------------------------
 typedef struct { 
 
