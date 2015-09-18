@@ -102,13 +102,30 @@ int Event::Selection()
       hist.hMonoCentralPFJet80_PFMETnoMu105_prescale  -> Fill(Prescale_edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v,weight);
       hist.hMET120_HBHENoiseCleaned_prescale          -> Fill(Prescale_edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v,weight);
       
-      if(edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v  == 1 ||
+
+      if(isSignal){
+	double num = randGenerator->Rndm();
+	int fired = 0;
+	// fraction of luminosity collected in run A+B is 0.268
+	if(num<0.2684672792811) fired = edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v;
+	else                    fired = edmEventHelperExtra_emulated_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95;
+
+	if(fired                                                         == 1 ||
+	   edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v   == 1)
+	  {}
+	else{ 
+	  return 0; 
+	}
+      }
+      else{
+	if(edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu95_NHEF0p95_v  == 1 ||
 	   edmTriggerResultsHelper_value_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95_v == 1 ||
 	   edmTriggerResultsHelper_value_HLT_MET120_HBHENoiseCleaned_v                  == 1)
 	  {}
-      else{ 
-	if(edmEventHelper_isRealData) cout<<"something wrong with triggers!"<<endl;
-	return 0; 
+	else{ 
+	  if(edmEventHelper_isRealData) cout<<"something wrong with triggers!"<<endl;
+	  return 0; 
+	}
       }
     }
     countsEventCuts->Fill("triggerCut_OnlyData", weight);
