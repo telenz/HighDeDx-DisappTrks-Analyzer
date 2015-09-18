@@ -3,11 +3,14 @@
 //--------------------------------------------------------------------------------------------------
 
 #include "TTree.h"
+#include "TRandom3.h"
 #include <vector>
 using namespace std;
 using namespace evt;
 
 bool isSignalC1N1;
+bool isSignal;
+TRandom3 *randGenerator;
 //----------------------------
 typedef struct { 
 
