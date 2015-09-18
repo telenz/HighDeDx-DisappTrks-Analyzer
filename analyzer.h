@@ -246,6 +246,7 @@ std::vector<float>	Vertex_position_rho(100,0);
 std::vector<float>	Vertex_x(100,0);
 std::vector<float>	Vertex_y(100,0);
 std::vector<float>	Vertex_z(100,0);
+int	edmEventHelperExtra_emulated_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95;
 int	edmEventHelper_bunchCrossing;
 int	edmEventHelper_event;
 int	edmEventHelper_isRealData;
@@ -2046,6 +2047,7 @@ void selectVariables(itreestream& stream)
   stream.select("recoVertex_offlinePrimaryVertices.x", Vertex_x);
   stream.select("recoVertex_offlinePrimaryVertices.y", Vertex_y);
   stream.select("recoVertex_offlinePrimaryVertices.z", Vertex_z);
+  stream.select("edmEventHelperExtra_Event_edm.emulated_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95", edmEventHelperExtra_emulated_HLT_MonoCentralPFJet80_PFMETnoMu105_NHEF0p95);
   stream.select("edmEventHelper_info.bunchCrossing", edmEventHelper_bunchCrossing);
   stream.select("edmEventHelper_info.event", edmEventHelper_event);
   stream.select("edmEventHelper_info.isRealData", edmEventHelper_isRealData);
