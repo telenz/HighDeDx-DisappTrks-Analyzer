@@ -29,7 +29,7 @@ int main(int argc, char** argv)
   decodeCommandLine(argc, argv, cmdline);
 
   // Get names of ntuple files to be processed and open chain of ntuples
-  bool isSignal = false;
+  isSignal      = false;
   isSignalC1N1  = false;
   vector<string> filenames = getFilenames(cmdline.filelist);
   if(filenames[0].find("pMSSM") != std::string::npos || filenames[0].find("RECO_RAW2DIGI_L1Reco_RECO") != std::string::npos) isSignal = true;
@@ -604,6 +604,8 @@ int main(int argc, char** argv)
   // ***********************************************************************************************************************
 
   cout<<endl<<"Number Of Events = "<<nevents<<endl<<endl;
+  
+  randGenerator = new TRandom3(0);
   
   for(int entry=0; entry <nevents; ++entry)
     {
