@@ -683,7 +683,7 @@ int main(int argc, char** argv)
 	      wt=0.;
 	    }
 	  
-	    weightReweighting = wt;
+	    weightReweighting *= wt;
 	  }
 
 	  if(!reweighted) continue;
