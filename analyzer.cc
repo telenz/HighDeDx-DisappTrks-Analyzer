@@ -664,10 +664,10 @@ int main(int argc, char** argv)
 	      reweighted=false;
 	      break;
 	    }
-	 
+
 	    double beta  = ChiTrack[i].genp/ChiTrack[i].genenergy;
 	    double gamma = 1./std::sqrt(1.-pow(beta,2));
- 
+
 	    double rho      = TMath::Sqrt( TMath::Power(ChiTrack[i].SimVertexposition_x - Vertex[0].x,2) + TMath::Power(ChiTrack[i].SimVertexposition_y - Vertex[0].y,2));
 	    double z        = TMath::Abs(ChiTrack[i].SimVertexposition_z - Vertex[0].z);
 	    double distance = TMath::Sqrt( TMath::Power(rho,2) + TMath::Power(z,2) );
@@ -682,11 +682,15 @@ int main(int argc, char** argv)
 	      cout<<"Warning:  Found event with ctau<0."<<endl;
 	      wt=0.;
 	    }
-	  
+
+ 	    if(ChiTrack[i].SimVertexposition_z==0 && ChiTrack[i].SimVertexposition_y==0 && ChiTrack[i].SimVertexposition_x==0) reweighted=false;
+
 	    weightReweighting *= wt;
 	  }
-
-	  if(!reweighted) continue;
+	  if(!reweighted){
+	    cout<<"reweighting not possible - skip event"<<endl;
+	    continue;
+	  }
 	}
       }
       /******************************************************************************************************************************/
