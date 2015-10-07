@@ -683,7 +683,7 @@ int main(int argc, char** argv)
 	      wt=0.;
 	    }
 
- 	    if(ChiTrack[i].SimVertexposition_z==0 && ChiTrack[i].SimVertexposition_y==0 && ChiTrack[i].SimVertexposition_x==0) reweighted=false;
+ 	    if(ChiTrack[i].SimVertexposition_z==0 && ChiTrack[i].SimVertexposition_y==0 && ChiTrack[i].SimVertexposition_x==0) wt=0;
 
 	    weightReweighting *= wt;
 	  }
