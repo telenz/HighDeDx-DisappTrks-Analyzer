@@ -17,6 +17,7 @@ typedef struct {
   double                 weight;
   double                 weightReweighting;
   std::vector<Double_t>  trackDeDxASmi;
+  std::vector<Double_t>  trackDeDxASmiNP;
   std::vector<Double_t>  trackDeDxASmi_woLastHit;
   std::vector<Double_t>  trackDeDxHarm2;
   std::vector<Double_t>  trackPt;
@@ -44,15 +45,6 @@ typedef struct {
   std::vector<Double_t>  trackEndVertexRho;
   std::vector<Double_t>  trackChi2;
   std::vector<Double_t>  trackNdof;
-  std::vector<Double_t>  trackDeDx1;
-  std::vector<Double_t>  trackDeDx2;
-  std::vector<Double_t>  trackDeDx3;
-  std::vector<Double_t>  trackDeDx4;
-  std::vector<Double_t>  trackDx1;
-  std::vector<Double_t>  trackDx2;
-  std::vector<Double_t>  trackDx3;
-  std::vector<Double_t>  trackDx4;
-  std::vector<Int_t>     trackMeasSize;
   UInt_t                 event;
   UInt_t                 run;
   UInt_t                 lumiBlock;
@@ -64,6 +56,7 @@ typedef struct {
   void clearVectors(){
 
     trackDeDxASmi.clear();
+    trackDeDxASmiNP.clear();
     trackDeDxASmi_woLastHit.clear();
     trackDeDxHarm2.clear();
     trackPt.clear();
@@ -91,15 +84,6 @@ typedef struct {
     trackEndVertexRho.clear();
     trackChi2.clear();
     trackNdof.clear();
-    trackDeDx1.clear();
-    trackDeDx2.clear();
-    trackDeDx3.clear();
-    trackDeDx4.clear();
-    trackDx1.clear();
-    trackDx2.clear();
-    trackDx3.clear();
-    trackDx4.clear();
-    trackMeasSize.clear();
   }
 
 } TreeVariables_t;
@@ -244,6 +228,7 @@ class Event
   bool triggerRequirements;
   bool trigger;
   bool trackPreselection;
+  bool trackCandidateSelection;
   bool qcdSupression;
   bool trackCandidateCutFinal;
   bool onlyChi;
