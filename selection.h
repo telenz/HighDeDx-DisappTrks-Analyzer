@@ -26,6 +26,7 @@ hist(histName, ofile_)
   triggerRequirements    = false;
   trigger                = false;
   trackPreselection      = false;
+  trackCandidateSelection = false;
   qcdSupression          = false;
   trackCandidateCutFinal = false;
 
@@ -172,6 +173,15 @@ int Event::Selection()
 
   }
   //.................................................................................//
+  //%%%%%%%%% Track Preselection %%%%%%%%%%%%%
+  if(trackCandidateSelection){
+    // 4.)
+    if(TrackColl.size()==0) return 0;
+    countsEventCuts->Fill("NonEmptyTrkColl", weight);
+    TrackColl = trackCandidateCuts(TrackColl,countsTrackCriteria);
+    if(TrackColl.size()==0) return 0;
+    countsEventCuts->Fill("trackCandCut", weight);
+  }
   //%%%%%%%%% Track Preselection %%%%%%%%%%%%%
   if(trackPreselection){
     // 4.)
