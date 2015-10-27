@@ -29,6 +29,7 @@ Hist::Hist(TString histName, outputFile ofile_)
   tree->Branch("njets",&variables.nJets);
   tree->Branch("LeadingJetPt",&variables.LeadingJetPt);
   tree->Branch("trackDeDxASmi",&variables.trackDeDxASmi);
+  tree->Branch("trackDeDxASmiNP",&variables.trackDeDxASmiNP);
   tree->Branch("trackDeDxASmi_woLastHit",&variables.trackDeDxASmi_woLastHit);
   tree->Branch("trackDeDxHarm2",&variables.trackDeDxHarm2);
   tree->Branch("trackPt",&variables.trackPt);
@@ -56,14 +57,6 @@ Hist::Hist(TString histName, outputFile ofile_)
   tree->Branch("trackEndVertexRho",&variables.trackEndVertexRho);
   tree->Branch("trackChi2",&variables.trackChi2);
   tree->Branch("trackNdof",&variables.trackNdof);
-  tree->Branch("trackDeDx1",&variables.trackDeDx1);
-  tree->Branch("trackDeDx2",&variables.trackDeDx2);
-  tree->Branch("trackDeDx3",&variables.trackDeDx3);
-  tree->Branch("trackDeDx4",&variables.trackDeDx4);
-  tree->Branch("trackDx1",&variables.trackDx1);
-  tree->Branch("trackDx2",&variables.trackDx2);
-  tree->Branch("trackDx3",&variables.trackDx3);
-  tree->Branch("trackDx4",&variables.trackDx4);
   tree->Branch("trackMeasSize",&variables.trackMeasSize);
 
 
@@ -316,6 +309,7 @@ void Hist::FillTrackVariables(std::vector<evt::Track_s> trkCollection,double wei
     
     // Fill tree variables
     variables.trackDeDxASmi.push_back(trkCollection[i].ASmi);
+    variables.trackDeDxASmiNP.push_back(trkCollection[i].ASmiNP);
     variables.trackDeDxASmi_woLastHit.push_back(trkCollection[i].ASmi_woLastHit);
     variables.trackDeDxHarm2.push_back(trkCollection[i].dEdxHarm2);
     variables.trackPt.push_back(trkCollection[i].pt);
@@ -343,15 +337,6 @@ void Hist::FillTrackVariables(std::vector<evt::Track_s> trkCollection,double wei
     variables.trackEndVertexRho.push_back(trkCollection[i].simEndVertexRho);
     variables.trackChi2.push_back(trkCollection[i].chi2);
     variables.trackNdof.push_back(trkCollection[i].ndof);
-    variables.trackDeDx1.push_back(trkCollection[i].DeDx1);
-    variables.trackDeDx2.push_back(trkCollection[i].DeDx2);
-    variables.trackDeDx3.push_back(trkCollection[i].DeDx3);
-    variables.trackDeDx4.push_back(trkCollection[i].DeDx4);
-    variables.trackDx1.push_back(trkCollection[i].Dx1);
-    variables.trackDx2.push_back(trkCollection[i].Dx2);
-    variables.trackDx3.push_back(trkCollection[i].Dx3);
-    variables.trackDx4.push_back(trkCollection[i].Dx4);
-    variables.trackMeasSize.push_back(trkCollection[i].MeasSize);
 
   }
 
