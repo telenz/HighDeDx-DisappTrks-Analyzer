@@ -207,6 +207,10 @@ int main(int argc, char** argv)
   class Event chiTracksnoSelection("chiTracksnoSelection",ofile);
   if(isSignal) chiTracksnoSelection.onlyChi = true;
 
+  class Event chiTracksCandidateTracks("chiTracksCandidateTracks",ofile);
+  if(isSignal) chiTracksCandidateTracks.onlyChi    = true;
+  chiTracksCandidateTracks.trackCandidateSelection = true;
+
   class Event chiTrackstriggerRequirements("chiTrackstriggerRequirements",ofile);
   if(isSignal) chiTrackstriggerRequirements.onlyChi = true;
   chiTrackstriggerRequirements.triggerRequirements  = true;
@@ -671,6 +675,7 @@ int main(int argc, char** argv)
 	    double rho      = TMath::Sqrt( TMath::Power(ChiTrack[i].SimVertexposition_x - Vertex[0].x,2) + TMath::Power(ChiTrack[i].SimVertexposition_y - Vertex[0].y,2));
 	    double z        = TMath::Abs(ChiTrack[i].SimVertexposition_z - Vertex[0].z);
 	    double distance = TMath::Sqrt( TMath::Power(rho,2) + TMath::Power(z,2) );
+ 	    if(ChiTrack[i].SimVertexposition_z==0 && ChiTrack[i].SimVertexposition_y==0 && ChiTrack[i].SimVertexposition_x==0) distance=3000.;
 	    double ProperLifetime = distance/(beta*gamma);
 
 	    double wtTarget       = (1. / TargetLifetime)  * TMath::Exp(-(ProperLifetime) /  TargetLifetime  );  
@@ -683,8 +688,7 @@ int main(int argc, char** argv)
 	      wt=0.;
 	    }
 
- 	    if(ChiTrack[i].SimVertexposition_z==0 && ChiTrack[i].SimVertexposition_y==0 && ChiTrack[i].SimVertexposition_x==0) wt=0;
-
+ 	    //if(ChiTrack[i].SimVertexposition_z==0 && ChiTrack[i].SimVertexposition_y==0 && ChiTrack[i].SimVertexposition_x==0) wt=0.01;
 	    weightReweighting *= wt;
 	  }
 	  if(!reweighted){
@@ -830,7 +834,7 @@ int main(int argc, char** argv)
       //triggerRequirements.Selection();
       //preselection.Selection();
       //fullSelection.Selection();
-      //chiTracksnoSelection.Selection();
+      chiTracksnoSelection.Selection();
       
       if(PDFunc && isSignal){
 	// 2.) Run over the preselection and store pdf weights
@@ -841,10 +845,12 @@ int main(int argc, char** argv)
 	}
       } 
        
+      chiTracksCandidateTracks.Selection();
       chiTrackstriggerRequirements.Selection();
       //chiTrackstriggerRequirementsTrigger.Selection();  //Not Needed
       chiTracksQCDsupression.Selection();
       chiTracksQCDsupressionTrigger.Selection();
+      
       chiTrackspreselection.Selection();
       chiTrackspreselectionTrigger.Selection();
       chiTrackspreselectionNoQCDCuts.Selection();
