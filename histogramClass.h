@@ -13,7 +13,7 @@ using namespace std;
 const double K   = 2.529; // checked again at 5th december (same for data and MC -> ask Loic about this)
 const double C   = 2.772;
 
-
+Hist::Hist(){};
 Hist::Hist(TString histName, outputFile ofile_)
 {
 
@@ -46,56 +46,45 @@ Hist::Hist(TString histName, outputFile ofile_)
   tree->Branch("trackPdgId",&variables.trackPdgId);
   tree->Branch("trackStatus",&variables.trackStatus);
   tree->Branch("trackCaloIsolation",&variables.trackCaloIsolation);
-  tree->Branch("trackHCALRp5Isolation",&variables.trackHCALRp5Isolation);
-  tree->Branch("trackECALRp5Isolation",&variables.trackECALRp5Isolation);
-  tree->Branch("trackHCALRp4Isolation",&variables.trackHCALRp4Isolation);
-  tree->Branch("trackECALRp4Isolation",&variables.trackECALRp4Isolation);
-  tree->Branch("trackHCALRp3Isolation",&variables.trackHCALRp3Isolation);
-  tree->Branch("trackECALRp3Isolation",&variables.trackECALRp3Isolation);
   tree->Branch("trackMass",&variables.trackMass);
   tree->Branch("trackIsolation",&variables.trackIsolation);
   tree->Branch("trackEndVertexRho",&variables.trackEndVertexRho);
   tree->Branch("trackChi2",&variables.trackChi2);
   tree->Branch("trackNdof",&variables.trackNdof);
-  tree->Branch("trackMeasSize",&variables.trackMeasSize);
+  tree->Branch("trackd0",&variables.trackd0);
+  tree->Branch("trackdz",&variables.trackdz);
 
 
-  htrackPt            = iniTH1D("htrackPt",100,0,2000);
-  htrackPtSmallRange  = iniTH1D("htrackPtSmallRange",40,0,400);
-  htrackPtEventCount           = iniTH1D("htrackPtEventCount",100,0,2000);
-  htrackPtSmallRangeEventCount = iniTH1D("htrackPtSmallRangeEventCount",40,0,400);
+  hPtOfPions          = iniTH1D("hPtOfPions",100,0,1.5);
+  htrackPt            = iniTH1D("htrackPt",50,0,1000);
+  htrackPtSmallRange  = iniTH1D("htrackPtSmallRange",25,0,500);
+  htrackPtSmallRangeCoarseBinning  = iniTH1D("htrackPtSmallRangeCoarseBinning",10,0,500);
   htrackP             = iniTH1D("htrackP",100,0,2000);
-  htrackEta           = iniTH1D("htrackEta",100,-5,5);
-  htrackd0            = iniTH1D("htrackd0",100,-1,1);
-  htrackdz            = iniTH1D("htrackdz",100,-5,5);
+  htrackEta           = iniTH1D("htrackEta",20,-3,3);
+  htrackAbsEta        = iniTH1D("htrackAbsEta",20,0,3);
+  htrackd0            = iniTH1D("htrackd0",10,0,0.2);
+  htrackdz            = iniTH1D("htrackdz",10,0,5);
   htrackNValid        = iniTH1D("htrackNValid",40,0,40);
-  htrackNValidSmallRange = iniTH1D("htrackNValidSmallRange",20,0,20);
-  htrackNValidEventCount           = iniTH1D("htrackNValidEventCount",40,0,40);
-  htrackNValidSmallRangeEventCount = iniTH1D("htrackNValidSmallRangeEventCount",20,0,20);
-  htrackNLostMid      = iniTH1D("htrackNLostMid",10,0,10);
-  htrackNLostInner    = iniTH1D("htrackNLostInner",20,0,20);
+  htrackNValidSmallRange = iniTH1D("htrackNValidSmallRange",30,0,30);
+  htrackNLostMid      = iniTH1D("htrackNLostMid",5,0,5);
+  htrackNLostInner    = iniTH1D("htrackNLostInner",5,0,5);
   htrackNLostOuter                     = iniTH1D("htrackNLostOuter",15,0,15);
   htrackNLostOuterSmallRange           = iniTH1D("htrackNLostOuterSmallRange",10,0,10);
-  htrackNLostOuterEventCount           = iniTH1D("htrackNLostOuterEventCount",15,0,15);
-  htrackNLostOuterSmallRangeEventCount = iniTH1D("htrackNLostOuterSmallRangeEventCount",10,0,10);
-  htrackIsolation                     = iniTH1D("htrackIsolation",100,0,5);
-  htrackIsolationSmallRange           = iniTH1D("htrackIsolationSmallRange",20,0,0.2);
-  htrackIsolationEventCount           = iniTH1D("htrackIsolationEventCount",100,0,5);
-  htrackIsolationSmallRangeEventCount = iniTH1D("htrackIsolationSmallRangeEventCount",20,0,0.2);
-  htrackCaloIsolation                     = iniTH1D("htrackCaloIsolation",100,0,500);
-  htrackCaloIsolationSmallRange           = iniTH1D("htrackCaloIsolationSmallRange",20,0,20);
-  htrackCaloIsolationEventCount           = iniTH1D("htrackCaloIsolationEventCount",100,0,500);
-  htrackCaloIsolationSmallRangeEventCount = iniTH1D("htrackCaloIsolationSmallRangeEventCount",20,0,20);
+  htrackIsolation                     = iniTH1D("htrackIsolation",20,0,2);
+  htrackIsolationSmallRange           = iniTH1D("htrackIsolationSmallRange",20,0,1);
+  htrackCaloIsolation                     = iniTH1D("htrackCaloIsolation",10,0,50);
+  htrackCaloIsolationSmallRange           = iniTH1D("htrackCaloIsolationSmallRange",10,0,20);
   htrackMass             = iniTH1D("htrackMass",100,0,1000);   
-  htrackMassEventCount   = iniTH1D("htrackMassEventCount",100,0,1000);   
   htrackDeDxHarm2                     = iniTH1D("htrackDeDxHarm2",100,0,40);
   htrackDeDxHarm2SmallRange           = iniTH1D("htrackDeDxHarm2SmallRange",50,0,10);
-  htrackDeDxHarm2EventCount           = iniTH1D("htrackDeDxHarm2EventCount",100,0,40);
-  htrackDeDxHarm2SmallRangeEventCount = iniTH1D("htrackDeDxHarm2SmallRangeEventCount",50,0,10);
   htrackASmi                     = iniTH1D("htrackASmi",50,-1.1,1.1);
-  htrackASmiSmallRange           = iniTH1D("htrackASmiSmallRange",20,0,1);
-  htrackASmiEventCount           = iniTH1D("htrackASmiEventCount",50,-1.1,1.1);
-  htrackASmiSmallRangeEventCount = iniTH1D("htrackASmiSmallRangeEventCount",20,0,1);
+  htrackASmiSmallRangeFineBinning = iniTH1D("htrackASmiSmallRangeFineBinning",20,0,1);
+  htrackASmiSmallRange            = iniTH1D("htrackASmiSmallRange",10,0,1);
+  htrackDeltaEDeltaX              = iniTH1D("htrackDeltaEDeltaX",100,0,2000);
+  //htrackASmiSmallRange_Electron           = iniTH1D("htrackASmiSmallRange_Electron",20,0,1);
+  //htrackASmiSmallRange_Muon           = iniTH1D("htrackASmiSmallRange_Electron",20,0,1);
+  //htrackASmiSmallRange_Tau           = iniTH1D("htrackASmiSmallRange_Electron",20,0,1);
+  //htrackASmiSmallRange_Fake           = iniTH1D("htrackASmiSmallRange_Electron",20,0,1);
   htrackASmi_3           = iniTH1D("htrackASmi_3",50,-1.1,1.1);
   htrackASmi_7           = iniTH1D("htrackASmi_7",50,-1.1,1.1);
   htrackASmiNP           = iniTH1D("htrackASmiNP",50,-1.1,1.1);
@@ -104,6 +93,10 @@ Hist::Hist(TString histName, outputFile ofile_)
   htrackASmiNP_7         = iniTH1D("htrackASmiNP_7",50,-1.1,1.1);
   htrackHighPurity       = iniTH1D("htrackHighPurity",2,0,2);
   htrackPdgId       = iniTH1D("htrackPdgId",500,0,500);
+  htrackdRminTau    = iniTH1D("htrackdRminTau",15,0,1.5);
+  htrackdRminMuon   = iniTH1D("htrackdRminMuon",15,0,1.5);
+  htrackdRminElec   = iniTH1D("htrackdRminElec",15,0,1.5);
+  htrackdRminJet    = iniTH1D("htrackdRminJet",10,0,5);
   htrackgenParticle = iniTH1D("htrackgenParticle",1,0,1);
   htrackgenParticle->Fill("unmatched", 0);
   htrackgenParticle->Fill("d", 0);
@@ -121,24 +114,29 @@ Hist::Hist(TString histName, outputFile ofile_)
   htrackgenParticle->Fill("mesons", 0);
   htrackgenParticle->Fill("baryons", 0);
   htrackgenParticle->Fill("others", 0);
+  htrackgenParticle->SetBit(TH1::kCanRebin);
   htrackgenParticleSmallRange = iniTH1D("htrackgenParticleSmallRange",1,0,1);
   htrackgenParticleSmallRange -> Fill("unmatched", 0);
-  htrackgenParticleSmallRange -> Fill("e", 0);
-  htrackgenParticleSmallRange -> Fill("mu", 0);
   htrackgenParticleSmallRange -> Fill("pi", 0);
+  htrackgenParticleSmallRange -> Fill("mu", 0);
+  htrackgenParticleSmallRange -> Fill("e", 0);
   htrackgenParticleSmallRange -> Fill("others", 0);
-  
+  htrackgenParticleSmallRange->SetBit(TH1::kCanRebin);
+  htrackgenParticleSmallRange-> LabelsDeflate("X");
 
   hNumberOfTracks = iniTH1D("hNumberOfTracks",10,0,10);
   htrackMT           = iniTH1D("htrackMT",250,0,500);
 
   hnPFJetsub         = iniTH1D("hnPFJetsub",20,0,20);
-  hDeltaPhi          = iniTH1D("hDeltaPhi",32,0,3.2);
-  hDeltaPhiMax       = iniTH1D("hDeltaPhiMax",32,0,3.2);
-  hDeltaPhiMaxbeforeCut = iniTH1D("hDeltaPhiMaxbeforeCut",32,0,3.2);
-  h1stjetpt          = iniTH1D("h1stjetpt",200,0,2000);
+  hDeltaPhi          = iniTH1D("hDeltaPhi",32,0,3.142);
+  hDeltaPhiMax       = iniTH1D("hDeltaPhiMax",32,0,3.142);
+  hDeltaPhiMaxbeforeCut = iniTH1D("hDeltaPhiMaxbeforeCut",16,0,3.142);
+  hDeltaPhiJetMetMinbeforeCut    = iniTH1D("hDeltaPhiJetMetMinbeforeCut",16,0,3.142);
+  h1stjetpt                     = iniTH1D("h1stjetpt",25,0,1000);
+  h1stjetptSmallRange           = iniTH1D("h1stjetptSmallRange",25,0,500);
   htrackpt1stjetpt              = iniTH2D("htrackpt1stjetpt",100,0,1000,200,0,2000);
   htrackPtDeDxHarm2             = iniTH2D("htrackPtDeDxHarm2",50,0,500,50,0,50);
+  htrackPDeDxHarm2              = iniTH2D("htrackPDeDxHarm2",500,0,1000,200,0,20);
   htrackPtDeDxHarm2LargeRange   = iniTH2D("htrackPtDeDxHarm2LargeRange",2000,0,2000,50,0,50);
   htrackPtDeDxHarm2SmallBinning = iniTH2D("htrackPtDeDxHarm2SmallBinning",100,0,500,100,0,50);
   htrackPtASmi                  = iniTH2D("htrackPtASmi",50,00,500,20,0,1);
@@ -151,6 +149,8 @@ Hist::Hist(TString histName, outputFile ofile_)
   htrackCaloIsoASmi             = iniTH2D("htrackCaloIsoASmi",20,0,100,20,0,1);
   htrackCaloIsoASmiLargeRange   = iniTH2D("htrackCaloIsoASmiLargeRange",40,0,200,10,0,1);
   htrackCaloIsoASmiSmallBinning = iniTH2D("htrackCaloIsoASmiSmallBinning",50,0,100,50,0,1);
+
+
   
   hMonoCentralPFJet80_PFMETnoMu95            = iniTH1D("hMonoCentralPFJet80_PFMETnoMu95",3,-1,2);
   hMonoCentralPFJet80_PFMETnoMu105           = iniTH1D("hMonoCentralPFJet80_PFMETnoMu105",3,-1,2);
@@ -159,9 +159,12 @@ Hist::Hist(TString histName, outputFile ofile_)
   hMonoCentralPFJet80_PFMETnoMu105_prescale  = iniTH1D("hMonoCentralPFJet80_PFMETnoMu105_prescale",101,-1,100);
   hMET120_HBHENoiseCleaned_prescale          = iniTH1D("hMET120_HBHENoiseCleaned_prescale",101,-1,100);
   hLuminosityBlock                           = iniTH1D("hLuminosityBlock",2500,0,2500);
-  hMet                          = iniTH1D("hMet",150,0,1500);
+  hMet                          = iniTH1D("hMet",25,0,1000);
+  hMetSmallRange                = iniTH1D("hMetSmallRange",25,0,500);
 
-  hgenPtChi              = iniTH1D("hgenPtChi",150,0,1500);
+  hgenPtChi              = iniTH1D("hgenPtChi",100,0,1000);
+  hgenPtChiCoarseBinning = iniTH1D("hgenPtChiCoarseBinning",20,0,1000);
+  hgenPtChiMiddleBinning = iniTH1D("hgenPtChiMiddleBinning",50,0,1000);
   hgenPChi               = iniTH1D("hgenPChi",300,0,3000);
   hgenEtaChi             = iniTH1D("hgenEtaChi",200,-5,5);
   hgenPhiChi             = iniTH1D("hgenPhiChi",100,0,3.142);
@@ -176,6 +179,7 @@ Hist::Hist(TString histName, outputFile ofile_)
   hAllTracksZRho            = iniTH2D("hAllTracksZRho",700,0,1400,400,0,800.);
   hFoundTracksZRho          = iniTH2D("hFoundTracksZRho",700,0,1400,400,0,800.);
   htrackProperLifetime      = iniTH1D("htrackProperLifetime",1000,0,1000);
+  htrackProperLifetimeReweighted      = iniTH1D("htrackProperLifetimeReweighted",1000,0,1000);
      
 };
 
@@ -186,28 +190,6 @@ void Hist::FillTrackVariables(std::vector<evt::Track_s> trkCollection,double wei
   variables.weight=weight; 
 
   hNumberOfTracks    ->   Fill(trkCollection.size(), weight);
-
-  if(trkCollection.size()>1){
-
-    htrackPtEventCount                      -> Fill(trkCollection[0].pt, weight);
-    htrackPtSmallRangeEventCount            -> Fill(trkCollection[0].pt, weight);
-    htrackASmiEventCount                    -> Fill(trkCollection[0].ASmi, weight);
-    htrackASmiSmallRangeEventCount          -> Fill(trkCollection[0].ASmi, weight);
-    htrackDeDxHarm2EventCount               -> Fill(trkCollection[0].dEdxHarm2, weight);
-    htrackDeDxHarm2SmallRangeEventCount     -> Fill(trkCollection[0].dEdxHarm2, weight);
-    htrackCaloIsolationEventCount           -> Fill(trackCaloIsolation(&trkCollection[0]), weight);
-    htrackCaloIsolationSmallRangeEventCount -> Fill(trackCaloIsolation(&trkCollection[0]), weight);
-    htrackNLostOuterEventCount              -> Fill(trkCollection[0].trackerExpectedHitsOuter_numberOfHits, weight);
-    htrackNLostOuterSmallRangeEventCount    -> Fill(trkCollection[0].trackerExpectedHitsOuter_numberOfHits, weight);
-    htrackIsolationEventCount               -> Fill(trkCollection[0].trackRelIso03, weight);
-    htrackIsolationSmallRangeEventCount     -> Fill(trkCollection[0].trackRelIso03, weight);
-    htrackNValidEventCount                  -> Fill(trkCollection[0].numberOfValidHits, weight); 
-    htrackNValidSmallRangeEventCount        -> Fill(trkCollection[0].numberOfValidHits, weight); 
-    double p    = std::sqrt(std::pow(trkCollection[0].pt,2) + std::pow(trkCollection[0].pz,2));
-    double mass = sqrt(pow(p,2)/K*(trkCollection[0].dEdxHarm2-C));
-    htrackMassEventCount                    -> Fill(mass,weight);
-
-  }
 
   for(unsigned int i=0; i<trkCollection.size(); i++){
     TVector3 trackVector;
@@ -223,8 +205,10 @@ void Hist::FillTrackVariables(std::vector<evt::Track_s> trkCollection,double wei
     htrackP                  ->Fill(p, weight);
     htrackPt                 ->Fill(trkCollection[i].pt, weight);
     htrackPtSmallRange       ->Fill(trkCollection[i].pt, weight);
+    htrackPtSmallRangeCoarseBinning       ->Fill(trkCollection[i].pt, weight);
       
     htrackEta                ->Fill(trkCollection[i].eta, weight);
+    htrackAbsEta                ->Fill(abs(trkCollection[i].eta), weight);
     htrackNValid             ->Fill(trkCollection[i].numberOfValidHits, weight);
     htrackNValidSmallRange   ->Fill(trkCollection[i].numberOfValidHits, weight);
     htrackNLostMid           ->Fill(trkCollection[i].hitPattern_trackerLayersWithoutMeasurement, weight);
@@ -244,6 +228,7 @@ void Hist::FillTrackVariables(std::vector<evt::Track_s> trkCollection,double wei
     htrackDeDxHarm2          ->Fill(trkCollection[i].dEdxHarm2, weight);
     htrackDeDxHarm2SmallRange->Fill(trkCollection[i].dEdxHarm2, weight);
     htrackASmi               ->Fill(trkCollection[i].ASmi, weight);
+    htrackASmiSmallRangeFineBinning     ->Fill(trkCollection[i].ASmi, weight);
     htrackASmiSmallRange     ->Fill(trkCollection[i].ASmi, weight);
     htrackASmi_3             ->Fill(trkCollection[i].ASmi_3, weight);
     htrackASmi_7             ->Fill(trkCollection[i].ASmi_7, weight);
@@ -251,8 +236,9 @@ void Hist::FillTrackVariables(std::vector<evt::Track_s> trkCollection,double wei
     htrackASmiNPSmallRange   ->Fill(trkCollection[i].ASmiNP, weight);
     htrackASmiNP_3           ->Fill(trkCollection[i].ASmiNP_3, weight);
     htrackASmiNP_7           ->Fill(trkCollection[i].ASmiNP_7, weight);
-    htrackHighPurity              ->Fill(trkCollection[i].trackHighPurity, weight);
+    htrackHighPurity              ->Fill(!trkCollection[i].trackHighPurity, weight);
     htrackPtDeDxHarm2             ->Fill(trkCollection[i].pt,trkCollection[i].dEdxHarm2, weight);
+    htrackPDeDxHarm2              ->Fill(p,trkCollection[i].dEdxHarm2, weight);
     htrackPtDeDxHarm2LargeRange   ->Fill(trkCollection[i].pt,trkCollection[i].dEdxHarm2, weight);
     htrackPtDeDxHarm2SmallBinning ->Fill(trkCollection[i].pt,trkCollection[i].dEdxHarm2, weight);
     htrackPtASmi                  ->Fill(trkCollection[i].pt,trkCollection[i].ASmi, weight);
@@ -267,8 +253,13 @@ void Hist::FillTrackVariables(std::vector<evt::Track_s> trkCollection,double wei
     htrackPtNLostOuter            ->Fill(trkCollection[i].pt,trkCollection[i].trackerExpectedHitsOuter_numberOfHits, weight);
 
 
-    htrackd0                 ->Fill(d0, weight);
-    htrackdz                 ->Fill(dZ, weight);
+    htrackd0                 ->Fill(abs(d0), weight);
+    htrackdz                 ->Fill(abs(dZ), weight);
+
+    htrackdRminTau   ->  Fill(trkCollection[i].deltaRMinTau);
+    htrackdRminMuon  ->  Fill(trkCollection[i].deltaRMinMuon);
+    htrackdRminElec  ->  Fill(trkCollection[i].deltaRMinElec);
+    htrackdRminJet   ->  Fill(trkCollection[i].deltaRMinJet);
  
     if(abs(trkCollection[i].pdgId==0))        htrackgenParticle->Fill("unmatched", weight);
     else if(abs(trkCollection[i].pdgId)==1)   htrackgenParticle->Fill("d", weight);
@@ -306,6 +297,14 @@ void Hist::FillTrackVariables(std::vector<evt::Track_s> trkCollection,double wei
       //	}
     }
 
+    for(unsigned int j=0;j<(*HitsDeDx)[i].size();j++){
+      if((*HitsSubdetid)[i][j]>2){
+	htrackDeltaEDeltaX -> Fill((*HitsDeDx)[i][j]/(*HitsPathlength)[i][j]);
+	//cout<<"(*HitsDeDx)[i][j]/(*HitsPathlength)[i][j] = "<<(*HitsDeDx)[i][j]/(*HitsPathlength)[i][j]<<endl;
+      }
+    }
+    
+
     
     // Fill tree variables
     variables.trackDeDxASmi.push_back(trkCollection[i].ASmi);
@@ -326,17 +325,13 @@ void Hist::FillTrackVariables(std::vector<evt::Track_s> trkCollection,double wei
     variables.trackPdgId.push_back(trkCollection[i].pdgId);
     variables.trackStatus.push_back(trkCollection[i].status);
     variables.trackCaloIsolation.push_back(trackCaloIsolation(&trkCollection[i]));
-    variables.trackHCALRp5Isolation.push_back(trkCollection[i].caloHadDeltaRp5);
-    variables.trackECALRp5Isolation.push_back(trkCollection[i].caloEMDeltaRp5);
-    variables.trackHCALRp4Isolation.push_back(trkCollection[i].caloHadDeltaRp4);
-    variables.trackECALRp4Isolation.push_back(trkCollection[i].caloEMDeltaRp4);
-    variables.trackHCALRp3Isolation.push_back(trkCollection[i].caloHadDeltaRp3);
-    variables.trackECALRp3Isolation.push_back(trkCollection[i].caloEMDeltaRp3);
     variables.trackMass.push_back(mass);
     variables.trackIsolation.push_back(trkCollection[i].trackRelIso03);
     variables.trackEndVertexRho.push_back(trkCollection[i].simEndVertexRho);
     variables.trackChi2.push_back(trkCollection[i].chi2);
     variables.trackNdof.push_back(trkCollection[i].ndof);
+    variables.trackd0.push_back(d0);
+    variables.trackdz.push_back(dZ);
 
   }
 
@@ -358,6 +353,8 @@ void Hist::FillGenParticleHistograms(std::vector<evt::GenParticle_s> genCollecti
     hgenBetaChi             -> Fill(betaAux, weight);
     hgenBetaTimesGammaChi   -> Fill(betaAux*gammaAux, weight);
     hgenPtChi               -> Fill(genCollection[i].pt, weight);
+    hgenPtChiCoarseBinning  -> Fill(genCollection[i].pt, weight);
+    hgenPtChiMiddleBinning  -> Fill(genCollection[i].pt, weight);
     hgenPChi                -> Fill(genCollection[i].p, weight);
     hgenEtaChi              -> Fill(genCollection[i].eta, weight);
     hgenPhiChi              -> Fill(genCollection[i].phi, weight);
@@ -384,6 +381,7 @@ void Hist::FillCharginoHistograms(std::vector<ChiTrack_s> chitrkCollection, doub
     double distance = TMath::Sqrt( TMath::Power(rho,2) + TMath::Power(z,2) );
     double properlifetime = distance/(beta*gamma);
     htrackProperLifetime -> Fill(properlifetime,weight);
+    htrackProperLifetimeReweighted -> Fill(properlifetime,weight*weightReweighting);
 
     if(chitrkCollection[i].SimVertexFound){
       hAllTracksZRho->Fill(z,rho);
