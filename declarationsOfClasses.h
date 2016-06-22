@@ -34,17 +34,13 @@ typedef struct {
   std::vector<Int_t>     trackPdgId;
   std::vector<Int_t>     trackStatus;
   std::vector<Double_t>  trackCaloIsolation;
-  std::vector<Double_t>  trackHCALRp5Isolation;
-  std::vector<Double_t>  trackECALRp5Isolation;
-  std::vector<Double_t>  trackHCALRp4Isolation;
-  std::vector<Double_t>  trackECALRp4Isolation;
-  std::vector<Double_t>  trackHCALRp3Isolation;
-  std::vector<Double_t>  trackECALRp3Isolation;
   std::vector<Double_t>  trackMass;
   std::vector<Double_t>  trackIsolation;
   std::vector<Double_t>  trackEndVertexRho;
   std::vector<Double_t>  trackChi2;
   std::vector<Double_t>  trackNdof;
+  std::vector<Double_t>  trackd0;
+  std::vector<Double_t>  trackdz;
   UInt_t                 event;
   UInt_t                 run;
   UInt_t                 lumiBlock;
@@ -73,17 +69,13 @@ typedef struct {
     trackPdgId.clear();
     trackStatus.clear();
     trackCaloIsolation.clear();
-    trackHCALRp5Isolation.clear();
-    trackECALRp5Isolation.clear();
-    trackHCALRp4Isolation.clear();
-    trackECALRp4Isolation.clear();
-    trackHCALRp3Isolation.clear();
-    trackECALRp3Isolation.clear();
     trackMass.clear();
     trackIsolation.clear();
     trackEndVertexRho.clear();
     trackChi2.clear();
     trackNdof.clear();
+    trackd0.clear();
+    trackdz.clear();
   }
 
 } TreeVariables_t;
@@ -98,51 +90,43 @@ class Hist
   TTree *tree;
   TreeVariables_t variables;
 
+  TH1D *hPtOfPions;
   TH1D *htrackPt;
   TH1D *htrackPtSmallRange;
-  TH1D *htrackPtEventCount;
-  TH1D *htrackPtSmallRangeEventCount;
+  TH1D *htrackPtSmallRangeCoarseBinning;
   TH1D *htrackP;
   TH1D *htrackEta;
+  TH1D *htrackAbsEta;
   TH1D *htrackd0;
   TH1D *htrackdz;
   TH1D *htrackNValid;
   TH1D *htrackNValidSmallRange;
-  TH1D *htrackNValidEventCount;
-  TH1D *htrackNValidSmallRangeEventCount;
   TH1D *htrackNLostMid;
   TH1D *htrackNLostInner;
   TH1D *htrackNLostOuter;
   TH1D *htrackNLostOuterSmallRange;
-  TH1D *htrackNLostOuterEventCount;
-  TH1D *htrackNLostOuterSmallRangeEventCount;
   TH1D *htrackIsolation;
   TH1D *htrackIsolationSmallRange;
-  TH1D *htrackIsolationEventCount;
-  TH1D *htrackIsolationSmallRangeEventCount;
   TH1D *htrackCaloIsolation;
   TH1D *htrackCaloIsolationSmallRange;
-  TH1D *htrackCaloIsolationEventCount;
-  TH1D *htrackCaloIsolationSmallRangeEventCount;
   TH1D *htrackASmi;
   TH1D *htrackASmiSmallRange;
-  TH1D *htrackASmiEventCount;
-  TH1D *htrackASmiSmallRangeEventCount;
+  TH1D *htrackASmiSmallRangeFineBinning;
   TH1D *htrackASmi_3;
   TH1D *htrackASmi_7;
   TH1D *htrackASmiNP;
   TH1D *htrackASmiNPSmallRange;
   TH1D *htrackASmiNP_3;
   TH1D *htrackASmiNP_7;
+  TH1D *htrackDeltaEDeltaX;
   TH1D *htrackDeDxHarm2;
   TH1D *htrackDeDxHarm2SmallRange;
-  TH1D *htrackDeDxHarm2EventCount;
-  TH1D *htrackDeDxHarm2SmallRangeEventCount;
   TH1D *htrackHighPurity;
   TH1D *htrackMT;
 
   TH1D *hNumberOfTracks;
   TH2D *htrackPtDeDxHarm2;
+  TH2D *htrackPDeDxHarm2;
   TH2D *htrackPtDeDxHarm2LargeRange;
   TH2D *htrackPtDeDxHarm2SmallBinning;
   TH2D *htrackPtASmi;
@@ -159,13 +143,16 @@ class Hist
   
 
   TH1D *htrackPdgId;
+  TH1D* htrackdRminTau;
+  TH1D* htrackdRminMuon;
+  TH1D* htrackdRminElec;
+  TH1D* htrackdRminJet;
   TH1D *htrackgenParticle;
   TH1D *htrackgenParticleSmallRange;
 
   TH1D *htrackMass;
-  TH1D *htrackMassEventCount;
-
   TH1D* h1stjetpt;
+  TH1D* h1stjetptSmallRange;
   TH2D* htrackpt1stjetpt;
   TH1D *hTriggerResults;
   TH1D *hMonoCentralPFJet80_PFMETnoMu95;
@@ -176,13 +163,17 @@ class Hist
   TH1D *hMET120_HBHENoiseCleaned_prescale ;
   TH1D *hLuminosityBlock;
   TH1D* hMet;
+  TH1D* hMetSmallRange;
   TH1D *hnPFJetsub;
 
   TH1D *hDeltaPhi;
   TH1D *hDeltaPhiMax;
   TH1D *hDeltaPhiMaxbeforeCut;
+  TH1D *hDeltaPhiJetMetMinbeforeCut;
 
   TH1D *hgenPtChi;
+  TH1D *hgenPtChiCoarseBinning;
+  TH1D *hgenPtChiMiddleBinning;
   TH1D *hgenEtaChi;
   TH1D *hgenPhiChi;
   TH1D *hgenBetaChi;
@@ -195,11 +186,13 @@ class Hist
   TH1D *htrackDeltaRSimRecoTracks;
   TH1D *hSimTrackType;
   TH1D *htrackProperLifetime;
+  TH1D *htrackProperLifetimeReweighted;
   
   TH2D *hAllTracksZRho;
   TH2D *hFoundTracksZRho;
 
  public:Hist(TString histName, outputFile ofile_);
+ public:Hist();
 
   void FillTrackVariables(std::vector<evt::Track_s> inputCollection,double weight);
   void FillGenParticleHistograms(std::vector<evt::GenParticle_s> inputCollection, double weight);
@@ -219,6 +212,7 @@ class Event
   std::vector<Track_s> TrackColl;
   std::vector<Jet_s> JetColl;
   std::vector<Jet_s> subleadingJetColl;
+  std::vector<Jet_s> DTsubleadingJetColl;
   std::vector<MuonPFlow_s> MuonColl;
   std::vector<ElectronPFlow_s> ElectronColl;
     
@@ -228,11 +222,14 @@ class Event
   bool triggerRequirements;
   bool trigger;
   bool trackPreselection;
+  bool trackGoodQualitySelection;
   bool trackCandidateSelection;
+  bool trackMIPSelection;
   bool qcdSupression;
   bool trackCandidateCutFinal;
   bool onlyChi;
   bool noChi;
+  bool DTSelection;
 
   bool isolatedLeptonCut;
 
@@ -250,6 +247,7 @@ class Event
   double mass;
 
  public:
+  Event();
   Event(TString histName, outputFile ofile_);
   int Selection();
   std::vector<Track_s> finalTrackCuts(std::vector<Track_s> trackCollection, TH1D* countsTrackCriteria);
