@@ -924,6 +924,10 @@ struct Track_s
   double Dx3;
   double Dx4;
   int MeasSize;
+  double deltaRMinTau;
+  double deltaRMinMuon;
+  double deltaRMinElec;
+  double deltaRMinJet;
 
 };
 std::vector<Track_s> Track(2000);
