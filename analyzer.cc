@@ -68,69 +68,6 @@ int main(int argc, char** argv)
   // Select variables to be read
   selectVariables(stream);
 
-  // The root application is needed to make canvases visible during
-  // program execution. If this is not needed, just comment out the
-  // following line
-
-  // TApplication app("analyzer", &argc, argv);
-
-  /**
-     Notes 1
-     -------
-     1. Use
-     ofile = outputFile(cmdline.outputfile, stream)
-
-     to skim events to output file in addition to writing out histograms.
-
-     2. Use
-     ofile.addEvent(event-weight)
-
-     to specify that the current event is to be added to the output file.
-     If omitted, the event-weight is defaulted to 1.
-
-     3. Use
-     ofile.count(cut-name, event-weight)
-
-     to keep track, in the count histogram, of the number of events
-     passing a given cut. If omitted, the event-weight is taken to be 1.
-     If you want the counts in the count histogram to appear in a given
-     order, specify the order, before entering the event loop, as in
-     the example below
-
-     ofile.count("NoCuts", 0)
-     ofile.count("GoodEvent", 0)
-     ofile.count("Vertex", 0)
-     ofile.count("MET", 0)
-
-     Notes 2
-     -------
-     By default all variables are saved. Before the event loop, you can use
-  
-     select(objectname)
-	  
-     e.g.,
-	
-     select("GenParticle")
-  
-     to declare that you intend to select objects of this type. The
-     selection is done using
-
-     select(objectname, index)
-	  
-     e.g.,
-	  
-     select("GenParticle", 3),
-  
-     which is called within the event loop. Call saveSelectedObjects()
-     before a call to addEvent if you wish to save the selected objects.
-     All other objects are saved by default.
-	 
-     NB: If you declare your intention to select objects of a given type
-     by calling select(objectname), but subsequently fail to select
-     them using select(objectname, index) then none will be saved!
-  */
-  
-
   outputFile ofile(cmdline.outputfilename);
 
   //-------------------------------------------------------------------------------------
@@ -141,13 +78,21 @@ int main(int argc, char** argv)
   TH1D *nVertices_0            = new TH1D("nVertices_0","nVertices_0",100,0,100);
   TH1D *hPU_NumInteractions_0  = new TH1D("hPU_NumInteractions_0","hPU_NumInteractions_0",100,0,100);
   TH1D *hTrueNumInteractions_0 = new TH1D("hTrueNumInteractions_0","hTrueNumInteractions_0",100,0,100);
+  TH1D* hgenPtChiChiSystem     = new TH1D("hgenPtChiChiSystem","hgenPtChiChiSystem",100,0,1000);
+  TH1D* hgenPChiChiSystem      = new TH1D("hgenPChiChiSystem","hgenPChiChiSystem",100,0,1000);
+  TH1D* hgenEChiChiSystem      = new TH1D("hgenEChiChiSystem","hgenEChiChiSystem",900,200,2000);
+  TH1D* hgenMChiChiSystem      = new TH1D("hgenMChiChiSystem","hgenMChiChiSystem",900,200,2000);
+  TH1D* hDeltaEDeltaX          = new TH1D("hDeltaEDeltaX","hDeltaEDeltaX",100,0,2000);
   //-------------------------------------------------------------------------------------
   // PDF stuff
   //-------------------------------------------------------------------------------------
   unsigned int  nbins_pdfweight = 0;
   vector<double> pdf_weight_sum(50);
-  Event PDFselection[45] = {Event("chiTrackspreselectionTriggerPDF_0",ofile ), Event("chiTrackspreselectionTriggerPDF_1",ofile ), Event("chiTrackspreselectionTriggerPDF_2",ofile ), Event("chiTrackspreselectionTriggerPDF_3",ofile ), Event("chiTrackspreselectionTriggerPDF_4",ofile ), Event("chiTrackspreselectionTriggerPDF_5",ofile ), Event("chiTrackspreselectionTriggerPDF_6",ofile ), Event("chiTrackspreselectionTriggerPDF_7",ofile ), Event("chiTrackspreselectionTriggerPDF_8",ofile ), Event("chiTrackspreselectionTriggerPDF_9",ofile ), Event("chiTrackspreselectionTriggerPDF_10",ofile ), Event("chiTrackspreselectionTriggerPDF_11",ofile ), Event("chiTrackspreselectionTriggerPDF_12",ofile ), Event("chiTrackspreselectionTriggerPDF_13",ofile ), Event("chiTrackspreselectionTriggerPDF_14",ofile ), Event("chiTrackspreselectionTriggerPDF_15",ofile ), Event("chiTrackspreselectionTriggerPDF_16",ofile ), Event("chiTrackspreselectionTriggerPDF_17",ofile ), Event("chiTrackspreselectionTriggerPDF_18",ofile ), Event("chiTrackspreselectionTriggerPDF_19",ofile ), Event("chiTrackspreselectionTriggerPDF_20",ofile ), Event("chiTrackspreselectionTriggerPDF_21",ofile ), Event("chiTrackspreselectionTriggerPDF_22",ofile ), Event("chiTrackspreselectionTriggerPDF_23",ofile ), Event("chiTrackspreselectionTriggerPDF_24",ofile ), Event("chiTrackspreselectionTriggerPDF_25",ofile ), Event("chiTrackspreselectionTriggerPDF_26",ofile ), Event("chiTrackspreselectionTriggerPDF_27",ofile ), Event("chiTrackspreselectionTriggerPDF_28",ofile ), Event("chiTrackspreselectionTriggerPDF_29",ofile ), Event("chiTrackspreselectionTriggerPDF_30",ofile ), Event("chiTrackspreselectionTriggerPDF_31",ofile ), Event("chiTrackspreselectionTriggerPDF_32",ofile ), Event("chiTrackspreselectionTriggerPDF_33",ofile ), Event("chiTrackspreselectionTriggerPDF_34",ofile ), Event("chiTrackspreselectionTriggerPDF_35",ofile ), Event("chiTrackspreselectionTriggerPDF_36",ofile ), Event("chiTrackspreselectionTriggerPDF_37",ofile ), Event("chiTrackspreselectionTriggerPDF_38",ofile ), Event("chiTrackspreselectionTriggerPDF_39",ofile ), Event("chiTrackspreselectionTriggerPDF_40",ofile ), Event("chiTrackspreselectionTriggerPDF_41",ofile ), Event("chiTrackspreselectionTriggerPDF_42",ofile ), Event("chiTrackspreselectionTriggerPDF_43",ofile ), Event("chiTrackspreselectionTriggerPDF_44",ofile )} ;
+  Event PDFselection[45] = {};
+
   if(PDFunc && isSignal){
+
+    for(int i=0; i<45; i++) PDFselection[i] = Event("chiTrackspreselectionTriggerPDF_" + (long) i ,ofile );
 
     nbins_pdfweight = 45;        //pdfWeights_cteq66.size();
     
@@ -181,35 +126,14 @@ int main(int argc, char** argv)
   cout<<endl<<endl<<"------------ Is it signal : "<<isSignal<<" --------------"<<endl<<endl;
   cout<<endl<<endl<<"------------ Is it C1N1   : "<<isSignalC1N1<<" --------------"<<endl<<endl;
   cout<<endl<<endl<<"------------ Is it data   : "<<isData<<" --------------"<<endl<<endl;
-  /*
-  class Event noSelection("noSelection",ofile);
-  class Event triggerRequirements("triggerRequirements",ofile);
-  triggerRequirements.triggerRequirements = true;
-  class Event triggerRequirementsTrigger("triggerRequirementsTrigger",ofile);
-  triggerRequirementsTrigger.triggerRequirements = true;
-  triggerRequirementsTrigger.trigger             = true;
-  class Event preselection("preselection",ofile);
-  preselection.triggerRequirements        = true;
-  preselection.trackPreselection          = true;
-  preselection.qcdSupression              = true;
-  class Event fullSelection("fullSelection",ofile);
-  fullSelection.triggerRequirements       = true;
-  fullSelection.trackPreselection         = true;
-  fullSelection.qcdSupression             = true;
-  fullSelection.trackCandidateCutFinal    = true;
-  fullSelection.TrackPtRequirement        = true;
-  fullSelection.NumOfLostOuterRequirement = true;
-  fullSelection.CaloIsolationRequirement  = true;
-  fullSelection.DeDxRequirement           = true;
-  */
   //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   // Only Chi
   class Event chiTracksnoSelection("chiTracksnoSelection",ofile);
   if(isSignal) chiTracksnoSelection.onlyChi = true;
 
-  class Event chiTracksCandidateTracks("chiTracksCandidateTracks",ofile);
-  if(isSignal) chiTracksCandidateTracks.onlyChi    = true;
-  chiTracksCandidateTracks.trackCandidateSelection = true;
+  class Event chiTracksMIPSelection("chiTracksMIPSelection",ofile);
+  if(isSignal) chiTracksMIPSelection.onlyChi = true;
+  chiTracksMIPSelection.trackMIPSelection = true;
 
   class Event chiTrackstriggerRequirements("chiTrackstriggerRequirements",ofile);
   if(isSignal) chiTrackstriggerRequirements.onlyChi = true;
@@ -230,6 +154,32 @@ int main(int argc, char** argv)
   chiTracksQCDsupressionTrigger.triggerRequirements  = true;
   chiTracksQCDsupressionTrigger.trigger              = true;
   chiTracksQCDsupressionTrigger.qcdSupression        = true;
+
+  class Event chiTracksGoodQualitySelection("chiTracksGoodQualitySelection",ofile);
+  if(isSignal) chiTracksGoodQualitySelection.onlyChi        = true;
+  chiTracksGoodQualitySelection.triggerRequirements         = true;
+  chiTracksGoodQualitySelection.qcdSupression               = true;
+  chiTracksGoodQualitySelection.trackGoodQualitySelection   = true;
+
+  class Event chiTracksGoodQualitySelectionTrigger("chiTracksGoodQualitySelectionTrigger",ofile);
+  if(isSignal) chiTracksGoodQualitySelectionTrigger.onlyChi        = true;
+  chiTracksGoodQualitySelectionTrigger.triggerRequirements         = true;
+  chiTracksGoodQualitySelectionTrigger.trigger                     = true;
+  chiTracksGoodQualitySelectionTrigger.qcdSupression               = true;
+  chiTracksGoodQualitySelectionTrigger.trackGoodQualitySelection   = true;
+
+  class Event chiTracksCandidateSelection("chiTracksCandidateSelection",ofile);
+  if(isSignal) chiTracksCandidateSelection.onlyChi        = true;
+  chiTracksCandidateSelection.triggerRequirements         = true;
+  chiTracksCandidateSelection.qcdSupression               = true;
+  chiTracksCandidateSelection.trackCandidateSelection     = true;
+
+  class Event chiTracksCandidateSelectionTrigger("chiTracksCandidateSelectionTrigger",ofile);
+  if(isSignal) chiTracksCandidateSelectionTrigger.onlyChi        = true;
+  chiTracksCandidateSelectionTrigger.triggerRequirements         = true;
+  chiTracksCandidateSelectionTrigger.trigger                     = true;
+  chiTracksCandidateSelectionTrigger.qcdSupression               = true;
+  chiTracksCandidateSelectionTrigger.trackCandidateSelection   = true;
 
   class Event chiTrackspreselection("chiTrackspreselection",ofile);
   if(isSignal) chiTrackspreselection.onlyChi= true;
@@ -264,103 +214,121 @@ int main(int argc, char** argv)
   if(isSignal) chiTrackspreselectionNoQCDCutsNoTrigger.onlyChi= true;
   chiTrackspreselectionNoQCDCutsNoTrigger.trackPreselection   = true;
 
-  class Event chiTrackspreselectionWjets("chiTrackspreselectionWjets",ofile);
-  if(isSignal) chiTrackspreselectionWjets.onlyChi= true;
-  chiTrackspreselectionWjets.triggerRequirements = true;
-  chiTrackspreselectionWjets.trackPreselection   = true;
-  chiTrackspreselectionWjets.qcdSupression       = true;
-  chiTrackspreselectionWjets.isolatedLeptonCut   = true;
-
-  class Event chiTrackspreselectionPlusNLostGt1("chiTrackspreselectionPlusNLostGt1",ofile);
-  if(isSignal) chiTrackspreselectionPlusNLostGt1.onlyChi      = true;
-  chiTrackspreselectionPlusNLostGt1.triggerRequirements       = true;
-  chiTrackspreselectionPlusNLostGt1.trackPreselection         = true;
-  chiTrackspreselectionPlusNLostGt1.qcdSupression             = true;
-  chiTrackspreselectionPlusNLostGt1.trackCandidateCutFinal    = true;
-  chiTrackspreselectionPlusNLostGt1.TrackPtRequirement        = false;
-  chiTrackspreselectionPlusNLostGt1.NumOfLostOuterRequirement = true;
-  chiTrackspreselectionPlusNLostGt1.CaloIsolationRequirement  = false;
-  chiTrackspreselectionPlusNLostGt1.DeDxRequirement           = false;
-
-  class Event chiTrackspreselection1LostPlusIsoCut("chiTrackspreselection1LostPlusIsoCut",ofile);
-  if(isSignal) chiTrackspreselection1LostPlusIsoCut.onlyChi      = true;
-  chiTrackspreselection1LostPlusIsoCut.triggerRequirements       = true;
-  chiTrackspreselection1LostPlusIsoCut.trackPreselection         = true;
-  chiTrackspreselection1LostPlusIsoCut.qcdSupression             = true;
-  chiTrackspreselection1LostPlusIsoCut.trackCandidateCutFinal    = true;
-  chiTrackspreselection1LostPlusIsoCut.TrackPtRequirement        = false;
-  chiTrackspreselection1LostPlusIsoCut.NumOfLostOuterRequirement = true;
-  chiTrackspreselection1LostPlusIsoCut.CaloIsolationRequirement  = true;
-  chiTrackspreselection1LostPlusIsoCut.DeDxRequirement           = false;
-
-  class Event chiTrackspreselection1LostPlusPtCut("chiTrackspreselection1LostPlusPtCut",ofile);
-  if(isSignal) chiTrackspreselection1LostPlusPtCut.onlyChi      = true;
-  chiTrackspreselection1LostPlusPtCut.triggerRequirements       = true;
-  chiTrackspreselection1LostPlusPtCut.trackPreselection         = true;
-  chiTrackspreselection1LostPlusPtCut.qcdSupression             = true;
-  chiTrackspreselection1LostPlusPtCut.trackCandidateCutFinal    = true;
-  chiTrackspreselection1LostPlusPtCut.TrackPtRequirement        = true;
-  chiTrackspreselection1LostPlusPtCut.NumOfLostOuterRequirement = true;
-  chiTrackspreselection1LostPlusPtCut.CaloIsolationRequirement  = false;
-  chiTrackspreselection1LostPlusPtCut.DeDxRequirement           = false;
-
-  class Event chiTrackspreselection1LostPlusIsoAndPtCut("chiTrackspreselection1LostPlusIsoAndPtCut",ofile);
-  if(isSignal) chiTrackspreselection1LostPlusIsoAndPtCut.onlyChi      = true;
-  chiTrackspreselection1LostPlusIsoAndPtCut.triggerRequirements       = true;
-  chiTrackspreselection1LostPlusIsoAndPtCut.trackPreselection         = true;
-  chiTrackspreselection1LostPlusIsoAndPtCut.qcdSupression             = true;
-  chiTrackspreselection1LostPlusIsoAndPtCut.trackCandidateCutFinal    = true;
-  chiTrackspreselection1LostPlusIsoAndPtCut.TrackPtRequirement        = true;
-  chiTrackspreselection1LostPlusIsoAndPtCut.NumOfLostOuterRequirement = true;
-  chiTrackspreselection1LostPlusIsoAndPtCut.CaloIsolationRequirement  = true;
-  chiTrackspreselection1LostPlusIsoAndPtCut.DeDxRequirement           = false;
-
-  class Event chiTrackspreselection1LostPlusIsoAndDeDxCut("chiTrackspreselection1LostPlusIsoAndDeDxCut",ofile);
-  if(isSignal) chiTrackspreselection1LostPlusIsoAndDeDxCut.onlyChi      = true;
-  chiTrackspreselection1LostPlusIsoAndDeDxCut.triggerRequirements       = true;
-  chiTrackspreselection1LostPlusIsoAndDeDxCut.trackPreselection         = true;
-  chiTrackspreselection1LostPlusIsoAndDeDxCut.qcdSupression             = true;
-  chiTrackspreselection1LostPlusIsoAndDeDxCut.trackCandidateCutFinal    = true;
-  chiTrackspreselection1LostPlusIsoAndDeDxCut.TrackPtRequirement        = false;
-  chiTrackspreselection1LostPlusIsoAndDeDxCut.NumOfLostOuterRequirement = true;
-  chiTrackspreselection1LostPlusIsoAndDeDxCut.CaloIsolationRequirement  = true;
-  chiTrackspreselection1LostPlusIsoAndDeDxCut.DeDxRequirement           = true;
-
-  class Event chiTrackspreselection1LostPlusPtAndDeDxCut("chiTrackspreselection1LostPlusPtAndDeDxCut",ofile);
-  if(isSignal) chiTrackspreselection1LostPlusPtAndDeDxCut.onlyChi      = true;
-  chiTrackspreselection1LostPlusPtAndDeDxCut.triggerRequirements       = true;
-  chiTrackspreselection1LostPlusPtAndDeDxCut.trackPreselection         = true;
-  chiTrackspreselection1LostPlusPtAndDeDxCut.qcdSupression             = true;
-  chiTrackspreselection1LostPlusPtAndDeDxCut.trackCandidateCutFinal    = true;
-  chiTrackspreselection1LostPlusPtAndDeDxCut.TrackPtRequirement        = true;
-  chiTrackspreselection1LostPlusPtAndDeDxCut.NumOfLostOuterRequirement = true;
-  chiTrackspreselection1LostPlusPtAndDeDxCut.CaloIsolationRequirement  = false;
-  chiTrackspreselection1LostPlusPtAndDeDxCut.DeDxRequirement           = true;
-
-  class Event chiTracksfullSelectionTrigger("chiTracksfullSelectionTrigger",ofile);
-  if(isSignal) chiTracksfullSelectionTrigger.onlyChi   = true;
-  chiTracksfullSelectionTrigger.triggerRequirements    = true;
-  chiTracksfullSelectionTrigger.trigger             = true;
-  chiTracksfullSelectionTrigger.trackPreselection      = true;
-  chiTracksfullSelectionTrigger.qcdSupression          = true;
-  chiTracksfullSelectionTrigger.trackCandidateCutFinal = true;
-  chiTracksfullSelectionTrigger.TrackPtRequirement        = true;
-  chiTracksfullSelectionTrigger.NumOfLostOuterRequirement = false;
-  chiTracksfullSelectionTrigger.CaloIsolationRequirement  = true;
-  chiTracksfullSelectionTrigger.DeDxRequirement           = true;
-
   class Event chiTracksfullSelection("chiTracksfullSelection",ofile);
-  if(isSignal) chiTracksfullSelection.onlyChi   = true;
-  chiTracksfullSelection.triggerRequirements    = true;
-  chiTracksfullSelection.trackPreselection      = true;
-  chiTracksfullSelection.qcdSupression          = true;
-  chiTracksfullSelection.trackCandidateCutFinal = true;
-  chiTracksfullSelection.TrackPtRequirement        = true;
+  if(isSignal) chiTracksfullSelection.onlyChi      = true;
+  chiTracksfullSelection.triggerRequirements       = true;
+  chiTracksfullSelection.trackPreselection         = true;
+  chiTracksfullSelection.qcdSupression             = true;
+  chiTracksfullSelection.trackCandidateCutFinal    = true;
+  chiTracksfullSelection.TrackPtRequirement        = false;
   chiTracksfullSelection.NumOfLostOuterRequirement = false;
   chiTracksfullSelection.CaloIsolationRequirement  = true;
-  chiTracksfullSelection.DeDxRequirement           = true;
-  
-  //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  chiTracksfullSelection.DeDxRequirement           = false;
+
+  class Event chiTracksfullSelectionNoQCDCuts("chiTracksfullSelectionNoQCDCuts",ofile);
+  if(isSignal) chiTracksfullSelectionNoQCDCuts.onlyChi      = true;
+  chiTracksfullSelectionNoQCDCuts.triggerRequirements       = true;
+ chiTracksfullSelectionNoQCDCuts.trackPreselection         = true;
+  chiTracksfullSelectionNoQCDCuts.trackCandidateCutFinal    = true;
+  chiTracksfullSelectionNoQCDCuts.TrackPtRequirement        = false;
+  chiTracksfullSelectionNoQCDCuts.NumOfLostOuterRequirement = false;
+  chiTracksfullSelectionNoQCDCuts.CaloIsolationRequirement  = true;
+  chiTracksfullSelectionNoQCDCuts.DeDxRequirement           = false;
+
+  class Event chiTracksfullSelectionNoQCDCutsNoTrigger("chiTracksfullSelectionNoQCDCutsNoTrigger",ofile);
+  if(isSignal) chiTracksfullSelectionNoQCDCutsNoTrigger.onlyChi      = true;
+  chiTracksfullSelectionNoQCDCutsNoTrigger.trackPreselection         = true;
+  chiTracksfullSelectionNoQCDCutsNoTrigger.trackCandidateCutFinal    = true;
+  chiTracksfullSelectionNoQCDCutsNoTrigger.TrackPtRequirement        = false;
+  chiTracksfullSelectionNoQCDCutsNoTrigger.NumOfLostOuterRequirement = false;
+  chiTracksfullSelectionNoQCDCutsNoTrigger.CaloIsolationRequirement  = true;
+  chiTracksfullSelectionNoQCDCutsNoTrigger.DeDxRequirement           = false;
+
+  class Event chiTracksfullSelectionTrigger("chiTracksfullSelectionTrigger",ofile);
+  if(isSignal) chiTracksfullSelectionTrigger.onlyChi      = true;
+  chiTracksfullSelectionTrigger.triggerRequirements       = true;
+  chiTracksfullSelectionTrigger.trigger                   = true;
+  chiTracksfullSelectionTrigger.trackPreselection         = true;
+  chiTracksfullSelectionTrigger.qcdSupression             = true;
+  chiTracksfullSelectionTrigger.trackCandidateCutFinal    = true;
+  chiTracksfullSelectionTrigger.TrackPtRequirement        = false;
+  chiTracksfullSelectionTrigger.NumOfLostOuterRequirement = false;
+  chiTracksfullSelectionTrigger.CaloIsolationRequirement  = true;
+  chiTracksfullSelectionTrigger.DeDxRequirement           = false;
+
+  class Event chiTracksfullSelectionNoTriggerCuts("chiTracksfullSelectionNoTriggerCuts",ofile);
+  if(isSignal) chiTracksfullSelectionNoTriggerCuts.onlyChi      = true;
+  chiTracksfullSelectionNoTriggerCuts.trackPreselection         = true;
+  chiTracksfullSelectionNoTriggerCuts.qcdSupression             = true;
+  chiTracksfullSelectionNoTriggerCuts.trackCandidateCutFinal    = true;
+  chiTracksfullSelectionNoTriggerCuts.TrackPtRequirement        = false;
+  chiTracksfullSelectionNoTriggerCuts.NumOfLostOuterRequirement = false;
+  chiTracksfullSelectionNoTriggerCuts.CaloIsolationRequirement  = true;
+  chiTracksfullSelectionNoTriggerCuts.DeDxRequirement           = false;
+
+  class Event chiTracksfullSelectionPlusIas("chiTracksfullSelectionPlusIas",ofile);
+  if(isSignal) chiTracksfullSelectionPlusIas.onlyChi      = true;
+  chiTracksfullSelectionPlusIas.triggerRequirements       = true;
+  chiTracksfullSelectionPlusIas.trackPreselection         = true;
+  chiTracksfullSelectionPlusIas.qcdSupression             = true;
+  chiTracksfullSelectionPlusIas.trackCandidateCutFinal    = true;
+  chiTracksfullSelectionPlusIas.TrackPtRequirement        = false;
+  chiTracksfullSelectionPlusIas.NumOfLostOuterRequirement = false;
+  chiTracksfullSelectionPlusIas.CaloIsolationRequirement  = true;
+  chiTracksfullSelectionPlusIas.DeDxRequirement           = true;
+
+  class Event chiTracksfullSelectionPlusIasNoTriggerCuts("chiTracksfullSelectionPlusIasNoTriggerCuts",ofile);
+  if(isSignal) chiTracksfullSelectionPlusIasNoTriggerCuts.onlyChi      = true;
+  chiTracksfullSelectionPlusIasNoTriggerCuts.triggerRequirements       = false;
+  chiTracksfullSelectionPlusIasNoTriggerCuts.trackPreselection         = true;
+  chiTracksfullSelectionPlusIasNoTriggerCuts.qcdSupression             = true;
+  chiTracksfullSelectionPlusIasNoTriggerCuts.trackCandidateCutFinal    = true;
+  chiTracksfullSelectionPlusIasNoTriggerCuts.TrackPtRequirement        = false;
+  chiTracksfullSelectionPlusIasNoTriggerCuts.NumOfLostOuterRequirement = false;
+  chiTracksfullSelectionPlusIasNoTriggerCuts.CaloIsolationRequirement  = true;
+  chiTracksfullSelectionPlusIasNoTriggerCuts.DeDxRequirement           = true;
+
+  class Event chiTracksfullSelectionPlusIasTrigger("chiTracksfullSelectionPlusIasTrigger",ofile);
+  if(isSignal) chiTracksfullSelectionPlusIasTrigger.onlyChi      = true;
+  chiTracksfullSelectionPlusIasTrigger.triggerRequirements       = true;
+  chiTracksfullSelectionPlusIasTrigger.trigger                   = true;
+  chiTracksfullSelectionPlusIasTrigger.trackPreselection         = true;
+  chiTracksfullSelectionPlusIasTrigger.qcdSupression             = true;
+  chiTracksfullSelectionPlusIasTrigger.trackCandidateCutFinal    = true;
+  chiTracksfullSelectionPlusIasTrigger.TrackPtRequirement        = false;
+  chiTracksfullSelectionPlusIasTrigger.NumOfLostOuterRequirement = false;
+  chiTracksfullSelectionPlusIasTrigger.CaloIsolationRequirement  = true;
+  chiTracksfullSelectionPlusIasTrigger.DeDxRequirement           = true;
+
+  class Event chiTracksfullSelectionPlusIasAndPt("chiTracksfullSelectionPlusIasAndPt",ofile);
+  if(isSignal) chiTracksfullSelectionPlusIasAndPt.onlyChi      = true;
+  chiTracksfullSelectionPlusIasAndPt.triggerRequirements       = true;
+  chiTracksfullSelectionPlusIasAndPt.trackPreselection         = true;
+  chiTracksfullSelectionPlusIasAndPt.qcdSupression             = true;
+  chiTracksfullSelectionPlusIasAndPt.trackCandidateCutFinal    = true;
+  chiTracksfullSelectionPlusIasAndPt.TrackPtRequirement        = true;
+  chiTracksfullSelectionPlusIasAndPt.NumOfLostOuterRequirement = false;
+  chiTracksfullSelectionPlusIasAndPt.CaloIsolationRequirement  = true;
+  chiTracksfullSelectionPlusIasAndPt.DeDxRequirement           = true;
+
+  class Event chiTracksfullSelectionPlusIasAndPtTrigger("chiTracksfullSelectionPlusIasAndPtTrigger",ofile);
+  if(isSignal) chiTracksfullSelectionPlusIasAndPtTrigger.onlyChi      = true;
+  chiTracksfullSelectionPlusIasAndPtTrigger.triggerRequirements       = true;
+  chiTracksfullSelectionPlusIasAndPtTrigger.trigger                   = true;
+  chiTracksfullSelectionPlusIasAndPtTrigger.trackPreselection         = true;
+  chiTracksfullSelectionPlusIasAndPtTrigger.qcdSupression             = true;
+  chiTracksfullSelectionPlusIasAndPtTrigger.trackCandidateCutFinal    = true;
+  chiTracksfullSelectionPlusIasAndPtTrigger.TrackPtRequirement        = true;
+  chiTracksfullSelectionPlusIasAndPtTrigger.NumOfLostOuterRequirement = false;
+  chiTracksfullSelectionPlusIasAndPtTrigger.CaloIsolationRequirement  = true;
+  chiTracksfullSelectionPlusIasAndPtTrigger.DeDxRequirement           = true;
+
+  class Event chiTracksDTSelection("chiTracksDTSelection",ofile);
+  if(isSignal) chiTracksDTSelection.onlyChi      = true;
+  chiTracksDTSelection.triggerRequirements       = true;
+  chiTracksDTSelection.trigger                   = true;
+  chiTracksDTSelection.DTSelection               = true;
+
   // SM model control regions
   class Event chiTracksSMControlCalo("chiTracksSMControlCalo",ofile);
   if(isSignal) chiTracksSMControlCalo.onlyChi   = true;
@@ -373,149 +341,8 @@ int main(int argc, char** argv)
   chiTracksSMControlCalo.CaloIsolationRequirement       = true;
   chiTracksSMControlCalo.DeDxRequirement                = false;
   chiTracksSMControlCalo.invertCaloIsolationRequirement = true;
-  
-  //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  // ABCD method with track Pt and DeDx
-  /*
-  ABCD trackPt_DeDx("_trackPt_DeDx",ofile,isSignal);
  
-  trackPt_DeDx.CR1.TrackPtRequirement = true;
-  trackPt_DeDx.CR1.DeDxRequirement    = true;
-  trackPt_DeDx.CR1.invertTrackPtRequirement = false;
-  trackPt_DeDx.CR1.invertDeDxRequirement    = true;
-
-  trackPt_DeDx.CR2.TrackPtRequirement = true;
-  trackPt_DeDx.CR2.DeDxRequirement    = true;
-  trackPt_DeDx.CR2.invertTrackPtRequirement = true;
-  trackPt_DeDx.CR2.invertDeDxRequirement    = true;
-
-  trackPt_DeDx.CR3.TrackPtRequirement = true;
-  trackPt_DeDx.CR3.DeDxRequirement    = true;
-  trackPt_DeDx.CR3.invertTrackPtRequirement = true;
-  trackPt_DeDx.CR3.invertDeDxRequirement    = false;
-
-  trackPt_DeDx.SR.TrackPtRequirement = true;
-  trackPt_DeDx.SR.DeDxRequirement    = true;
-  trackPt_DeDx.SR.invertTrackPtRequirement = false;
-  trackPt_DeDx.SR.invertDeDxRequirement    = false;
   //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  // ABCD method with track Pt and CaloIsolation
-  ABCD trackPt_CaloIso("_trackPt_CaloIso",ofile,isSignal);
- 
-  trackPt_CaloIso.CR1.TrackPtRequirement       = true;
-  trackPt_CaloIso.CR1.CaloIsolationRequirement = true;
-  trackPt_CaloIso.CR1.invertTrackPtRequirement       = false;
-  trackPt_CaloIso.CR1.invertCaloIsolationRequirement = true;
-
-  trackPt_CaloIso.CR2.TrackPtRequirement       = true;
-  trackPt_CaloIso.CR2.CaloIsolationRequirement = true;
-  trackPt_CaloIso.CR2.invertTrackPtRequirement       = true;
-  trackPt_CaloIso.CR2.invertCaloIsolationRequirement = true;
-
-  trackPt_CaloIso.CR3.TrackPtRequirement       = true;
-  trackPt_CaloIso.CR3.CaloIsolationRequirement = true;
-  trackPt_CaloIso.CR3.invertTrackPtRequirement       = true;
-  trackPt_CaloIso.CR3.invertCaloIsolationRequirement = false;
-
-  trackPt_CaloIso.SR.TrackPtRequirement       = true;
-  trackPt_CaloIso.SR.CaloIsolationRequirement = true;
-  trackPt_CaloIso.SR.invertTrackPtRequirement       = false;
-  trackPt_CaloIso.SR.invertCaloIsolationRequirement = false;
-  //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  // ABCD method with track Pt and DeDx
-  ABCD DeDx_CaloIso("_DeDx_CaloIso",ofile,isSignal);
- 
-  DeDx_CaloIso.CR1.DeDxRequirement          = true;
-  DeDx_CaloIso.CR1.CaloIsolationRequirement = true;
-  DeDx_CaloIso.CR1.invertDeDxRequirement          = false;
-  DeDx_CaloIso.CR1.invertCaloIsolationRequirement = true;
-
-  DeDx_CaloIso.CR2.DeDxRequirement          = true;
-  DeDx_CaloIso.CR2.CaloIsolationRequirement = true;
-  DeDx_CaloIso.CR2.invertDeDxRequirement          = true;
-  DeDx_CaloIso.CR2.invertCaloIsolationRequirement = true;
-
-  DeDx_CaloIso.CR3.DeDxRequirement          = true;
-  DeDx_CaloIso.CR3.CaloIsolationRequirement = true;
-  DeDx_CaloIso.CR3.invertDeDxRequirement          = true;
-  DeDx_CaloIso.CR3.invertCaloIsolationRequirement = false;
-
-  DeDx_CaloIso.SR.DeDxRequirement          = true;
-  DeDx_CaloIso.SR.CaloIsolationRequirement = true;
-  DeDx_CaloIso.SR.invertDeDxRequirement          = false;
-  DeDx_CaloIso.SR.invertCaloIsolationRequirement = false;
-  //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  // ABCD method with track Pt and DeDx
-  ABCD trackPt_lostOuterHits("_trackPt_lostOuterHits",ofile,isSignal);
- 
-  trackPt_lostOuterHits.CR1.TrackPtRequirement        = true;
-  trackPt_lostOuterHits.CR1.NumOfLostOuterRequirement = true;
-  trackPt_lostOuterHits.CR1.invertTrackPtRequirement        = false;
-  trackPt_lostOuterHits.CR1.invertNumOfLostOuterRequirement = true;
-
-  trackPt_lostOuterHits.CR2.TrackPtRequirement        = true;
-  trackPt_lostOuterHits.CR2.NumOfLostOuterRequirement = true;
-  trackPt_lostOuterHits.CR2.invertTrackPtRequirement        = true;
-  trackPt_lostOuterHits.CR2.invertNumOfLostOuterRequirement = true;
-
-  trackPt_lostOuterHits.CR3.TrackPtRequirement        = true;
-  trackPt_lostOuterHits.CR3.NumOfLostOuterRequirement = true;
-  trackPt_lostOuterHits.CR3.invertTrackPtRequirement        = true;
-  trackPt_lostOuterHits.CR3.invertNumOfLostOuterRequirement = false;
-
-  trackPt_lostOuterHits.SR.TrackPtRequirement        = true;
-  trackPt_lostOuterHits.SR.NumOfLostOuterRequirement = true;
-  trackPt_lostOuterHits.SR.invertTrackPtRequirement        = false;
-  trackPt_lostOuterHits.SR.invertNumOfLostOuterRequirement = false;
-  //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  // ABCD method with track Pt and DeDx
-  ABCD DeDx_lostOuterHits("_DeDx_lostOuterHits",ofile,isSignal);
- 
-  DeDx_lostOuterHits.CR1.DeDxRequirement           = true;
-  DeDx_lostOuterHits.CR1.NumOfLostOuterRequirement = true;
-  DeDx_lostOuterHits.CR1.invertDeDxRequirement           = false;
-  DeDx_lostOuterHits.CR1.invertNumOfLostOuterRequirement = true;
-
-  DeDx_lostOuterHits.CR2.DeDxRequirement           = true;
-  DeDx_lostOuterHits.CR2.NumOfLostOuterRequirement = true;
-  DeDx_lostOuterHits.CR2.invertDeDxRequirement           = true;
-  DeDx_lostOuterHits.CR2.invertNumOfLostOuterRequirement = true;
-
-  DeDx_lostOuterHits.CR3.DeDxRequirement           = true;
-  DeDx_lostOuterHits.CR3.NumOfLostOuterRequirement = true;
-  DeDx_lostOuterHits.CR3.invertDeDxRequirement           = true;
-  DeDx_lostOuterHits.CR3.invertNumOfLostOuterRequirement = false;
-
-  DeDx_lostOuterHits.SR.DeDxRequirement           = true;
-  DeDx_lostOuterHits.SR.NumOfLostOuterRequirement = true;
-  DeDx_lostOuterHits.SR.invertDeDxRequirement           = false;
-  DeDx_lostOuterHits.SR.invertNumOfLostOuterRequirement = false;
-  //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  // ABCD method with track Pt and DeDx
-  ABCD CaloIso_lostOuterHits("_CaloIso_lostOuterHits",ofile,isSignal);
- 
-  CaloIso_lostOuterHits.CR1.CaloIsolationRequirement  = true;
-  CaloIso_lostOuterHits.CR1.NumOfLostOuterRequirement = true;
-  CaloIso_lostOuterHits.CR1.invertCaloIsolationRequirement  = false;
-  CaloIso_lostOuterHits.CR1.invertNumOfLostOuterRequirement = true;
-
-  CaloIso_lostOuterHits.CR2.CaloIsolationRequirement  = true;
-  CaloIso_lostOuterHits.CR2.NumOfLostOuterRequirement = true;
-  CaloIso_lostOuterHits.CR2.invertCaloIsolationRequirement  = true;
-  CaloIso_lostOuterHits.CR2.invertNumOfLostOuterRequirement = true;
-
-  CaloIso_lostOuterHits.CR3.CaloIsolationRequirement  = true;
-  CaloIso_lostOuterHits.CR3.NumOfLostOuterRequirement = true;
-  CaloIso_lostOuterHits.CR3.invertCaloIsolationRequirement  = true;
-  CaloIso_lostOuterHits.CR3.invertNumOfLostOuterRequirement = false;
-
-  CaloIso_lostOuterHits.SR.CaloIsolationRequirement  = true;
-  CaloIso_lostOuterHits.SR.NumOfLostOuterRequirement = true;
-  CaloIso_lostOuterHits.SR.invertCaloIsolationRequirement  = false;
-  CaloIso_lostOuterHits.SR.invertNumOfLostOuterRequirement = false;
-  */
-  //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
   //-------------------------------------------------------------------------------------
   // Read file for bad ecal cells and csc chambers 
   //-------------------------------------------------------------------------------------
@@ -606,11 +433,9 @@ int main(int argc, char** argv)
   }
   // -----------------------------------------------------------------------------------------------------------------------
   // ***********************************************************************************************************************
-
   cout<<endl<<"Number Of Events = "<<nevents<<endl<<endl;
   
   randGenerator = new TRandom3(0);
-  
   for(int entry=0; entry <nevents; ++entry)
     {
 
@@ -636,7 +461,8 @@ int main(int argc, char** argv)
       findChi0InGenParticleCollection();
       findChiInSimTrackCollection();
       findChiDecayVertex();
-      
+      //findPionInSimTrackCollection();
+
       
       // Chargino event reweighting:
       if(isSignal && TargetLifetime !=0){
@@ -730,6 +556,10 @@ int main(int argc, char** argv)
 	  }
 	  else if(up)                                weight *= 1.00;
 	}
+	hgenPtChiChiSystem -> Fill(ptSystem,weight);
+	hgenPChiChiSystem  -> Fill((chi1+chi2).P(),weight);
+	hgenEChiChiSystem  -> Fill((chi1+chi2).E(),weight);
+	hgenMChiChiSystem  -> Fill((chi1+chi2).M(),weight);
       }
       /******************************************************************************************************************************/
       if(isSignal && JECunc){
@@ -830,11 +660,6 @@ int main(int argc, char** argv)
       hTrueNumInteractions_0->Fill(PileupSummaryInfo[0].getTrueNumInteractions);
       hPU_NumInteractions_0->Fill(PileupSummaryInfo[0].getPU_NumInteractions);
 
-      //noSelection.Selection();
-      //triggerRequirements.Selection();
-      //preselection.Selection();
-      //fullSelection.Selection();
-      chiTracksnoSelection.Selection();
       
       if(PDFunc && isSignal){
 	// 2.) Run over the preselection and store pdf weights
@@ -844,13 +669,22 @@ int main(int argc, char** argv)
 	  PDFselection[i].Selection();
 	}
       } 
-       
-      chiTracksCandidateTracks.Selection();
-      chiTrackstriggerRequirements.Selection();
-      //chiTrackstriggerRequirementsTrigger.Selection();  //Not Needed
-      chiTracksQCDsupression.Selection();
-      chiTracksQCDsupressionTrigger.Selection();
+
+
       
+      //chiTracksMIPSelection.Selection();
+      chiTracksnoSelection.Selection();
+     
+      //chiTrackstriggerRequirements.Selection();
+      //chiTrackstriggerRequirementsTrigger.Selection();  //Not Needed
+      //chiTracksQCDsupression.Selection();
+      //chiTracksQCDsupressionTrigger.Selection();
+
+      /*
+      chiTracksGoodQualitySelection.Selection();
+      chiTracksGoodQualitySelectionTrigger.Selection();
+      chiTracksCandidateSelection.Selection();
+      chiTracksCandidateSelectionTrigger.Selection();
       chiTrackspreselection.Selection();
       chiTrackspreselectionTrigger.Selection();
       chiTrackspreselectionNoQCDCuts.Selection();
@@ -859,12 +693,18 @@ int main(int argc, char** argv)
       chiTrackspreselectionNoQCDCutsNoTrigger.Selection();
       chiTracksfullSelection.Selection();
       chiTracksfullSelectionTrigger.Selection();
-     
+      chiTracksfullSelectionNoQCDCuts.Selection();
+      chiTracksfullSelectionNoQCDCutsNoTrigger.Selection();
+      chiTracksfullSelectionPlusIas.Selection();
+      chiTracksfullSelectionPlusIasNoTriggerCuts.Selection();
+      chiTracksfullSelectionPlusIasTrigger.Selection();
+      chiTracksfullSelectionPlusIasAndPt.Selection();
+      chiTracksfullSelectionPlusIasAndPtTrigger.Selection();
+      chiTracksfullSelectionNoTriggerCuts.Selection();
 
-      //chiTrackspreselectionWjets.Selection();
-      //chiTracksSMControlCalo.Selection();
-
-      
+      chiTracksDTSelection.Selection();
+      */
+            
     }//end of loop over events
  
   stop = clock();
